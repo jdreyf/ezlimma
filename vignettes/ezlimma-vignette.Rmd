@@ -1,0 +1,117 @@
+---
+title: "ezlimma vignette"
+author: "Jonathan Dreyfuss"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ezlimma vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+## Introduction
+
+Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. I'll break this introduction into two sections: one for feature-level analysis, and another for pathway-level analysis. But before I can show you the code, we need to load the package, and generate some data. 
+
+## Load package
+```{r lib}
+library("ezlimma")
+```
+
+## Simulate data
+I'll simulate log2 expression data with 100 genes, 3 controls and 3 samples with treatment A, 3 with treatment B, and the first 5 genes 4-fold up in the controls. Like the example data in \code{limma} \code{lmFit}, we'll make the std deviations vary between genes with prior df=4.
+```{r sim}
+set.seed(42)
+sd <- 0.3*sqrt(4/rchisq(100, df=4))
+y <-  matrix(rnorm(100*9, sd=sd),100)
+dimnames(y) <- list(paste0("gene", 1:100), rep(c("ctrl", "trtA", "trtB"), each=3))
+y[1:5, 1:3] <- y[1:5, 1:3] + 2
+```
+
+## Feature-level
+Assume we want to test trtA vs ctrl and trtB vs ctrl. We can do this in two lines of code,
+```{r lc}
+contr.v <- c(trtAvsCtrl="trtA-ctrl", trtBvsCtrl="trtB-ctrl")
+res0 <- limma_contrasts(y, grp=colnames(y), contrasts.v = contr.v)
+```
+
+This returns a dataframe that looks like:
+```{r, echo=FALSE}
+knitr::kable(signif(res0[1:10,], 3))
+```
+
+Similarly, we can test association to a phenotype variable. Let's say we have a phenotype vector, 
+```{r}
+pheno.v <- rnorm(ncol(y))
+pheno.v[1:3] <- pheno.v[1:3]-1
+```
+
+we can test association with,
+```{r}
+res1 <- ezcor(y, pheno.v, method="pearson")
+```
+
+where *method* can be any of "pearson", "kendall", or "spearman". This returns a dataframe like,
+```{r, echo=FALSE}
+knitr::kable(signif(res1[1:10,], 3))
+```
+
+Similarly, we can test association using linear regression with limma, where the model is *gene expression = a + bx + error*, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,
+```{r}
+res <- limma_cor(y, phenotype = pheno.v)
+```
+
+This improves the gene rankings, owing to limma's empirical Bayesian modeling of the variance.
+```{r, echo=FALSE}
+knitr::kable(signif(res[1:10,], 3))
+```
+
+Because this is a regression, we can also adjust for covariates. We do this by creating our own design matrix instead of letting *limma.cor* create one from *phenotype*.
+```{r}
+covar <- rnorm(9)
+design <- model.matrix(~pheno.v+covar)
+res <- limma_cor(y, design = design)
+```
+
+which gives
+```{r, echo=FALSE}
+knitr::kable(signif(res[1:10,], 3))
+```
+
+We can also test multiple phenotypes together. Say we had a matrix of phenotypes as
+```{r}
+pheno.mat <- cbind(pheno1=pheno.v, pheno2=rnorm(9))
+```
+
+then we could test both phenotypes together in one line, as
+```{r}
+res <- multi_cor(y, pheno.mat = pheno.mat)
+```
+
+```{r, echo=FALSE}
+knitr::kable(signif(res[1:10,], 3))
+```
+
+where the result is ordered by the combined p-value of the two associations per gene by default. The *method* options for the association test are: "pearson" (the default), "spearman", "kendall", as before, or "limma", where it will use *limma.cor*. Currently this function only allows one method for all phenotypes.
+
+## Gene set level
+At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with *limma* method roast, which are implemented for multiple sets at a time with the functions *mroast* or its faster approximation *fry*. We have written wrappers around these to allow for easier testing, and to make an Excel front end where each gene set links to a CSV containing the statistics on its genes, made using the functions presented above.
+
+Let's make the gene set object,
+```{r}
+G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
+          list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
+          list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
+```
+
+Then we can test each of these gene sets.
+```{r}
+res <- roast_contrasts(y, G=G, stats.tab=res0, grp=colnames(y), contrasts.v = contr.v, fun="fry", name="vignette")
+```
+
+This creates a folder with one CSV per pathway, and an Excel file named *vignette_fry.xlsx* that looks like
+```{r, echo=FALSE}
+knitr::kable(res)
+```
+
+except the first column has links to the CSVs in the folder. Similarly, we can use *roast_cor*.
