@@ -129,7 +129,7 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
   colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   #add prefix to each column except 1st, which is NGenes
   colnames(res)[-1] <- paste(colnames(design)[2], colnames(res)[-1], sep = '.')
-  res <- res[order(combine.pvalues(res, grep('\\.p$', colnames(res)))), ]
+  res <- res[order(combine_pvalues(res, grep('\\.p$', colnames(res)))), ]
   
   #change FDR to appropriate adjustment name if user doesn't use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
@@ -145,13 +145,13 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
   pwys <- rownames(res)[1:n.top]
   for(pwy in pwys){
       stat <- stats.tab[index[[pwy]], ]
-      stat <- stat[order(combine.pvalues(stat)), ]
+      stat <- stat[order(combine_pvalues(stat)), ]
       write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
   }
   
   wb <- xlsx::createWorkbook()
   sheet <- xlsx::createSheet(wb, sheetName = name)
-  xlsx::addDataFrame(df.signif(res, 3), sheet)
+  xlsx::addDataFrame(df_signif(res, 3), sheet)
   rows  <- xlsx::getRows(sheet)
   cells <- xlsx::getCells(rows, 1)
   

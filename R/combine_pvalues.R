@@ -11,14 +11,14 @@
 #'\code{\link[survcomp]{combine.test}}.
 #'@return p-value.
 #'@seealso \code{\link[survcomp]{combine.test}}.
-
+#'@export
 
 #don't export
-combine.pvalues <- function(mat, pv.cols=NULL){
+combine_pvalues <- function(mat, pv.cols=NULL){
   if (is.null(pv.cols)){
     pv.cols <- grep(paste0('\\.', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
   }
-  stopifnot(length(pv.cols)>0) 
+  stopifnot(length(pv.cols)>0)
   comb.p <- apply(as.matrix(mat[,pv.cols]), 1, FUN=function(p){ 
     p.nona <- p[!is.na(p)]
     z <- qnorm(p.nona, lower.tail = FALSE)

@@ -8,14 +8,14 @@
 #don't export
 #to improve can look at
 #https://stackoverflow.com/questions/9063889/how-to-round-a-data-frame-in-r-that-contains-some-character-variables
-df.signif <- function(df, digits=3){
+df_signif <- function(df, digits=3){
   cols.num <- sapply(df, is.numeric)
   mat <- df[,cols.num]
   mat <- signif(mat, digits=digits)
   nonmat <- data.frame(df[,!cols.num], check.names=FALSE)
-  #if only one non-numeric col, need to re-assign colnames -- maybe need drop=FALSE
   if (sum(!cols.num)==1){ colnames(nonmat) <- colnames(df)[!cols.num] }
   df2 <- data.frame(mat, nonmat, check.names=FALSE)
+  #revert column names to original
   df2 <- df2[,colnames(df)]
   return(df2)
 }

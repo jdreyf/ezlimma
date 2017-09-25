@@ -43,6 +43,6 @@ multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendal
     if (!is.null(cor.mat)){ stopifnot(rownames(cor.mat)==rownames(cor.tmp)) }
     cor.mat <- cbind(cor.mat, cor.tmp)
   }
-  if (reorder.rows){ cor.mat <- cor.mat[order(combine.pvalues(cor.mat)),] }
+  if (reorder.rows){ cor.mat <- cor.mat[order(combine_pvalues(cor.mat)),] }
   return(cor.mat)
 }

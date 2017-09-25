@@ -124,7 +124,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
         res <- cbind(res, res.tmp[rownames(res), -1])
     }
   }#end for i
-  res <- res[order(combine.pvalues(res, grep('\\.p$', colnames(res)))), ]
+  res <- res[order(combine_pvalues(res, grep('\\.p$', colnames(res)))), ]
 
   #change FDR to appropriate adjustment name if user doesn't use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
@@ -140,13 +140,13 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   pwys <- rownames(res)[1:n.toptabs]
   for(pwy in pwys){
       stat <- stats.tab[index[[pwy]], ]
-      stat <- stat[order(combine.pvalues(stat)), ]
+      stat <- stat[order(combine_pvalues(stat)), ]
       write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
   }
   
   wb <- xlsx::createWorkbook()
   sheet <- xlsx::createSheet(wb, sheetName = name)
-  xlsx::addDataFrame(df.signif(res, 3), sheet)
+  xlsx::addDataFrame(df_signif(res, 3), sheet)
   rows  <- xlsx::getRows(sheet)
   cells <- xlsx::getCells(rows, 1)
 
