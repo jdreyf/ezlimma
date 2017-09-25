@@ -10,8 +10,15 @@ vignette: >
 ---
 
 ## Introduction
-
 Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. I'll break this introduction into two sections: one for feature-level analysis, and another for pathway-level analysis. But before I can show you the code, we need to load the package, and generate some data. 
+
+## Install
+If you haven't installed `devtools`, you must install it, and then use it to install `ezlimma`.
+```{r install, eval=FALSE}
+install.packages("devtools")
+library("devtools")
+install_github("jdreyf/ezlimma")
+```
 
 ## Load package
 ```{r lib}
