@@ -19,16 +19,16 @@
 #assume that if 'logFC' in cols, then want 'FC'
 eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH', 
                      prefix='', coef=NULL){
-  stopifnot(cols %in% 
-            c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
+  stopifnot(length(cols)>=1, 
+    cols %in% c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
   
   tt <- topTable(fit, number=Inf, sort.by='P', adjust.method=adjust.method, coef=coef)
   #FC
   if ('logFC' %in% cols){
     tt$FC <- logfc2fc(tt$logFC)
     cols <- c(cols, 'FC')
-  }    
-  tt <- tt[,cols]
+  }
+  tt <- tt[, cols, drop=FALSE]
   colnames(tt) <- sub('P.Value', 'p', colnames(tt))
   #p.adjust says fdr is alias for BH
   if (adjust.method %in% c('BH', 'fdr')){

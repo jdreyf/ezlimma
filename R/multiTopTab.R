@@ -23,7 +23,7 @@ multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.met
 	#go thru contrasts
 	for (i in 1:length(contrasts)){
 	  mtt.tmp <- eztoptab(fit, coef=i, cols=cols, adjust.method=adjust.method)
-	  mtt.tmp <- mtt.tmp[genes,]
+	  mtt.tmp <- mtt.tmp[genes,, drop=FALSE]
 	  colnames(mtt.tmp) <- paste(contrasts[i], colnames(mtt.tmp), sep='.')
     if (i==1){
       mtt <- mtt.tmp

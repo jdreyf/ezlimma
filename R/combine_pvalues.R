@@ -15,8 +15,9 @@
 
 #don't export
 combine_pvalues <- function(mat, pv.cols=NULL){
+  #if pv.cols not given, grep for them at end of column names
   if (is.null(pv.cols)){
-    pv.cols <- grep(paste0('\\.', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
+    pv.cols <- grep(paste0('\\.|^', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
   }
   stopifnot(length(pv.cols)>0)
   comb.p <- apply(as.matrix(mat[,pv.cols]), 1, FUN=function(p){ 

@@ -54,8 +54,8 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
                     weights = NULL, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf){
-  stopifnot(rownames(object) %in% rownames(stats.tab), length(gene.weights)==nrow(object),
-            !is.null(design)|!is.null(phenotype))
+  stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
+            is.null(gene.weights)|length(gene.weights)==nrow(object))
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), 
               names(phenotype)==colnames(object))
@@ -78,13 +78,13 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
           object <- object[,!is.na(phenotype), drop=FALSE]
           if(!is.null(weights)){
             if (length(weights)==ncol(object)){ 
-              weights <- weights[!is.na(pheno)]
+              weights <- weights[!is.na(phenotype)]
             } else {
-              weights <- weights[,!is.na(pheno)]
-            }  
+              weights <- weights[,!is.na(phenotype)]
+            }
           }#end if !is.null weights
       } else {
-          pheno.nona <- pheno
+          pheno.nona <- phenotype
       }
       design <- model.matrix(~1+pheno.nona) 
       colnames(design) <- gsub('\\(|\\)', '', gsub('pheno.nona', '', colnames(design), fixed=TRUE))
@@ -141,8 +141,8 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
   dir.create(name)
   dir.create(paste0(name, '/pathways'))
   
-  if (n.top > nrow(res)) n.top <- nrow(res)
-  pwys <- rownames(res)[1:n.top]
+  if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
+  pwys <- rownames(res)[1:n.toptabs]
   for(pwy in pwys){
       stat <- stats.tab[index[[pwy]], ]
       stat <- stat[order(combine_pvalues(stat)), ]
