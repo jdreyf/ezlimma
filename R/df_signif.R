@@ -4,8 +4,8 @@
 #'
 #'@param df A dataframe
 #'@param digits number of digits to take significance to
+#'@export
 
-#don't export
 #to improve can look at
 #https://stackoverflow.com/questions/9063889/how-to-round-a-data-frame-in-r-that-contains-some-character-variables
 df_signif <- function(df, digits=3){

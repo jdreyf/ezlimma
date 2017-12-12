@@ -43,6 +43,8 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
                             trend=FALSE, block=NULL, correlation=NULL, adjust.method='BH', 
                             add.means=TRUE, cols=c('P.Value', 'adj.P.Val', 'logFC')){
   if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
+  if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
+  if (any(rownames(object)=="")) stop("'object' cannot have an empty rowname ''.")
 
   if (is.null(design)){
     design <- model.matrix(~0+grp)
@@ -70,7 +72,7 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
   
   #cbind grp means
   if (add.means){
-    grp.means <- t(apply(object, 1, FUN=function(v) tapply(v, grp, mean, na.rm=TRUE)))
+    grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
     colnames(grp.means) <- paste(colnames(grp.means), 'avg', sep='.')
     mtt <- cbind(grp.means[rownames(mtt),], mtt)
   }

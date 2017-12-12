@@ -15,6 +15,7 @@
 
 #not exported
 multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH'){
+  #remove spaces in names of contrasts to be valid R colnames
   contrasts <- gsub(' ', '', colnames(fit$contrasts))
   #get gene order
   #limma 3.16 has row.names=row number & 'ID' column; limma 3.18 has row.names=ID
@@ -23,6 +24,7 @@ multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.met
 	#go thru contrasts
 	for (i in 1:length(contrasts)){
 	  mtt.tmp <- eztoptab(fit, coef=i, cols=cols, adjust.method=adjust.method)
+	  #this line alters "" rowname to "NA"
 	  mtt.tmp <- mtt.tmp[genes,, drop=FALSE]
 	  colnames(mtt.tmp) <- paste(contrasts[i], colnames(mtt.tmp), sep='.')
     if (i==1){
