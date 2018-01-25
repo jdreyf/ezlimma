@@ -2,7 +2,7 @@
 % Please edit documentation in R/g_index.R
 \name{g_index}
 \alias{g_index}
-\title{Get indices of pathways that are the right size}
+\title{Create object with indices of genes per gene set}
 \usage{
 g_index(G, object, min.ngenes, max.ngenes)
 }
@@ -21,5 +21,5 @@ genes and columns to samples.}
 Index of acceptable gene sets in \code{G}.
 }
 \description{
-Get indices of pathways that are the right size.
+Create object with indices of genes per gene set.
 }

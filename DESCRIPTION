@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Automates and Adds Features to limma Package.
-Version: 0.1.0
+Version: 0.1.1
 Author: Jonathan Dreyfuss [aut, cre],
     Hui Pan [aut]
 Maintainer: Jonathan Dreyfuss <jdreyf@bu.edu>
