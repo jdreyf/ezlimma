@@ -2,82 +2,84 @@
 % Please edit documentation in R/roast_contrasts.R
 \name{roast_contrasts}
 \alias{roast_contrasts}
-\title{Test contrasts of gene sets between groups using rotation testing with output 
+\title{Test contrasts of gene sets between groups using rotation testing with output
 to Excel}
 \usage{
 roast_contrasts(object, G, stats.tab, grp = NULL, contrasts.v,
-  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean", name,
-  weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
-  correlation = NULL, adjust.method = "BH", min.ngenes = 3,
-  max.ngenes = 1000, alternative = c("two.sided", "less", "greater"),
-  n.toptabs = Inf)
+  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
+  name = NA, weights = NULL, gene.weights = NULL, trend = FALSE,
+  block = NULL, correlation = NULL, adjust.method = "BH",
+  min.ngenes = 3, max.ngenes = 1000, nrot = 999,
+  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf)
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values for a series of arrays, with rows corresponding to 
+\item{object}{A matrix-like data object containing log-ratios or
+log-expression values for a series of arrays, with rows corresponding to
 genes and columns to samples.}
 
-\item{G}{a gene set list returned from \code{\link{read.gmt}}.}
+\item{G}{a gene set list returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{a table of feature (e.g. gene) statistics, that the Excel 
+\item{stats.tab}{a table of feature (e.g. gene) statistics, that the Excel
 table can link to.}
 
-\item{grp}{Vector of phenotype groups of the samples, which represent valid 
-variable names in R. Should be same length as \code{ncol(object)}. If the 
+\item{grp}{Vector of phenotype groups of the samples, which represent valid
+variable names in R. Should be same length as \code{ncol(object)}. If the
 vector is named, names should match \code{colnames(object)}.}
 
-\item{contrasts.v}{A named vector of contrasts for 
+\item{contrasts.v}{A named vector of contrasts for
 \code{\link[limma]{makeContrasts}}.}
 
-\item{design}{the design matrix of the experiment, with rows corresponding to 
+\item{design}{the design matrix of the experiment, with rows corresponding to
 arrays and columns to coefficients to be estimated.}
 
 \item{fun}{function to use, either \code{fry} or \code{mroast}.}
 
-\item{set.statistic}{summary set statistic, if using \code{mroast}. 
-Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or 
+\item{set.statistic}{summary set statistic, if using \code{mroast}.
+Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or
 \code{"msq"}.}
 
-\item{name}{a name for the folder and Excel file that get written.}
+\item{name}{a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
 \item{weights}{non-negative observation weights passed to \code{lmFit}. Can be
-a numeric matrix of individual weights, of same size as the object 
-expression matrix, or a numeric vector of array weights with length equal to
-\code{ncol} of the expression matrix, or a numeric vector of gene weights 
-with length equal to \code{nrow} of the expression matrix.}
+a numeric matrix of individual weights of same size as \code{object} or a numeric 
+vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
+of gene weights with length equal to \code{nrow(object)}.}
 
-\item{gene.weights}{numeric vector of directional (positive or negative) 
-genewise weights, passed to \code{mroast} or \code{fry}. This vector must 
+\item{gene.weights}{numeric vector of directional (positive or negative)
+genewise weights, passed to \code{mroast} only. This vector must
 have length equal to \code{nrow(object)}.}
 
-\item{trend}{logical, should an intensity-trend be allowed for the prior 
-variance? Default is that the prior variance is constant.}
+\item{trend}{logical, should an intensity-trend be allowed for the prior
+variance? Default is that the prior variance is constant. Only for \code{mroast}.}
 
-\item{block}{vector or factor specifying a blocking variable on the arrays. 
-Has length equal to the number of arrays.}
+\item{block}{vector or factor specifying a blocking variable on the arrays.
+Has length equal to the number of arrays. Only for \code{mroast}.}
 
-\item{correlation}{the inter-duplicate or inter-technical replicate 
-correlation.}
+\item{correlation}{the inter-duplicate or inter-technical replicate
+correlation. Only for \code{mroast}.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{method used to adjust the p-values for multiple testing.
+Only for \code{mroast}.}
 
 \item{min.ngenes}{minimum number of genes needed in a gene set for testing.}
 
 \item{max.ngenes}{maximum number of genes needed in a gene set for testing.}
 
-\item{alternative}{indicates the alternative hypothesis and must be one of 
-\code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"} 
+\item{nrot}{number of rotations used to estimate the p-values for \code{mroast}.}
+
+\item{alternative}{indicates the alternative hypothesis and must be one of
+\code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"}
 corresponds to positive association, \code{"less"} to negative association.}
 
 \item{n.toptabs}{number of gene set toptables to write to CSV and link to from
 Excel}
 }
 \value{
-dataframe of gene set statistics.
+data frame of gene set statistics.
 }
 \description{
-Test contrasts of gene sets between groups using \code{limma} function
-\code{\link[limma]{fry}} or \code{\link[limma]{mroast}}. It returns a
-dataframe with statistics per gene set, and writes this to an Excel file. The
-Excel file links to CSV files, which contain statistics per gene set.
+Test contrasts of gene sets using \code{\link[limma]{roast}} with functions
+\code{mroast} or \code{fry}. It returns a data frame with statistics per gene set, 
+and writes this to an Excel file. The Excel file links to CSV files, which contain 
+statistics per gene set. Some of the arguments only apply to \code{mroast}.
 }

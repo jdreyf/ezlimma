@@ -44,12 +44,13 @@ correlation.}
 \item{add.means}{logical indicating if (unweighted) group means per row
 should be added to the output.}
 
-\item{cols}{columns of \code{topTable} output the user would like in the 
-output, although the names are changed. If \code{logFC} is specified, 
-\code{FC} will also be given.}
+\item{cols}{columns of \code{topTable} the user would like in the 
+output. Possibilities include \code{'logFC', 'AveExpr', 't', 'P.Value', 'adj.P.Val', 'B'}. 
+Once selected, the column names of the output may be different than \code{cols}.
+If \code{logFC} is specified, \code{FC} will automatically also be given.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
 Apply lmFit, contrasts.fit, & eBayes to one or more contrasts by passing each 

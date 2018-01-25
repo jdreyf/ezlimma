@@ -2,18 +2,19 @@
 #'to Excel
 #'
 #'Test association of gene sets to phenotype using rotation testing with
-#'\code{limma} function \code{\link[limma]{fry}} or \code{\link[limma]{mroast}}.
-#'It returns a dataframe with statistics per gene set, and writes this to an
+#'\code{\link[limma]{roast}} using \code{limma} functions \code{mroast} or \code{fry}.
+#'It returns a data frame with statistics per gene set, and writes this to an
 #'Excel file. The Excel file links to CSV files, which contain statistics per
 #'gene set.
 #'
 #'@param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of arrays, with rows corresponding to 
 #'  genes and columns to samples.
-#'@param G a gene set list returned from \code{\link{read.gmt}}.
+#'@param G a gene set list returned from \link{read_gmt}.
 #'@param stats.tab a table of feature (e.g. gene) statistics, that the Excel 
 #'  table can link to.
-#'@param name a name for the folder and Excel file that get written.
+#'@param name a name for the folder and Excel file that get written. Set to \code{NA} 
+#'  to avoid writing output.
 #'@param phenotype Vector of phenotypes of the samples. Should be same length as
 #'  \code{ncol(object)}. If the vector is named, names should match 
 #'  \code{colnames(object)}.
@@ -46,14 +47,15 @@
 #'  corresponds to positive association, \code{"less"} to negative association.
 #'@param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
+#'@param nrot number of rotations used to compute the p-values in \code{mroast}.
 #'@return dataframe of gene set statistics.
 #'@export
 
-roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NULL, 
+roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = 'mean',
                     weights = NULL, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
-                    alternative=c("two.sided", "less", "greater"), n.toptabs = Inf){
+                    alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999){
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
   if (!is.null(phenotype)){
@@ -73,7 +75,7 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
       #model.matrix clips NAs in phenotype, so need to also remove from object, weights
       n.na <- sum(is.na(phenotype))
       if (n.na > 0){
-          warning(n.na, 'NAs in phenotype removed')
+          warning(n.na, ' NAs in phenotype removed')
           pheno.nona <- phenotype[!is.na(phenotype)]
           object <- object[,!is.na(phenotype), drop=FALSE]
           if(!is.null(weights)){
@@ -128,7 +130,8 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
   
   colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   #add prefix to each column except 1st, which is NGenes
-  colnames(res)[-1] <- paste(colnames(design)[2], colnames(res)[-1], sep = '.')
+  #but colnames(design)[2] is ""
+  #colnames(res)[-1] <- paste(colnames(design)[2], colnames(res)[-1], sep = '.')
   res <- res[order(combine_pvalues(res, grep('\\.p$', colnames(res)))), ]
   
   #change FDR to appropriate adjustment name if user doesn't use FDR
@@ -137,27 +140,29 @@ roast_cor <- function(object, G, stats.tab, name, phenotype = NULL, design = NUL
   }
   
   ##write xlsx file with links
-  name <- paste(name, fun, sep='_')
-  dir.create(name)
-  dir.create(paste0(name, '/pathways'))
-  
-  if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
-  pwys <- rownames(res)[1:n.toptabs]
-  for(pwy in pwys){
-      stat <- stats.tab[index[[pwy]], ]
-      stat <- stat[order(combine_pvalues(stat)), ]
-      write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
+  if (!is.na(name)){
+    name <- paste(name, fun, sep="_")
+    dir.create(name)
+    dir.create(paste0(name, '/pathways'))
+    
+    if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
+    pwys <- rownames(res)[1:n.toptabs]
+    for(pwy in pwys){
+        stat <- stats.tab[index[[pwy]], ]
+        stat <- stat[order(combine_pvalues(stat)), ]
+        write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
+    }
+    
+    wb <- xlsx::createWorkbook()
+    sheet <- xlsx::createSheet(wb, sheetName = name)
+    xlsx::addDataFrame(df_signif(res, 3), sheet)
+    rows  <- xlsx::getRows(sheet)
+    cells <- xlsx::getCells(rows, 1)
+    
+    for(i in seq_along(pwys)){
+      xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
+    }
+    xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
   }
-  
-  wb <- xlsx::createWorkbook()
-  sheet <- xlsx::createSheet(wb, sheetName = name)
-  xlsx::addDataFrame(df_signif(res, 3), sheet)
-  rows  <- xlsx::getRows(sheet)
-  cells <- xlsx::getCells(rows, 1)
-  
-  for(i in seq_along(pwys)){
-    xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
-  }
-  xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
   return(res)
 }#end fcn

@@ -1,16 +1,15 @@
 #'Test contrasts of gene sets between groups using rotation testing with output
 #'to Excel
 #'
-#'Test contrasts of gene sets between groups using \code{limma} function
-#'\code{\link[limma]{fry}} or \code{\link[limma]{mroast}}. It returns a
-#'dataframe with statistics per gene set, and writes this to an Excel file. The
-#'Excel file links to CSV files, which contain statistics per gene set. Some of the
-#'arguments only apply to method \code{mroast}.
+#'Test contrasts of gene sets using \code{\link[limma]{roast}} with functions
+#'\code{mroast} or \code{fry}. It returns a data frame with statistics per gene set, 
+#'and writes this to an Excel file. The Excel file links to CSV files, which contain 
+#'statistics per gene set. Some of the arguments only apply to \code{mroast}.
 #'
 #'@param object A matrix-like data object containing log-ratios or
 #'  log-expression values for a series of arrays, with rows corresponding to
 #'  genes and columns to samples.
-#'@param G a gene set list returned from \code{\link{read.gmt}}.
+#'@param G a gene set list returned from \code{\link{read_gmt}}.
 #'@param stats.tab a table of feature (e.g. gene) statistics, that the Excel
 #'  table can link to.
 #' @param grp Vector of phenotype groups of the samples, which represent valid
@@ -24,12 +23,11 @@
 #'@param set.statistic summary set statistic, if using \code{mroast}.
 #'  Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or
 #'  \code{"msq"}.
-#'@param name a name for the folder and Excel file that get written.
+#'@param name a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
 #'@param weights non-negative observation weights passed to \code{lmFit}. Can be
-#'  a numeric matrix of individual weights, of same size as the object
-#'  expression matrix, or a numeric vector of array weights with length equal to
-#'  \code{ncol} of the expression matrix, or a numeric vector of gene weights
-#'  with length equal to \code{nrow} of the expression matrix.
+#'  a numeric matrix of individual weights of same size as \code{object} or a numeric 
+#'  vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
+#'  of gene weights with length equal to \code{nrow(object)}.
 #'@param gene.weights numeric vector of directional (positive or negative)
 #'  genewise weights, passed to \code{mroast} only. This vector must
 #'  have length equal to \code{nrow(object)}.
@@ -49,11 +47,11 @@
 #'  corresponds to positive association, \code{"less"} to negative association.
 #'@param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
-#'@return dataframe of gene set statistics.
+#'@return data frame of gene set statistics.
 #'@export
 
 roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=NULL,
-                          fun=c("fry", "mroast"), set.statistic = 'mean', name,
+                          fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
                           weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
                           correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000,
                           nrot=999, alternative=c("two.sided", "less", "greater"), n.toptabs = Inf){
@@ -137,27 +135,29 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   }
 
   ##write xlsx file with links
-  name <- paste(name, fun, sep="_")
-  dir.create(name)
-  dir.create(paste0(name, '/pathways'))
-
-  if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
-  pwys <- rownames(res)[1:n.toptabs]
-  for(pwy in pwys){
+  if (!is.na(name)){
+    name <- paste(name, fun, sep="_")
+    dir.create(name)
+    dir.create(paste0(name, '/pathways'))
+    
+    if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
+    pwys <- rownames(res)[1:n.toptabs]
+    for(pwy in pwys){
       stat <- stats.tab[index[[pwy]], ]
       stat <- stat[order(combine_pvalues(stat)), ]
       write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
-  }
-
-  wb <- xlsx::createWorkbook()
-  sheet <- xlsx::createSheet(wb, sheetName = name)
-  xlsx::addDataFrame(df_signif(res, 3), sheet)
-  rows  <- xlsx::getRows(sheet)
-  cells <- xlsx::getCells(rows, 1)
-
-  for(i in seq_along(pwys)){
-    xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
-  }
-  xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
+    }
+    
+    wb <- xlsx::createWorkbook()
+    sheet <- xlsx::createSheet(wb, sheetName = name)
+    xlsx::addDataFrame(df_signif(res, 3), sheet)
+    rows  <- xlsx::getRows(sheet)
+    cells <- xlsx::getCells(rows, 1)
+    
+    for(i in seq_along(pwys)){
+      xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
+    }
+    xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
+  }#end if !is.na(name)
   return(res)
 }#end fcn

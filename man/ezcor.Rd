@@ -4,7 +4,7 @@
 \alias{ezcor}
 \title{Test correlation of each row of an object to a phenotype vector}
 \usage{
-ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
+ezcor(object, phenotype, method = "pearson", reorder.rows = FALSE,
   prefix = "", adjust.method = "BH", alternative = "two.sided")
 }
 \arguments{
@@ -20,9 +20,8 @@ genes and columns to samples.}
 to be used for the test. One of \code{"pearson"}, \code{"kendall"}, or
 \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{topTableF}} or be left in the same order as 
-\code{object}? Default is to reorder.}
+\item{reorder.rows}{logical, should rows be reordered by p-value or be left in 
+the same order as \code{object}? Default is not to reorder.}
 
 \item{prefix}{character string to add to beginning of column names.}
 

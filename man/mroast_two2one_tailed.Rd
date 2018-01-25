@@ -17,7 +17,7 @@ mroast_two2one_tailed(tab, pv.col = "PValue", dir.col = "Direction",
 \item{direction}{direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
 }
 \value{
-p-values.
+Vector of p-values.
 }
 \description{
 Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{mroast}.

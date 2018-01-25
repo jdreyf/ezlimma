@@ -27,10 +27,11 @@
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @param add.means logical indicating if (unweighted) group means per row
 #'   should be added to the output.
-#' @param cols columns of \code{topTable} output the user would like in the 
-#'   output, although the names are changed. If \code{logFC} is specified, 
-#'   \code{FC} will also be given.
-#' @return Dataframe.
+#' @param cols columns of \code{topTable} the user would like in the 
+#'   output. Possibilities include \code{'logFC', 'AveExpr', 't', 'P.Value', 'adj.P.Val', 'B'}. 
+#'   Once selected, the column names of the output may be different than \code{cols}.
+#'   If \code{logFC} is specified, \code{FC} will automatically also be given.
+#' @return Data frame.
 #' @details If \code{design} is \code{NULL} and \code{grp} is given, design will
 #'   be calculated as \code{model.matrix(~0+grp)}. However, \code{grp} isn't
 #'   needed if \code{design} is provided & \code{add.means} is \code{FALSE}. See

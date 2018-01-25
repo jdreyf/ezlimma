@@ -10,11 +10,12 @@ Description: Functions for more easily using limma, such as to test multiple
     contrasts for genes or pathways in one line. Also, an Excel front-end for
 	limma's pathway analysis functions roast and fry.
 Depends:
-	limma (>= 3.18),
-	xlsx
+	limma (>= 3.34.6)
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat,
+	xlsx
 License: MIT License
 Encoding: UTF-8
 LazyData: true

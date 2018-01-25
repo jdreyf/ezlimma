@@ -25,8 +25,8 @@
 #'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
 #'  is specified, \code{FC} will also be given.
 #'@param reorder.rows logical, should rows be reordered by F-statistic from 
-#'  \code{\link[limma]{topTableF}} or be left in the same order as 
-#'  \code{object}? Default is to reorder.
+#'  \code{\link[limma]{toptable}} or be left in the same order as 
+#'  \code{object}? Default is not to reorder.
 #'@return Dataframe.
 #'@details If \code{design} is \code{NULL} and \code{phenotype} is given, design
 #'  will be calculated as \code{model.matrix(~0+phenotype)}. However, 
@@ -38,7 +38,7 @@
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NULL, 
                       trend=FALSE, adjust.method='BH', 
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC'), 
-                      reorder.rows=TRUE){
+                      reorder.rows=FALSE){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|
                length(weights)==ncol(object))
   
@@ -51,7 +51,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NU
       #model.matrix clips NAs in pheno, so need to also remove from mat
       n.na <- sum(is.na(phenotype))
       if (n.na>0){
-        message(n.na, 'NAs in phenotype removed')
+        message(n.na, ' NAs removed')
         pheno.nona <- phenotype[!is.na(phenotype)]
         object <- object[,!is.na(phenotype)]
         if (!is.null(weights)){ 

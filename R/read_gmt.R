@@ -9,7 +9,6 @@
 #' @return A list of gene sets. Each element has a gene set \code{name},
 #'   \code{description}, and \code{genes}.
 #' @export
-#'   
 
 read_gmt <- function(file.gmt){
   x0 <- scan(file.gmt, what="", sep="\n", quiet=TRUE)

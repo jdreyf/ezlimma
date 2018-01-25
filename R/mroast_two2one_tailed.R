@@ -6,14 +6,14 @@
 #'@param pv.col name or index of p-value column.
 #'@param dir.col name or index of column giving direction gene set has changed.
 #'@param direction direction of gene set change. Can be \code{"Up"} or \code{"Down"}.
-#'@return p-values.
+#'@return Vector of p-values.
 
 mroast_two2one_tailed <- function(tab, pv.col='PValue', dir.col='Direction', direction='Up',
                                   nrot = 9999){
   stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,pv.col]<=1, 
             tab[,pv.col]>=0, min(tab[,pv.col]) >= 1/(nrot+1) )
   
-  #pv=(b+1)/(nrot+1) where b  number of rotations giving a more extreme stat
+  #pv=(b+1)/(nrot+1) where b = number of rotations giving a more extreme stat
   #if dir.col==direction, then by symmetry half of the previously extreme rotations 
   #are still extreme, so pv'=(b/2 + 1)/(nrot+1)
   #if dir.col!=direction, then nrot-b/2 of the previously extreme rotations are extreme,

@@ -29,6 +29,6 @@ Dataframe.
 Wrapper for limma topTable function that subsets and changes colnames
 }
 \details{
-See \code{\link{[limma]{topTable}}} for more details on many of 
+See \code{\link[limma]{topTable}} for more details on many of 
 these, as this fuction is a wrapper for that one.
 }

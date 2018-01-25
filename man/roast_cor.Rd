@@ -5,23 +5,25 @@
 \title{Test association of gene sets to phenotype using rotation testing with output
 to Excel}
 \usage{
-roast_cor(object, G, stats.tab, name, phenotype = NULL, design = NULL,
-  fun = c("fry", "mroast"), set.statistic = "mean", weights = NULL,
-  gene.weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", min.ngenes = 3, max.ngenes = 1000,
-  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf)
+roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
+  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
+  weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
+  correlation = NULL, adjust.method = "BH", min.ngenes = 3,
+  max.ngenes = 1000, alternative = c("two.sided", "less", "greater"),
+  n.toptabs = Inf, nrot = 999)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
 log-expression values for a series of arrays, with rows corresponding to 
 genes and columns to samples.}
 
-\item{G}{a gene set list returned from \code{\link{read.gmt}}.}
+\item{G}{a gene set list returned from \link{read_gmt}.}
 
 \item{stats.tab}{a table of feature (e.g. gene) statistics, that the Excel 
 table can link to.}
 
-\item{name}{a name for the folder and Excel file that get written.}
+\item{name}{a name for the folder and Excel file that get written. Set to \code{NA} 
+to avoid writing output.}
 
 \item{phenotype}{Vector of phenotypes of the samples. Should be same length as
 \code{ncol(object)}. If the vector is named, names should match 
@@ -68,14 +70,16 @@ corresponds to positive association, \code{"less"} to negative association.}
 
 \item{n.toptabs}{number of gene set toptables to write to CSV and link to from
 Excel}
+
+\item{nrot}{number of rotations used to compute the p-values in \code{mroast}.}
 }
 \value{
 dataframe of gene set statistics.
 }
 \description{
 Test association of gene sets to phenotype using rotation testing with
-\code{limma} function \code{\link[limma]{fry}} or \code{\link[limma]{mroast}}.
-It returns a dataframe with statistics per gene set, and writes this to an
+\code{\link[limma]{roast}} using \code{limma} functions \code{mroast} or \code{fry}.
+It returns a data frame with statistics per gene set, and writes this to an
 Excel file. The Excel file links to CSV files, which contain statistics per
 gene set.
 }

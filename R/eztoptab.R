@@ -11,7 +11,7 @@
 #' @param prefix character string to add to beginning of column names.
 #' @param coef column number or column name specifying which coefficient or 
 #' contrast of the linear model is of interest.
-#' @details See \code{\link{[limma]{topTable}}} for more details on many of 
+#' @details See \code{\link[limma]{topTable}} for more details on many of 
 #' these, as this fuction is a wrapper for that one.
 #' @return Dataframe.
 

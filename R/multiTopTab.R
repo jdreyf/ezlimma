@@ -9,7 +9,7 @@
 #' \code{FC} will also be given.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @details This function calls \code{\link{eztoptab}}. See also 
-#' \code{\link{[limma]{topTable}}} for more details on many of these, as this 
+#' \code{\link[limma]{toptable}} for more details on many of these, as this 
 #' fuction is a wrapper for that one.
 #' @return Dataframe
 

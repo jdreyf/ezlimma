@@ -13,12 +13,12 @@ logfc2fc(logFC)
 The fold-change.
 }
 \description{
-Transform a possibly negative log2 fold-change to a fold-change.
+Transform a log2 fold-change to a possibly negative fold-change.
 }
 \details{
-This function assumes that log fold-changes less than 1 were converted 
-to their negative multiplicative reciprocal, e.g. lfc = 0.5 -> lfc = -2, as is
-commonly done in biology.
+This function converts log fold-changes < 0
+to their negative multiplicative reciprocal, 
+e.g. fc = 0.5 -> fc = -2, as is commonly done in biology.
 }
 \examples{
 logfc2fc(2) #4

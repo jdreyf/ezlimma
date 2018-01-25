@@ -25,6 +25,6 @@ Combine one or more toptables extracted from \code{fit}.
 }
 \details{
 This function calls \code{\link{eztoptab}}. See also 
-\code{\link{[limma]{topTable}}} for more details on many of these, as this 
+\code{\link[limma]{toptable}} for more details on many of these, as this 
 fuction is a wrapper for that one.
 }

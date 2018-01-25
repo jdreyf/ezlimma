@@ -5,7 +5,7 @@
 \title{Test correlation of each row of an object to each column of pheno.mat}
 \usage{
 multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = TRUE, prefix = "", adjust.method = "BH",
+  "limma"), reorder.rows = FALSE, prefix = "", adjust.method = "BH",
   limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
@@ -20,18 +20,18 @@ correspond to columns of \code{object}.}
 \item{method}{a character string indicating which association is to be used 
 for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
 from \code{\link[stats]{cor.test}} or \code{"limma"} for 
-\code{\link{limma.cor}}.}
+\code{\link{limma_cor}}.}
 
 \item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{topTableF}} or be left in the same order as 
-\code{object}? Default is to reorder.}
+\code{\link[limma]{toptable}} or be left in the same order as 
+\code{object}? Default is not to reorder.}
 
 \item{prefix}{character string to add to beginning of column names.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
 
 \item{limma.cols}{if \code{method="limma"}, this specifies \code{cols} from 
-\code{\link{limma.cor}}. Ignored without a warning if \code{method} not 
+\code{\link{limma_cor}}. Ignored without a warning if \code{method} not 
 \code{"limma"}.}
 }
 \value{
@@ -41,5 +41,5 @@ Dataframe with several statistical columns corresponding to each
 \description{
 Test correlation of each row of an object to each column of pheno.mat using 
 one of Pearson's, Kendall's, or Spearman's correlation methods, or limma 
-regression in \code{\link{limma.cor}}.
+regression in \code{\link{limma_cor}}.
 }

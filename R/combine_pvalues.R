@@ -7,20 +7,24 @@
 #'@param pv.cols the column names or column indices with p-values. If
 #'  \code{NULL}, the function searches for columns that end with \code{.p} or
 #'  \code{.pval}.
-#'@details This function uses the z-transform method to combine p-values, equivalently to using unweighted \code{method="z.transform"} in
-#'\code{\link[survcomp]{combine.test}}.
-#'@return p-value.
+#'@details This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
+#'\code{method="z.transform"} in \code{\link[survcomp]{combine.test}}.
+#'@return A vector of p-values.
 #'@seealso \code{\link[survcomp]{combine.test}}.
+#'@examples
+#' tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
+#' combine_pvalues(tab)
 #'@export
 
 #don't export
 combine_pvalues <- function(mat, pv.cols=NULL){
+  stopifnot(ncol(mat) > 1, !is.null(pv.cols) || !is.null(colnames(mat)))
   #if pv.cols not given, grep for them at end of column names
   if (is.null(pv.cols)){
-    pv.cols <- grep(paste0('\\.|^', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
+    pv.cols <- grep(pattern=paste0('(\\.|^)', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
   }
   stopifnot(length(pv.cols)>0)
-  comb.p <- apply(as.matrix(mat[,pv.cols]), 1, FUN=function(p){ 
+  comb.p <- apply(as.matrix(mat[,pv.cols]), MARGIN=1, FUN=function(p){ 
     p.nona <- p[!is.na(p)]
     z <- qnorm(p.nona, lower.tail = FALSE)
     cp <- pnorm(sum(z)/sqrt(length(p.nona)), lower.tail = FALSE)

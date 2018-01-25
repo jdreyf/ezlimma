@@ -7,9 +7,9 @@
 df_signif(df, digits = 3)
 }
 \arguments{
-\item{df}{A dataframe}
+\item{df}{A data frame}
 
-\item{digits}{number of digits to take significance to}
+\item{digits}{number of digits passed to \code{signif}.}
 }
 \description{
 Apply \code{signif} function to numeric columns of data frames
