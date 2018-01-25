@@ -17,9 +17,9 @@ roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
 log-expression values for a series of arrays, with rows corresponding to 
 genes and columns to samples.}
 
-\item{G}{a gene set list returned from \link{read_gmt}.}
+\item{G}{a gene set list as returned from \link{read_gmt}.}
 
-\item{stats.tab}{a table of feature (e.g. gene) statistics, that the Excel 
+\item{stats.tab}{a table of feature (e.g. gene) statistics that the Excel 
 table can link to.}
 
 \item{name}{a name for the folder and Excel file that get written. Set to \code{NA} 
@@ -74,7 +74,7 @@ Excel}
 \item{nrot}{number of rotations used to compute the p-values in \code{mroast}.}
 }
 \value{
-dataframe of gene set statistics.
+data frame of gene set statistics.
 }
 \description{
 Test association of gene sets to phenotype using rotation testing with

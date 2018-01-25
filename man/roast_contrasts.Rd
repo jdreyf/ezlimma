@@ -17,9 +17,9 @@ roast_contrasts(object, G, stats.tab, grp = NULL, contrasts.v,
 log-expression values for a series of arrays, with rows corresponding to
 genes and columns to samples.}
 
-\item{G}{a gene set list returned from \code{\link{read_gmt}}.}
+\item{G}{a gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{a table of feature (e.g. gene) statistics, that the Excel
+\item{stats.tab}{a table of feature (e.g. gene) statistics that the Excel
 table can link to.}
 
 \item{grp}{Vector of phenotype groups of the samples, which represent valid

@@ -10,8 +10,8 @@
 #'@param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of arrays, with rows corresponding to 
 #'  genes and columns to samples.
-#'@param G a gene set list returned from \link{read_gmt}.
-#'@param stats.tab a table of feature (e.g. gene) statistics, that the Excel 
+#'@param G a gene set list as returned from \link{read_gmt}.
+#'@param stats.tab a table of feature (e.g. gene) statistics that the Excel 
 #'  table can link to.
 #'@param name a name for the folder and Excel file that get written. Set to \code{NA} 
 #'  to avoid writing output.
@@ -48,7 +48,7 @@
 #'@param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
 #'@param nrot number of rotations used to compute the p-values in \code{mroast}.
-#'@return dataframe of gene set statistics.
+#'@return data frame of gene set statistics.
 #'@export
 
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
@@ -65,11 +65,8 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
   
-  ##define objects
-  index <- lapply(G, function(g) rownames(object)[rownames(object) %in% g$genes])
-  names(index) <- sapply(G, function(g) g$name)
-  ##remove gene sets of the wrong size
-  index <- index[sapply(index, function(x) length(x) >= min.ngenes & length(x) <= max.ngenes)]
+  ##get G index
+  index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)
   
   if (is.null(design)){
       #model.matrix clips NAs in phenotype, so need to also remove from object, weights
@@ -115,19 +112,11 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
                   trend.var = trend, block = block, correlation = correlation,
                   adjust.method = adjust.method, nrot = nrot)
   }
-  #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
-  if (alternative!="two.sided"){ 
-    direction <- sub("greater", "Up", sub("less", "Down", alternative))
-    if (fun=="fry"){
-      res[,'PValue'] <- fry_two2one_tailed(res, direction = direction)
-    } else {
-      res[,'PValue'] <- mroast_two2one_tailed(res, direction = one.tailed, nrot = nrot)
-    }
-    res[,'FDR'] <- p.adjust(res[,'PValue'], method = adjust.method)
-    mixed.cols <- grep('Mixed', colnames(res))
-    if (length(mixed.cols) > 0){ res <- res[,-mixed.cols] }
-  }#end if one.tailed
   
+  ##if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
+  if (alternative!="two.sided"){
+    res <- roast_one_tailed(roast.res=res, fun=fun, alternative=alternative, nrot=nrot, adjust.method=adjust.method)
+  }
   colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   #add prefix to each column except 1st, which is NGenes
   #but colnames(design)[2] is ""
@@ -141,28 +130,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   
   ##write xlsx file with links
   if (!is.na(name)){
-    name <- paste(name, fun, sep="_")
-    dir.create(name)
-    dir.create(paste0(name, '/pathways'))
-    
-    if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
-    pwys <- rownames(res)[1:n.toptabs]
-    for(pwy in pwys){
-        stat <- stats.tab[index[[pwy]], ]
-        stat <- stat[order(combine_pvalues(stat)), ]
-        write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
-    }
-    
-    wb <- xlsx::createWorkbook()
-    sheet <- xlsx::createSheet(wb, sheetName = name)
-    xlsx::addDataFrame(df_signif(res, 3), sheet)
-    rows  <- xlsx::getRows(sheet)
-    cells <- xlsx::getCells(rows, 1)
-    
-    for(i in seq_along(pwys)){
-      xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
-    }
-    xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
+    write_linked_xlsx(name=name, fun=fun, res=res, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
   }
   return(res)
 }#end fcn

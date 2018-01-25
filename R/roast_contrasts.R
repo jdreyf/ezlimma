@@ -9,8 +9,8 @@
 #'@param object A matrix-like data object containing log-ratios or
 #'  log-expression values for a series of arrays, with rows corresponding to
 #'  genes and columns to samples.
-#'@param G a gene set list returned from \code{\link{read_gmt}}.
-#'@param stats.tab a table of feature (e.g. gene) statistics, that the Excel
+#'@param G a gene set list as returned from \code{\link{read_gmt}}.
+#'@param stats.tab a table of feature (e.g. gene) statistics that the Excel
 #'  table can link to.
 #' @param grp Vector of phenotype groups of the samples, which represent valid
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the
@@ -69,11 +69,8 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
 
-  ##define objects
-  index <- lapply(G, function(g) rownames(object)[rownames(object) %in% g$genes])
-  names(index) <- sapply(G, function(g) g$name)
-  ##remove gene sets of the wrong size
-  index <- index[sapply(index, function(x) length(x) >= min.ngenes & length(x) <= max.ngenes)]
+  ##get G index
+  index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)
 
   if (is.null(design)){
       stopifnot(ncol(object) == length(grp), colnames(object) == names(grp))
@@ -82,7 +79,8 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   }
 
   contr.mat <- makeContrasts(contrasts = contrasts.v, levels = design)
-
+  
+  #deal with weights
   if (!is.matrix(object)){
       if (!is.null(object$weights)){
           if (!is.null(weights)){
@@ -104,21 +102,15 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
                      block = block, correlation = correlation, adjust.method = adjust.method,
                      set.statistic = set.statistic, nrot=nrot)
     }
+    #need to coerce "direction" from factor to char
+    res.tmp$Direction <- as.character(res.tmp$Direction)
     #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
     if (alternative!="two.sided"){
-      direction <- sub("greater", "Up", sub("less", "Down", alternative))
-      if (fun=="fry"){
-        res[,'PValue'] <- fry_two2one_tailed(res, direction = direction)
-      } else {
-        res[,'PValue'] <- mroast_two2one_tailed(res, direction = direction, nrot = nrot)
-      }
-
-      res.tmp[,'FDR'] <- p.adjust(res.tmp[,'PValue'], method = adjust.method)
-      mixed.cols <- grep('Mixed', colnames(res.tmp))
-      if (length(mixed.cols)>0){ res.tmp <- res.tmp[,-mixed.cols] }
+      res.tmp <- roast_one_tailed(roast.res=res.tmp,  fun=fun, alternative=alternative, 
+                                  nrot=nrot, adjust.method=adjust.method)
     }#end if one.tailed
-
-    colnames(res.tmp) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res.tmp))))
+    colnames(res.tmp) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", 
+                                                  gsub("PValue.Mixed", "Mixed.p", colnames(res.tmp))))
     #add contrast names to each column except 1st, which is NGenes
     colnames(res.tmp)[-1] <- paste(names(contrasts.v[i]), colnames(res.tmp)[-1], sep = '.')
     if (i == 1){
@@ -136,28 +128,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
 
   ##write xlsx file with links
   if (!is.na(name)){
-    name <- paste(name, fun, sep="_")
-    dir.create(name)
-    dir.create(paste0(name, '/pathways'))
-    
-    if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
-    pwys <- rownames(res)[1:n.toptabs]
-    for(pwy in pwys){
-      stat <- stats.tab[index[[pwy]], ]
-      stat <- stat[order(combine_pvalues(stat)), ]
-      write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
-    }
-    
-    wb <- xlsx::createWorkbook()
-    sheet <- xlsx::createSheet(wb, sheetName = name)
-    xlsx::addDataFrame(df_signif(res, 3), sheet)
-    rows  <- xlsx::getRows(sheet)
-    cells <- xlsx::getCells(rows, 1)
-    
-    for(i in seq_along(pwys)){
-      xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
-    }
-    xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
+    write_linked_xlsx(name=name, fun=fun, res=res, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
   }#end if !is.na(name)
   return(res)
 }#end fcn

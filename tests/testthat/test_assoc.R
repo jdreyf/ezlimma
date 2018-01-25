@@ -38,7 +38,13 @@ test_that("limma_contrasts", {
   
   #give only p-val column
   eztt.p <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, cols = "P.Value", add.means = FALSE)
-  expect_equal(eztt.p, eztt[,grep("\\.p$", colnames(eztt))])
+  expect_equal(eztt.p, eztt[rownames(eztt.p), grep("\\.p$", colnames(eztt))])
+})
+
+test_that("contr_names", {
+  contr.v <- c("First3")
+  eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
+  expect_equal(length(grep("^\\.$", colnames(eztt))), 0)
 })
 
 test_that("ezcor", {
@@ -71,11 +77,12 @@ test_that("limma_cor", {
   fit2 <- eBayes(fit)
   toptab <- topTable(fit2, coef=2, num=Inf)
   res2 <- limma_cor(M, phenotype = pheno.v)
-  expect_equal(rownames(res2), rownames(toptab))
+  res2 <- res2[rownames(toptab),]
+  # expect_equal(rownames(res2), rownames(toptab))
   expect_equal(res2$p, toptab$P.Value)
-}
+})
 
-test_that("lmFit weights", {
+test_that("lmFit_weights", {
   wts <- (1:ncol(M))/ncol(M)
   fit.w <- lmFit(M, design=design, weights=wts)
   fit.aw <- lmFit(M, design=design, array.weights=wts)
@@ -92,10 +99,23 @@ test_that("roast_contrasts", {
   expect_equal(rownames(rc.res2)[1], "pwy1")
 })
 
+test_that("roast one sided testing", {
+  tmp <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+  tmp2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", alternative = "less")
+  expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
+  expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
+  
+  tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+  tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")
+  expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.01)
+  expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.01)
+  expect_lt(abs(tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.01)
+})
+
 test_that("roast_cor", {
   #one less weight since have an NA
   rc.res3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6)
-  expect_equal(rownames(rc.res1)[1], "pwy1")
+  expect_equal(rownames(rc.res3)[1], "pwy1")
   #colnames of res don't start with .
   expect_equal(length(grep("^\\.", colnames(rc.res3))), 0)
 })
