@@ -126,6 +126,8 @@ test_that("roast_contrasts one sided testing", {
   tmp2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", alternative = "less")
   expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
   expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
+  #no mixed columns
+  expect_equal(length(grep("Mixed", colnames(tmp2))), 0)
   
   tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
   tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")

@@ -20,6 +20,9 @@ corresponds to positive association, \code{"less"} to negative association.}
 \item{adjust.method}{method used to adjust the p-values for multiple testing.
 Only for \code{mroast}.}
 }
+\value{
+Modified result from \code{mroast} or \code{fry}.
+}
 \description{
 Convert \code{mroast} or \code{fry} two-tailed results to one-tailed and remove 
 non-directional, termed "Mixed", statistics.

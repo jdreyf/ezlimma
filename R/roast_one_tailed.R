@@ -11,6 +11,7 @@
 #'@param nrot number of rotations used to estimate the p-values for \code{mroast}.
 #'@param adjust.method method used to adjust the p-values for multiple testing.
 #' Only for \code{mroast}.
+#'@return Modified result from \code{mroast} or \code{fry}.  
 
 roast_one_tailed <- function(roast.res, fun, alternative, nrot, adjust.method){
   direction <- sub("greater", "Up", sub("less", "Down", alternative))
