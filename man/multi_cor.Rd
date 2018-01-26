@@ -5,7 +5,7 @@
 \title{Test correlation of each row of an object to each column of pheno.mat}
 \usage{
 multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = FALSE, prefix = "", adjust.method = "BH",
+  "limma"), reorder.rows = TRUE, prefix = "", adjust.method = "BH",
   limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
@@ -13,7 +13,7 @@ multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
 log-expression values, with rows corresponding to features (eg genes) and 
 columns to samples.}
 
-\item{pheno.mat}{matrix of phenotypes of the samples, with each column one 
+\item{pheno.mat}{matrix-like data object of phenotypes of the samples, with each column one 
 phenotype vector. Length and names of rows of \code{pheno.mat} should 
 correspond to columns of \code{object}.}
 
@@ -24,7 +24,7 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for
 
 \item{reorder.rows}{logical, should rows be reordered by F-statistic from 
 \code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}? Default is not to reorder.}
+\code{object}?}
 
 \item{prefix}{character string to add to beginning of column names.}
 

@@ -7,7 +7,7 @@
 #'@param object A matrix-like data object containing log-ratios or 
 #'  log-expression values, with rows corresponding to features (eg genes) and 
 #'  columns to samples.
-#'@param pheno.mat matrix of phenotypes of the samples, with each column one 
+#'@param pheno.mat matrix-like data object of phenotypes of the samples, with each column one 
 #'  phenotype vector. Length and names of rows of \code{pheno.mat} should 
 #'  correspond to columns of \code{object}.
 #'@param method a character string indicating which association is to be used 
@@ -16,7 +16,7 @@
 #'  \code{\link{limma_cor}}.
 #'@param reorder.rows logical, should rows be reordered by F-statistic from 
 #'  \code{\link[limma]{toptable}} or be left in the same order as 
-#'  \code{object}? Default is not to reorder.
+#'  \code{object}?
 #'@param prefix character string to add to beginning of column names.
 #'@param adjust.method method used to adjust the p-values for multiple testing.
 #'@param limma.cols if \code{method="limma"}, this specifies \code{cols} from 
@@ -27,9 +27,10 @@
 #'@export
 
 multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendall', 'limma'),
-                     reorder.rows=FALSE, prefix='', adjust.method='BH', 
+                     reorder.rows=TRUE, prefix='', adjust.method='BH', 
                      limma.cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
   method <- match.arg(method)
+  if (is.null(dim(pheno.mat))) stop("pheno.mat needs to have rows and columns.")
   stopifnot(ncol(object)==nrow(pheno.mat), rownames(pheno.mat)==colnames(object))
   cor.mat <- NULL
   for (i in 1:ncol(pheno.mat)){

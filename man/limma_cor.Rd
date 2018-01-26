@@ -6,8 +6,7 @@
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = "",
   weights = NULL, trend = FALSE, adjust.method = "BH",
-  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"),
-  reorder.rows = FALSE)
+  reorder.rows = TRUE, cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -35,13 +34,13 @@ variance? Default is that the prior variance is constant.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
 
+\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
+\code{\link[limma]{toptable}} or be left in the same order as 
+\code{object}?}
+
 \item{cols}{columns of \code{topTable} output the user would like in the 
 result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
 is specified, \code{FC} will also be given.}
-
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}? Default is not to reorder.}
 }
 \value{
 Dataframe.

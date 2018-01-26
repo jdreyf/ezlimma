@@ -13,7 +13,7 @@
 #'  to be used for the test. One of \code{"pearson"}, \code{"kendall"}, or
 #'  \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.
 #'@param reorder.rows logical, should rows be reordered by p-value or be left in 
-#'  the same order as \code{object}? Default is not to reorder.
+#'  the same order as \code{object}?
 #'@param prefix character string to add to beginning of column names.
 #'@param adjust.method method used to adjust the p-values for multiple testing.
 #'@param alternative indicates the alternative hypothesis and must be one of 
@@ -23,7 +23,7 @@
 #'@return Dataframe.
 #'@export
 
-ezcor <- function(object, phenotype, method="pearson", reorder.rows=FALSE, 
+ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
                   prefix='', adjust.method='BH', alternative='two.sided'){
   stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object))
   

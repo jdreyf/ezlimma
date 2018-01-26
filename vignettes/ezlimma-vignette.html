@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-01-25" />
+<meta name="date" content="2018-01-26" />
 
 <title>ezlimma vignette</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-01-25</em></h4>
+<h4 class="date"><em>2018-01-26</em></h4>
 
 
 
@@ -96,8 +96,8 @@ M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">
 grp &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;First3&quot;</span>, <span class="st">&quot;Last3&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
 M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
 </div>
-<div id="gene-level" class="section level2">
-<h2>Gene-level</h2>
+<div id="gene-level-analysis" class="section level2">
+<h2>Gene level analysis</h2>
 <p>Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
 res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrasts.v =</span> contr.v)</code></pre></div>
@@ -312,70 +312,70 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 </thead>
 <tbody>
 <tr class="odd">
-<td>gene1</td>
-<td align="right">-0.7260</td>
-<td align="right">0.1020</td>
-<td align="right">0.730</td>
-</tr>
-<tr class="even">
-<td>gene2</td>
-<td align="right">0.6550</td>
-<td align="right">0.1580</td>
-<td align="right">0.901</td>
-</tr>
-<tr class="odd">
-<td>gene3</td>
-<td align="right">0.0312</td>
-<td align="right">0.9530</td>
-<td align="right">0.969</td>
-</tr>
-<tr class="even">
-<td>gene4</td>
-<td align="right">-0.2230</td>
-<td align="right">0.6700</td>
-<td align="right">0.963</td>
-</tr>
-<tr class="odd">
-<td>gene5</td>
-<td align="right">-0.3260</td>
-<td align="right">0.5290</td>
-<td align="right">0.923</td>
-</tr>
-<tr class="even">
-<td>gene6</td>
-<td align="right">0.1250</td>
-<td align="right">0.8140</td>
-<td align="right">0.969</td>
-</tr>
-<tr class="odd">
-<td>gene7</td>
-<td align="right">-0.5900</td>
-<td align="right">0.2180</td>
-<td align="right">0.923</td>
-</tr>
-<tr class="even">
-<td>gene8</td>
-<td align="right">-0.2130</td>
-<td align="right">0.6850</td>
-<td align="right">0.963</td>
-</tr>
-<tr class="odd">
 <td>gene9</td>
-<td align="right">-0.8980</td>
+<td align="right">-0.898</td>
 <td align="right">0.0152</td>
-<td align="right">0.730</td>
+<td align="right">0.73</td>
 </tr>
 <tr class="even">
-<td>gene10</td>
-<td align="right">0.5320</td>
-<td align="right">0.2770</td>
-<td align="right">0.923</td>
+<td>gene22</td>
+<td align="right">0.856</td>
+<td align="right">0.0296</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">-0.840</td>
+<td align="right">0.0362</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">0.820</td>
+<td align="right">0.0457</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene15</td>
+<td align="right">0.808</td>
+<td align="right">0.0515</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene19</td>
+<td align="right">0.791</td>
+<td align="right">0.0607</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene98</td>
+<td align="right">0.788</td>
+<td align="right">0.0629</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene95</td>
+<td align="right">0.783</td>
+<td align="right">0.0653</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene80</td>
+<td align="right">0.780</td>
+<td align="right">0.0673</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene47</td>
+<td align="right">0.767</td>
+<td align="right">0.0754</td>
+<td align="right">0.73</td>
 </tr>
 </tbody>
 </table>
 <p>Similarly, we can test association using linear regression with limma, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno.v)</code></pre></div>
-<p>This improves the gene rankings, owing to limma’s empirical Bayesian modeling of the variance.</p>
+<p>The output is,</p>
 <table>
 <thead>
 <tr class="header">
@@ -389,73 +389,73 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 <tbody>
 <tr class="odd">
 <td>gene1</td>
-<td align="right">1.15000</td>
+<td align="right">1.1500</td>
 <td align="right">0.00000</td>
 <td align="right">1.10e-06</td>
-<td align="right">-0.74200</td>
+<td align="right">-0.742</td>
 </tr>
 <tr class="even">
-<td>gene2</td>
-<td align="right">0.08100</td>
-<td align="right">0.23400</td>
-<td align="right">8.61e-01</td>
-<td align="right">0.15200</td>
-</tr>
-<tr class="odd">
-<td>gene3</td>
-<td align="right">0.03120</td>
-<td align="right">0.96100</td>
-<td align="right">9.69e-01</td>
-<td align="right">0.00626</td>
-</tr>
-<tr class="even">
-<td>gene4</td>
-<td align="right">0.27300</td>
-<td align="right">0.66700</td>
-<td align="right">9.50e-01</td>
-<td align="right">-0.05470</td>
-</tr>
-<tr class="odd">
-<td>gene5</td>
-<td align="right">-0.15400</td>
-<td align="right">0.66000</td>
-<td align="right">9.50e-01</td>
-<td align="right">-0.05590</td>
-</tr>
-<tr class="even">
-<td>gene6</td>
-<td align="right">-0.12000</td>
-<td align="right">0.88100</td>
-<td align="right">9.69e-01</td>
-<td align="right">0.01900</td>
-</tr>
-<tr class="odd">
-<td>gene7</td>
-<td align="right">-0.00829</td>
-<td align="right">0.22100</td>
-<td align="right">8.61e-01</td>
-<td align="right">-0.15600</td>
-</tr>
-<tr class="even">
-<td>gene8</td>
-<td align="right">-0.02950</td>
-<td align="right">0.69100</td>
-<td align="right">9.59e-01</td>
-<td align="right">-0.05060</td>
-</tr>
-<tr class="odd">
 <td>gene9</td>
-<td align="right">0.02850</td>
+<td align="right">0.0285</td>
 <td align="right">0.00505</td>
 <td align="right">2.53e-01</td>
-<td align="right">-0.35800</td>
+<td align="right">-0.358</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">0.0757</td>
+<td align="right">0.01340</td>
+<td align="right">3.04e-01</td>
+<td align="right">-0.316</td>
 </tr>
 <tr class="even">
-<td>gene10</td>
-<td align="right">-0.06180</td>
-<td align="right">0.27500</td>
-<td align="right">8.99e-01</td>
-<td align="right">0.13900</td>
+<td>gene15</td>
+<td align="right">0.0376</td>
+<td align="right">0.01540</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.309</td>
+</tr>
+<tr class="odd">
+<td>gene19</td>
+<td align="right">-0.2180</td>
+<td align="right">0.01720</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.304</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">-0.1610</td>
+<td align="right">0.01820</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.301</td>
+</tr>
+<tr class="odd">
+<td>gene98</td>
+<td align="right">0.0289</td>
+<td align="right">0.03620</td>
+<td align="right">4.67e-01</td>
+<td align="right">0.267</td>
+</tr>
+<tr class="even">
+<td>gene99</td>
+<td align="right">-0.0156</td>
+<td align="right">0.03740</td>
+<td align="right">4.67e-01</td>
+<td align="right">-0.266</td>
+</tr>
+<tr class="odd">
+<td>gene60</td>
+<td align="right">-0.1380</td>
+<td align="right">0.05830</td>
+<td align="right">5.86e-01</td>
+<td align="right">-0.241</td>
+</tr>
+<tr class="even">
+<td>gene31</td>
+<td align="right">0.0857</td>
+<td align="right">0.05860</td>
+<td align="right">5.86e-01</td>
+<td align="right">-0.241</td>
 </tr>
 </tbody>
 </table>
@@ -477,73 +477,73 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <tbody>
 <tr class="odd">
 <td>gene1</td>
-<td align="right">1.15000</td>
+<td align="right">1.1500</td>
 <td align="right">0.00000</td>
 <td align="right">0.000</td>
-<td align="right">-0.87800</td>
+<td align="right">-0.878</td>
 </tr>
 <tr class="even">
-<td>gene2</td>
-<td align="right">0.08100</td>
-<td align="right">0.35100</td>
-<td align="right">0.885</td>
-<td align="right">0.12000</td>
-</tr>
-<tr class="odd">
-<td>gene3</td>
-<td align="right">0.03120</td>
-<td align="right">0.82900</td>
-<td align="right">0.991</td>
-<td align="right">0.02770</td>
-</tr>
-<tr class="even">
-<td>gene4</td>
-<td align="right">0.27300</td>
-<td align="right">0.49700</td>
-<td align="right">0.979</td>
-<td align="right">-0.08750</td>
-</tr>
-<tr class="odd">
-<td>gene5</td>
-<td align="right">-0.15400</td>
-<td align="right">0.77300</td>
-<td align="right">0.991</td>
-<td align="right">-0.03720</td>
-</tr>
-<tr class="even">
-<td>gene6</td>
-<td align="right">-0.12000</td>
-<td align="right">0.93900</td>
-<td align="right">0.991</td>
-<td align="right">0.00984</td>
-</tr>
-<tr class="odd">
-<td>gene7</td>
-<td align="right">-0.00829</td>
-<td align="right">0.35400</td>
-<td align="right">0.885</td>
-<td align="right">-0.11900</td>
-</tr>
-<tr class="even">
-<td>gene8</td>
-<td align="right">-0.02950</td>
-<td align="right">0.91300</td>
-<td align="right">0.991</td>
-<td align="right">-0.01410</td>
-</tr>
-<tr class="odd">
 <td>gene9</td>
-<td align="right">0.02850</td>
+<td align="right">0.0285</td>
 <td align="right">0.00796</td>
 <td align="right">0.282</td>
-<td align="right">-0.34300</td>
+<td align="right">-0.343</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">0.0757</td>
+<td align="right">0.01010</td>
+<td align="right">0.282</td>
+<td align="right">-0.333</td>
 </tr>
 <tr class="even">
-<td>gene10</td>
-<td align="right">-0.06180</td>
-<td align="right">0.39800</td>
-<td align="right">0.947</td>
-<td align="right">0.10900</td>
+<td>gene15</td>
+<td align="right">0.0376</td>
+<td align="right">0.01130</td>
+<td align="right">0.282</td>
+<td align="right">0.328</td>
+</tr>
+<tr class="odd">
+<td>gene99</td>
+<td align="right">-0.0156</td>
+<td align="right">0.02380</td>
+<td align="right">0.417</td>
+<td align="right">-0.292</td>
+</tr>
+<tr class="even">
+<td>gene60</td>
+<td align="right">-0.1380</td>
+<td align="right">0.02510</td>
+<td align="right">0.417</td>
+<td align="right">-0.289</td>
+</tr>
+<tr class="odd">
+<td>gene19</td>
+<td align="right">-0.2180</td>
+<td align="right">0.02920</td>
+<td align="right">0.417</td>
+<td align="right">0.282</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">-0.1610</td>
+<td align="right">0.04330</td>
+<td align="right">0.542</td>
+<td align="right">0.261</td>
+</tr>
+<tr class="odd">
+<td>gene80</td>
+<td align="right">0.1620</td>
+<td align="right">0.05950</td>
+<td align="right">0.633</td>
+<td align="right">0.243</td>
+</tr>
+<tr class="even">
+<td>gene74</td>
+<td align="right">-0.2460</td>
+<td align="right">0.07160</td>
+<td align="right">0.633</td>
+<td align="right">-0.232</td>
 </tr>
 </tbody>
 </table>
@@ -658,8 +658,8 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 </table>
 <p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: “pearson” (the default), “spearman”, “kendall”, as before, or “limma”, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
 </div>
-<div id="gene-set-level" class="section level2">
-<h2>Gene set level</h2>
+<div id="gene-set-level-analysis" class="section level2">
+<h2>Gene set level analysis</h2>
 <p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with limma’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
 <p>Let’s make the gene set object,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy1&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)),
@@ -748,9 +748,27 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.3849170</td>
 <td align="right">0.3849170</td>
 </tr>
+<tr class="even">
+<td>except</td>
+<td align="right">the first</td>
+<td align="left">column would have</td>
+<td align="right">links to the</td>
+<td align="right">CSVs in the</td>
+<td align="right">folder. Similarly</td>
+<td align="right">, we can use `roast</td>
+<td align="left">_cor`.</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="left"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
 </tbody>
 </table>
-<p>except the first column would have links to the CSVs in the folder. Similarly, we can use <code>roast_cor</code>.</p>
 </div>
 <div id="system-info" class="section level2">
 <h2>System info</h2>
@@ -773,7 +791,7 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.1.0 limma_3.34.6 
+## [1] ezlimma_0.1.1 limma_3.34.6 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.15    digest_0.6.14   rprojroot_1.3-2 backports_1.1.2

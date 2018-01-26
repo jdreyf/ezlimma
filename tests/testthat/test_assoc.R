@@ -22,7 +22,9 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 
+#######################################################################################################################
 ##gene-level
+#######################################################################################################################
 test_that("limma_contrasts", {
   fit <- lmFit(M, design=design)
   #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
@@ -82,6 +84,16 @@ test_that("limma_cor", {
   expect_equal(res2$p, toptab$P.Value)
 })
 
+test_that("multi_cor", {
+  res.ez <- ezcor(M, pheno2, method="spearman", reorder.rows = FALSE)
+  res.mc <- multi_cor(M, cbind(a=pheno.v, b=pheno2), method="spearman", reorder.rows = FALSE)
+  expect_equal(res.ez[,"p"], res.mc[,"b.p"])
+  
+  res.lm <- data.matrix(limma_cor(M, pheno2, reorder.rows = FALSE))
+  res.mc <- multi_cor(M, cbind(a=pheno.v, b=pheno2), method="limma", reorder.rows = FALSE)
+  expect_equal(res.lm[,"p"], res.mc[,"b.p"])
+})
+
 test_that("lmFit_weights", {
   wts <- (1:ncol(M))/ncol(M)
   fit.w <- lmFit(M, design=design, weights=wts)
@@ -91,25 +103,14 @@ test_that("lmFit_weights", {
   #identical(fit0, fit.aw)
 })
 
+#######################################################################################################################
 ##pwy-level
+#######################################################################################################################
 test_that("roast_contrasts", {
   rc.res1 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6)
   expect_equal(rownames(rc.res1)[1], "pwy1")
   rc.res2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6)
   expect_equal(rownames(rc.res2)[1], "pwy1")
-})
-
-test_that("roast one sided testing", {
-  tmp <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
-  tmp2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", alternative = "less")
-  expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
-  expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
-  
-  tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
-  tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")
-  expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.01)
-  expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.01)
-  expect_lt(abs(tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.01)
 })
 
 test_that("roast_cor", {
@@ -118,4 +119,17 @@ test_that("roast_cor", {
   expect_equal(rownames(rc.res3)[1], "pwy1")
   #colnames of res don't start with .
   expect_equal(length(grep("^\\.", colnames(rc.res3))), 0)
+})
+
+test_that("roast_contrasts one sided testing", {
+  tmp <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+  tmp2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", alternative = "less")
+  expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
+  expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
+  
+  tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+  tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")
+  expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.02)
+  expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.02)
+  expect_lt(abs(tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.02)
 })

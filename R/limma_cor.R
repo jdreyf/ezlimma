@@ -26,7 +26,7 @@
 #'  is specified, \code{FC} will also be given.
 #'@param reorder.rows logical, should rows be reordered by F-statistic from 
 #'  \code{\link[limma]{toptable}} or be left in the same order as 
-#'  \code{object}? Default is not to reorder.
+#'  \code{object}?
 #'@return Dataframe.
 #'@details If \code{design} is \code{NULL} and \code{phenotype} is given, design
 #'  will be calculated as \code{model.matrix(~0+phenotype)}. However, 
@@ -36,9 +36,8 @@
 #'@export
 
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NULL, 
-                      trend=FALSE, adjust.method='BH', 
-                      cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC'), 
-                      reorder.rows=FALSE){
+                      trend=FALSE, adjust.method='BH', reorder.rows=TRUE,
+                      cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|
                length(weights)==ncol(object))
   
