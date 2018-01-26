@@ -1,11 +1,13 @@
 # ezlimma
-Wrapper R package around limma
+`ezlimma` is an R/Bioconductor package that streamlines use of the popular R/Bioconductor package `limma`.
 
-To install, if you haven't installed `devtools`, you must install it, and then use it to install `ezlimma`.
+## Install
+Install `ezlimma` from GitHub using `devtools`.
 ```
-install.packages("devtools")
+install.packages("devtools") #if haven't already installed devtools
 library("devtools")
 install_github("jdreyf/ezlimma")
 ```
 
+## Usage
 See the vignette for a tutorial.
