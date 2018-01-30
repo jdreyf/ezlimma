@@ -1,5 +1,5 @@
 library("ezlimma")
-context("assoc")
+context("association")
 
 #example from limma::contrasts.fit
 set.seed(42)
