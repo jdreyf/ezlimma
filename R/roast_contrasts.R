@@ -50,6 +50,7 @@
 #'@return data frame of gene set statistics.
 #'@export
 
+#limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=NULL,
                           fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
                           weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
