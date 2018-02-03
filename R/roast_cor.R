@@ -58,6 +58,11 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999){
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
+  #only mroast takes some arguments
+  if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
+    warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
+  }
+  
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), 
               names(phenotype)==colnames(object))
@@ -104,12 +109,12 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   ##run for contrast = 2
   if (fun=="fry"){
     res <- fry(y = object, index = index, design = design, contrast = 2,
-               weights = weights, gene.weights = gene.weights, trend.var = trend, 
+               weights = weights, gene.weights = gene.weights, trend = trend, 
                block = block, correlation = correlation, adjust.method = adjust.method)
   } else {
     res <- mroast(y = object, index = index, design = design, contrast = 2,
                   set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
-                  trend.var = trend, block = block, correlation = correlation,
+                  trend = trend, block = block, correlation = correlation,
                   adjust.method = adjust.method, nrot = nrot)
   }
   

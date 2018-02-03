@@ -46,17 +46,17 @@ vector of array weights with length equal to \code{ncol(object)}, or a numeric v
 of gene weights with length equal to \code{nrow(object)}.}
 
 \item{gene.weights}{numeric vector of directional (positive or negative)
-genewise weights, passed to \code{mroast} only. This vector must
-have length equal to \code{nrow(object)}.}
+genewise weights. This vector must have length equal to \code{nrow(object)}.
+Only for \code{mroast}.}
 
 \item{trend}{logical, should an intensity-trend be allowed for the prior
-variance? Default is that the prior variance is constant. Only for \code{mroast}.}
+variance? Default is that the prior variance is constant.}
 
 \item{block}{vector or factor specifying a blocking variable on the arrays.
-Has length equal to the number of arrays. Only for \code{mroast}.}
+Has length equal to the number of arrays.}
 
 \item{correlation}{the inter-duplicate or inter-technical replicate
-correlation. Only for \code{mroast}.}
+correlation.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.
 Only for \code{mroast}.}

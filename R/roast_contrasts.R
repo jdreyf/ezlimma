@@ -29,16 +29,16 @@
 #'  vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
 #'  of gene weights with length equal to \code{nrow(object)}.
 #'@param gene.weights numeric vector of directional (positive or negative)
-#'  genewise weights, passed to \code{mroast} only. This vector must
-#'  have length equal to \code{nrow(object)}.
+#'  genewise weights. This vector must have length equal to \code{nrow(object)}.
+#'  Only for \code{mroast}.
 #'@param trend logical, should an intensity-trend be allowed for the prior
-#'  variance? Default is that the prior variance is constant. Only for \code{mroast}.
+#'  variance? Default is that the prior variance is constant.
 #'@param block vector or factor specifying a blocking variable on the arrays.
-#'  Has length equal to the number of arrays. Only for \code{mroast}.
+#'  Has length equal to the number of arrays.
 #'@param correlation the inter-duplicate or inter-technical replicate
-#'  correlation. Only for \code{mroast}.
+#'  correlation.
 #'@param adjust.method method used to adjust the p-values for multiple testing.
-#'Only for \code{mroast}.
+#' Only for \code{mroast}.
 #'@param min.ngenes minimum number of genes needed in a gene set for testing.
 #'@param max.ngenes maximum number of genes needed in a gene set for testing.
 #'@param nrot number of rotations used to estimate the p-values for \code{mroast}.
@@ -60,8 +60,8 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(grp),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
   #only mroast takes some arguments
-  if (fun=="fry" && (!is.null(gene.weights)||trend||!is.null(block)||!is.null(correlation)||adjust.method!="BH")){
-    warning("fry method does not take arguments: gene.weights, trend, block, correlation, or adjust.method. These arguments will be ignored.")
+  if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
+    warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
   }
 
   if (!is.null(grp)){
@@ -94,12 +94,14 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
   }#end if(!is.matrix(object))
 
   ##run fry or mroast for each contrast
+  #block & correlation from lmFit, trend from eBayes
   for (i in seq_along(contrasts.v)){
     if (fun=="fry"){
-      res.tmp <- fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights)
+      res.tmp <- fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights, 
+                     block=block, correlation=correlation, trend=trend)
     } else {
       res.tmp <- mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
-                     weights = weights, gene.weights = gene.weights, trend.var = trend,
+                     weights = weights, gene.weights = gene.weights, trend = trend,
                      block = block, correlation = correlation, adjust.method = adjust.method,
                      set.statistic = set.statistic, nrot=nrot)
     }

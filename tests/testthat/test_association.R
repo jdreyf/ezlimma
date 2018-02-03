@@ -9,6 +9,11 @@ design <- cbind(First3Arrays=c(1,1,1,0,0,0), Last3Arrays=c(0,0,0,1,1,1))
 grp <- rep(c("First3", "Last3"), each=3)
 M[1, 1:3] <- M[1, 1:3] + 2
 
+el <- new("EList")
+el$E <- M
+ww <- matrix(rexp(n=nrow(M)*ncol(M)), ncol=ncol(M), nrow=nrow(M))
+el$weights <- ww
+
 pheno.v <- rnorm(ncol(M))
 pheno.v[1:3] <- pheno.v[1:3]-1
 pheno2 <- pheno.v
@@ -16,16 +21,21 @@ pheno2[1] <- NA
 
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
 eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
-eztt <- eztt[order(eztt$Last3vsFirst3.p),]
+lc <- limma_cor(M, phenotype = pheno.v)
 
 G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 
+rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+rcr.f <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
+rcr.m <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
+
 #######################################################################################################################
 ##gene-level
 #######################################################################################################################
-test_that("limma_contrasts", {
+test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
   fit <- lmFit(M, design=design)
   #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
   contrast.matrix <- cbind(First3=c(1,0),Last3=c(0,1),Last3vsFirst3=c(-1,1))
@@ -36,20 +46,27 @@ test_that("limma_contrasts", {
   eztt.ss <- eztt[,c("Last3vsFirst3.logFC", "Last3vsFirst3.p", "Last3vsFirst3.FDR")]
   col.nms <- c("logFC", "P.Value", "adj.P.Val")
   colnames(eztt.ss) <- col.nms
-  expect_equal(eztt.ss, toptab[,col.nms])
+  expect_equal(eztt.ss, toptab[rownames(eztt.ss), col.nms])
   
   #give only p-val column
   eztt.p <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, cols = "P.Value", add.means = FALSE)
   expect_equal(eztt.p, eztt[rownames(eztt.p), grep("\\.p$", colnames(eztt))])
 })
 
-test_that("contr_names", {
-  contr.v <- c("First3")
-  eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
-  expect_equal(length(grep("^\\.$", colnames(eztt))), 0)
+test_that("limma_contrasts trend has effect", {
+  #give only p-val column
+  ezttt.p <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, cols = "P.Value", add.means = FALSE, trend=TRUE)
+  #most p-values should be different
+  expect_equal(mean(ezttt.p == eztt[rownames(ezttt.p), grep("\\.p$", colnames(eztt))]), 0)
 })
 
-test_that("ezcor", {
+test_that("empty contr_names don't create cols that start with '.'", {
+  contr.v <- c("First3")
+  eztt.nonm <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
+  expect_equal(length(grep("^\\.$", colnames(eztt.nonm))), 0)
+})
+
+test_that("ezcor with different methods matches cor", {
   #make separate apply calls to ensure no bugs
   m.r <- apply(M, 1, function(v){
     cor(v, pheno.v)
@@ -73,18 +90,21 @@ test_that("ezcor", {
   expect_equal(res1[,"p"], m.p)
 })
 
-test_that("limma_cor", {
+test_that("limma_cor matches topTable(eBayes(lmFit(M)))", {
   design <- model.matrix(~1+pheno.v)
   fit <- lmFit(M, design)
   fit2 <- eBayes(fit)
   toptab <- topTable(fit2, coef=2, num=Inf)
-  res2 <- limma_cor(M, phenotype = pheno.v)
-  res2 <- res2[rownames(toptab),]
   # expect_equal(rownames(res2), rownames(toptab))
-  expect_equal(res2$p, toptab$P.Value)
+  expect_equal(lc[rownames(toptab), "p"], toptab$P.Value)
 })
 
-test_that("multi_cor", {
+test_that("limma_cor trend has effect", {
+  lc2 <- limma_cor(M, phenotype = pheno.v, trend=TRUE)
+  expect_equal(mean(lc2$p == lc[rownames(lc2), "p"]), 0)
+})
+
+test_that("multi_cor matches ezcor & limma_cor", {
   res.ez <- ezcor(M, pheno2, method="spearman", reorder.rows = FALSE)
   res.mc <- multi_cor(M, cbind(a=pheno.v, b=pheno2), method="spearman", reorder.rows = FALSE)
   expect_equal(res.ez[,"p"], res.mc[,"b.p"])
@@ -94,31 +114,79 @@ test_that("multi_cor", {
   expect_equal(res.lm[,"p"], res.mc[,"b.p"])
 })
 
-test_that("lmFit_weights", {
+test_that("lmFit array weights only affect if given in 'weights'", {
   wts <- (1:ncol(M))/ncol(M)
-  fit.w <- lmFit(M, design=design, weights=wts)
   fit.aw <- lmFit(M, design=design, array.weights=wts)
   fit0 <- lmFit(M, design=design)
   expect_equal(fit0, fit.aw)
-  #identical(fit0, fit.aw)
+  
+  fit.w <- lmFit(M, design=design, weights=wts)
+  expect_false(identical(fit0, fit.w))
+  
+  fit.gw <- lmFit(M, design=design, weights=1:nrow(M))
+  expect_false(identical(fit0, fit.w))
+})
+
+test_that("limma_contrasts weights", {
+  eztt.w <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, weights = 1:ncol(M))
+  expect_equal(mean(eztt.w$First3.p==eztt$First3.p), 0)
+  
+  eztt.gw <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, weights = 1:nrow(M))
+  expect_equal(mean(eztt.gw$First3.p==eztt$First3.p), 0)
+  
+  #create EList object
+  eztt.el <- limma_contrasts(el, grp = grp, contrasts.v = contr.v)
+  expect_equal(mean(eztt.el$First3.p==eztt$First3.p), 0)
+  
+  #object$weights are being ignored
+  expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrasts.v = contr.v, weights = NULL))
+  expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
+})
+
+test_that("limma_cor weights", {
+  lc.w <- limma_cor(M, phenotype = pheno.v, weights = 1:ncol(M))
+  expect_equal(mean(lc.w$p==lc$p), 0)
+  
+  lc.gw <- limma_cor(M, phenotype = pheno.v, weights = 1:nrow(M))
+  expect_equal(mean(lc.gw$p==lc$p), 0)
+  
+  #create EList object
+  lc.el <- limma_cor(el, phenotype = pheno.v)
+  expect_equal(mean(lc.el$p==lc$p), 0)
+  
+  #object$weights are being ignored
+  expect_warning(lc.elw <- limma_cor(el, phenotype = pheno.v, weights = NULL))
+  expect_equal(mean(lc.elw$p==lc$p), 1)
 })
 
 #######################################################################################################################
 ##pwy-level
 #######################################################################################################################
-test_that("roast_contrasts", {
-  rc.res1 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6)
-  expect_equal(rownames(rc.res1)[1], "pwy1")
-  rc.res2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6)
-  expect_equal(rownames(rc.res2)[1], "pwy1")
+test_that("roast_contrasts weights", {
+  #aw have effect
+  rcn.fw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6)
+  expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 0)
+  rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6)
+  expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
+  
+  #gene weights have effect
+  expect_warning(rcn.fw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", gene.weights=1:nrow(M)))
+  expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 1)
+  rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", gene.weights=1:nrow(M))
+  expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
+  
+  rcn.fw <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+  expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 0)
+  rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+  expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
 })
 
 test_that("roast_cor", {
   #one less weight since have an NA
-  rc.res3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6)
-  expect_equal(rownames(rc.res3)[1], "pwy1")
+  rcr.mw <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6)
+  expect_equal(mean(rcr.mw$p==rcr.m$p), 0)
   #colnames of res don't start with .
-  expect_equal(length(grep("^\\.", colnames(rc.res3))), 0)
+  expect_equal(length(grep("^\\.", colnames(rcr.mw))), 0)
 })
 
 test_that("roast_contrasts one sided testing", {
@@ -134,4 +202,31 @@ test_that("roast_contrasts one sided testing", {
   expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.02)
   expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.02)
   expect_lt(abs(tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.02)
+})
+
+test_that("roast_contrasts trend has effect", {
+  rc.res1 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6)
+  rc.res1t <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6, trend = TRUE)
+  expect_equal(mean(rc.res1$First3.p == rc.res1t$First3.p), 0)
+  
+  set.seed(0)
+  rc.res2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6)
+  set.seed(0)
+  rc.res2t <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6, trend = TRUE)
+  p.cols <- grep("\\.p", colnames(rc.res2))
+  expect_equal(mean(rc.res2[,p.cols] == rc.res2t[,p.cols]), 0)
+})
+
+test_that("roast_cor trend has effect", {
+  rc.res3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6)
+  rc.res3t <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6, trend = TRUE)
+  p.cols <- grep("\\.p", colnames(rc.res3))
+  expect_equal(mean(rc.res3[,p.cols] == rc.res3t[,p.cols]), 0)
+  
+  set.seed(0)
+  rc.res3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6)
+  set.seed(0)
+  rc.res3t <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6, trend = TRUE)
+  p.cols <- grep("\\.p", colnames(rc.res3))
+  expect_equal(mean(rc.res3[,p.cols] == rc.res3t[,p.cols]), 0)
 })
