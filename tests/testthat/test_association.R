@@ -2,7 +2,7 @@ library("ezlimma")
 context("association")
 
 #example from limma::contrasts.fit
-set.seed(42)
+set.seed(0)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
 dimnames(M) <- list(paste0("gene", 1:nrow(M)), paste0("sample", 1:ncol(M)))
 design <- cbind(First3Arrays=c(1,1,1,0,0,0), Last3Arrays=c(0,0,0,1,1,1))
@@ -28,8 +28,10 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 
 rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+set.seed(0)
 rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
 rcr.f <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
+set.seed(0)
 rcr.m <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
 
 #######################################################################################################################
@@ -166,27 +168,61 @@ test_that("roast_contrasts weights", {
   #aw have effect
   rcn.fw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=1:6)
   expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 0)
+  set.seed(0)
   rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=1:6)
   expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
   
   #gene weights have effect
   expect_warning(rcn.fw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", gene.weights=1:nrow(M)))
   expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 1)
+  set.seed(0)
   rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", gene.weights=1:nrow(M))
   expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
   
-  rcn.fw <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
-  expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 0)
-  rcn.mw <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
-  expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
+  rcn.fe <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+  expect_equal(mean(rcn.f$First3.p==rcn.fe$First3.p), 0)
+  set.seed(0)
+  rcn.me <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+  expect_equal(mean(rcn.m$First3.p==rcn.me$First3.p), 0)
+  
+  #suppress object$weights
+  expect_warning(rcn.fw <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", weights=el$weights))
+  expect_equal(mean(rcn.fw$First3.p==rcn.fe$First3.p), 1)
+  set.seed(0)
+  expect_warning(rcn.mw <- roast_contrasts(el, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", weights=el$weights))
+  expect_equal(mean(rcn.mw$First3.p==rcn.me$First3.p), 1)
 })
 
-test_that("roast_cor", {
+test_that("roast_cor weights", {
   #one less weight since have an NA
+  set.seed(0)
   rcr.mw <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:6)
   expect_equal(mean(rcr.mw$p==rcr.m$p), 0)
   #colnames of res don't start with .
   expect_equal(length(grep("^\\.", colnames(rcr.mw))), 0)
+  rcr.fw <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6)
+  expect_equal(mean(rcr.fw$p==rcr.f$p), 0)
+  
+  #gene precision weights have effect
+  rcr.fw <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:nrow(M))
+  expect_equal(mean(rcr.f$p==rcr.fw$p), 0)
+  set.seed(0)
+  rcr.mw <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=1:nrow(M))
+  expect_equal(mean(rcr.m$p==rcr.mw$p), 0)
+  
+  #weights in EList
+  rcr.fe <- roast_cor(el, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
+  expect_equal(mean(rcr.f$p==rcr.fe$p), 0)
+  set.seed(0)
+  rcr.me <- roast_cor(el, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
+  expect_equal(mean(rcr.f$p==rcr.me$p), 0)
+  
+  #suppress object$weights
+  expect_warning(rcr.fw <- roast_cor(el, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=el$weights))
+  expect_equal(mean(rcr.fe$p==rcr.fw$p), 1)
+  set.seed(0)
+  expect_warning(rcr.mw <- roast_cor(el, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", weights=el$weights))
+  expect_equal(mean(rcr.me$p==rcr.mw$p), 1)
 })
 
 test_that("roast_contrasts one sided testing", {
@@ -194,14 +230,17 @@ test_that("roast_contrasts one sided testing", {
   tmp2 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry", alternative = "less")
   expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
   expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
+  expect_equal(1-tmp["pwy3", "First3.p"]/2, tmp2["pwy3", "First3.p"])
   #no mixed columns
   expect_equal(length(grep("Mixed", colnames(tmp2))), 0)
   
+  set.seed(42)
   tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+  set.seed(42)
   tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")
-  expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.02)
-  expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.02)
-  expect_lt(abs(tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.02)
+  expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.001)
+  expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.001)
+  expect_lt(abs(1-tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.001)
 })
 
 test_that("roast_contrasts trend has effect", {

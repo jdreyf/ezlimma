@@ -39,15 +39,15 @@ covariates.}
 Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or 
 \code{"msq"}.}
 
-\item{weights}{non-negative observation weights passed to \code{lmFit}. Can be
+\item{weights}{non-negative precision weights passed to \code{lmFit}. Can be
 a numeric matrix of individual weights, of same size as the object 
 expression matrix, or a numeric vector of array weights with length equal to
 \code{ncol} of the expression matrix, or a numeric vector of gene weights 
 with length equal to \code{nrow} of the expression matrix.}
 
-\item{gene.weights}{numeric vector of directional (positive or negative) 
-genewise weights, passed to \code{mroast} or \code{fry}. This vector must 
-have length equal to \code{nrow(object)}.}
+\item{gene.weights}{numeric vector of directional (positive or negative) genewise weights. These represent
+each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
+vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
 \item{trend}{logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}
