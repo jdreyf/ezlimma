@@ -19,12 +19,11 @@
 #'  \code{ncol(object)}. If the vector is named, names should match 
 #'  \code{colnames(object)}.
 #'@param design the design matrix of the experiment, with rows corresponding to 
-#'  arrays and columns to coefficients to be estimated. Can be used to provide 
-#'  covariates.
+#'  arrays and columns to coefficients to be estimated. The first column should be the intercept, 
+#'  the second column corresponds to the phenotype, and other columns to covariates. See vignette.
 #'@param fun function to use, either \code{fry} or \code{mroast}.
-#'@param set.statistic summary set statistic, if using \code{mroast}. 
-#'  Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or 
-#'  \code{"msq"}.
+#'@param set.statistic summary set statistic. Possibilities are \code{"mean"},
+#'  \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.
 #'@param weights non-negative precision weights passed to \code{lmFit}. Can be
 #'  a numeric matrix of individual weights, of same size as the object 
 #'  expression matrix, or a numeric vector of array weights with length equal to
@@ -39,6 +38,7 @@
 #'  Has length equal to the number of arrays.
 #'@param correlation the inter-duplicate or inter-technical replicate 
 #'  correlation.
+#'@param prefix character string to add to beginning of column names.
 #'@param adjust.method method used to adjust the p-values for multiple testing.
 #'@param min.ngenes minimum number of genes needed in a gene set for testing.
 #'@param max.ngenes maximum number of genes needed in a gene set for testing.
@@ -54,18 +54,18 @@
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = 'mean',
                     weights = NULL, gene.weights=NULL, trend = FALSE, block = NULL, 
-                    correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
+                    correlation = NULL, prefix=NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999){
+  
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
   #only mroast takes some arguments
-  if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
-    warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
+  if (fun=="fry" && (set.statistic!="mean" || !is.null(gene.weights) || adjust.method!="BH")){
+    warning("fry method does not take arguments: set.statistic, gene.weights, or adjust.method. These arguments will be ignored.")
   }
   
   if (!is.null(phenotype)){
-    stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), 
-              names(phenotype)==colnames(object))
+    stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), names(phenotype)==colnames(object))
   }
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
@@ -86,15 +86,18 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
             } else {
               weights <- weights[,!is.na(phenotype)]
             }
-          }#end if !is.null weights
+          } #end if !is.null weights
       } else {
           pheno.nona <- phenotype
-      }
+      } #end if/else n.na > 0
       design <- model.matrix(~1+pheno.nona) 
       colnames(design) <- gsub('\\(|\\)', '', gsub('pheno.nona', '', colnames(design), fixed=TRUE))
+  } else {
+    if (!is.null(phenotype)) warning("Phenotype is ignored, since design is given.")
   }
-  stopifnot(colnames(design)[1] == 'Intercept' & is.numeric(design[,2]))
-    
+  stopifnot(is.numeric(design[,2]))
+  
+  #deal with weights
   if (!is.matrix(object)){
       if (!is.null(object$weights)){
           if (!is.null(weights)){
@@ -109,31 +112,32 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   ##run for contrast = 2
   if (fun=="fry"){
     res <- fry(y = object, index = index, design = design, contrast = 2,
-               weights = weights, gene.weights = gene.weights, trend = trend, 
-               block = block, correlation = correlation, adjust.method = adjust.method)
+               weights = weights, trend = trend, block = block, correlation = correlation)
   } else {
     res <- mroast(y = object, index = index, design = design, contrast = 2,
                   set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
                   trend = trend, block = block, correlation = correlation,
                   adjust.method = adjust.method, nrot = nrot)
   }
+  #need to coerce Direction from factor to char
+  res$Direction <- as.character(res$Direction)
   
-  ##if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
+  #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
   if (alternative!="two.sided"){
     res <- roast_one_tailed(roast.res=res, fun=fun, alternative=alternative, nrot=nrot, adjust.method=adjust.method)
   }
   colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   #add prefix to each column except 1st, which is NGenes
-  #but colnames(design)[2] is ""
-  #colnames(res)[-1] <- paste(colnames(design)[2], colnames(res)[-1], sep = '.')
-  res <- res[order(combine_pvalues(res, grep('\\.p$', colnames(res)))), ]
+  if (!is.null(prefix)) colnames(res)[-1] <- paste(prefix, colnames(res)[-1], sep = '.')
+  #let combine_pvalues find pvalue columns
+  res <- res[order(combine_pvalues(res)), ]
   
   #change FDR to appropriate adjustment name if user doesn't use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
-    colnames(res) <- gsub("\\.FDR$", adjust.method, colnames(res))
+    colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
-  ##write xlsx file with links
+  #write xlsx file with links
   if (!is.na(name)){
     write_linked_xlsx(name=name, fun=fun, res=res, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
   }

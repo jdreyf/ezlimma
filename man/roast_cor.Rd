@@ -8,9 +8,9 @@ to Excel}
 roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
-  correlation = NULL, adjust.method = "BH", min.ngenes = 3,
-  max.ngenes = 1000, alternative = c("two.sided", "less", "greater"),
-  n.toptabs = Inf, nrot = 999)
+  correlation = NULL, prefix = NULL, adjust.method = "BH",
+  min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided", "less",
+  "greater"), n.toptabs = Inf, nrot = 999)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -30,14 +30,13 @@ to avoid writing output.}
 \code{colnames(object)}.}
 
 \item{design}{the design matrix of the experiment, with rows corresponding to 
-arrays and columns to coefficients to be estimated. Can be used to provide 
-covariates.}
+arrays and columns to coefficients to be estimated. The first column should be the intercept, 
+the second column corresponds to the phenotype, and other columns to covariates. See vignette.}
 
 \item{fun}{function to use, either \code{fry} or \code{mroast}.}
 
-\item{set.statistic}{summary set statistic, if using \code{mroast}. 
-Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or 
-\code{"msq"}.}
+\item{set.statistic}{summary set statistic. Possibilities are \code{"mean"},
+\code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.}
 
 \item{weights}{non-negative precision weights passed to \code{lmFit}. Can be
 a numeric matrix of individual weights, of same size as the object 
@@ -57,6 +56,8 @@ Has length equal to the number of arrays.}
 
 \item{correlation}{the inter-duplicate or inter-technical replicate 
 correlation.}
+
+\item{prefix}{character string to add to beginning of column names.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
 

@@ -20,9 +20,8 @@
 #'@param design the design matrix of the experiment, with rows corresponding to
 #'  arrays and columns to coefficients to be estimated.
 #'@param fun function to use, either \code{fry} or \code{mroast}.
-#'@param set.statistic summary set statistic, if using \code{mroast}.
-#'  Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or
-#'  \code{"msq"}.
+#'@param set.statistic summary set statistic. Possibilities are \code{"mean"},
+#'  \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.
 #'@param name a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
 #'@param weights non-negative precision weights passed to \code{lmFit}. Can be
 #'  a numeric matrix of individual weights of same size as \code{object} or a numeric 
@@ -107,9 +106,10 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
     }
     #need to coerce "direction" from factor to char
     res.tmp$Direction <- as.character(res.tmp$Direction)
+    
     #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
     if (alternative!="two.sided"){
-      res.tmp <- roast_one_tailed(roast.res=res.tmp,  fun=fun, alternative=alternative, 
+      res.tmp <- roast_one_tailed(roast.res=res.tmp, fun=fun, alternative=alternative, 
                                   nrot=nrot, adjust.method=adjust.method)
     }#end if one.tailed
     colnames(res.tmp) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", 
@@ -122,14 +122,15 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
         res <- cbind(res, res.tmp[rownames(res), -1])
     }
   }#end for i
-  res <- res[order(combine_pvalues(res, grep('\\.p$', colnames(res)))), ]
+  #let combine_pvalues find pvalue columns
+  res <- res[order(combine_pvalues(res)), ]
 
   #change FDR to appropriate adjustment name if user doesn't use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
-    colnames(res) <- gsub("\\.FDR$", adjust.method, colnames(res))
+    colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
 
-  ##write xlsx file with links
+  #write xlsx file with links
   if (!is.na(name)){
     write_linked_xlsx(name=name, fun=fun, res=res, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
   }#end if !is.na(name)

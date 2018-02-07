@@ -16,9 +16,9 @@
 roast_one_tailed <- function(roast.res, fun, alternative, nrot, adjust.method){
   direction <- sub("greater", "Up", sub("less", "Down", alternative))
   if (fun=="fry"){
-    roast.res[,'PValue'] <- fry_two2one_tailed(roast.res, direction = direction)
+    roast.res[,'PValue'] <- fry_two2one_tailed(tab = roast.res, direction = direction)
   } else {
-    roast.res[,'PValue'] <- mroast_two2one_tailed(roast.res, direction = direction, nrot = nrot)
+    roast.res[,'PValue'] <- mroast_two2one_tailed(tab = roast.res, direction = direction, nrot = nrot)
   }
   roast.res[,'FDR'] <- p.adjust(roast.res[,'PValue'], method = adjust.method)
   mixed.cols <- grep('Mixed', colnames(roast.res))

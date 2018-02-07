@@ -5,7 +5,7 @@
 \title{Test correlation of each row of an object to a phenotype vector}
 \usage{
 ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
-  prefix = "", adjust.method = "BH", alternative = "two.sided")
+  prefix = NULL, adjust.method = "BH", alternative = "two.sided")
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 

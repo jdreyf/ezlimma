@@ -34,9 +34,8 @@ arrays and columns to coefficients to be estimated.}
 
 \item{fun}{function to use, either \code{fry} or \code{mroast}.}
 
-\item{set.statistic}{summary set statistic, if using \code{mroast}.
-Possibilities are \code{"mean"},\code{"floormean"}, \code{"mean50"}, or
-\code{"msq"}.}
+\item{set.statistic}{summary set statistic. Possibilities are \code{"mean"},
+\code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.}
 
 \item{name}{a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 

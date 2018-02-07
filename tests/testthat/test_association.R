@@ -234,13 +234,31 @@ test_that("roast_contrasts one sided testing", {
   #no mixed columns
   expect_equal(length(grep("Mixed", colnames(tmp2))), 0)
   
-  set.seed(42)
+  set.seed(0)
   tmp3 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
-  set.seed(42)
+  set.seed(0)
   tmp4 <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast", alt="less")
   expect_lt(abs(1-tmp3["pwy1", "First3.p"]/2 - tmp4["pwy1", "First3.p"]), 0.001)
   expect_lt(abs(tmp3["pwy2", "First3.p"]/2 - tmp4["pwy2", "First3.p"]), 0.001)
   expect_lt(abs(1-tmp3["pwy3", "First3.p"]/2 - tmp4["pwy3", "First3.p"]), 0.001)
+})
+
+test_that("roast_cor one sided testing", {
+  tmp <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
+  tmp2 <- roast_cor(object=M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", alternative = "less")
+  expect_equal(tmp["pwy1", "p"]/2, tmp2["pwy1", "p"])
+  expect_equal(tmp["pwy2", "p"]/2, tmp2["pwy2", "p"])
+  expect_equal(tmp["pwy3", "p"]/2, tmp2["pwy3", "p"])
+  #no mixed columns
+  expect_equal(length(grep("Mixed", colnames(tmp2))), 0)
+  
+  set.seed(0)
+  tmp3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
+  set.seed(0)
+  tmp4 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", alt="less")
+  expect_lt(abs(tmp3["pwy1", "p"]/2 - tmp4["pwy1", "p"]), 0.001)
+  expect_lt(abs(tmp3["pwy2", "p"]/2 - tmp4["pwy2", "p"]), 0.001)
+  expect_lt(abs(tmp3["pwy3", "p"]/2 - tmp4["pwy3", "p"]), 0.001)
 })
 
 test_that("roast_contrasts trend has effect", {

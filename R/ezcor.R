@@ -24,7 +24,7 @@
 #'@export
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
-                  prefix='', adjust.method='BH', alternative='two.sided'){
+                  prefix=NULL, adjust.method='BH', alternative='two.sided'){
   stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object))
   
   #res.tmp$estimate has cor, res.tmp$statistic has t-stat
@@ -41,6 +41,6 @@ ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE,
     colnames(res.mat) <- sub('adj.P.Val', adjust.method, colnames(res.mat))
   }
   if (reorder.rows){ res.mat <- res.mat[order(res.mat[,'p']),] }
-  if (prefix!=''){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
+  if (!is.null(prefix)){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
   return(res.mat)
 }
