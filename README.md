@@ -12,3 +12,6 @@ install_github("jdreyf/ezlimma")
 
 ## Usage
 See the vignette for a tutorial.
+
+## Acknowledgement
+Thanks to Grace Daher (Joslin Diabetes Center) for testing the package and making suggestions.
