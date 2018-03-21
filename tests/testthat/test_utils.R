@@ -25,4 +25,7 @@ test_that("combine_pvals", {
   #ensure grep for pv.cols not confused by "pheno.cor"
   tab2 <- data.frame(pheno.cor=(-2:2)/3, pheno.p=(1:5)/5)
   expect_equal(combine_pvalues(tab2), tab2[,2])
+  #1 row
+  tab1 <- matrix(tab[1,], nrow=1, dimnames=list("a", colnames(tab)))
+  expect_error(combine_pvalues(tab1))
 })

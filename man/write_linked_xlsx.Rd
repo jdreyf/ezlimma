@@ -2,7 +2,7 @@
 % Please edit documentation in R/write_linked_xlsx.R
 \name{write_linked_xlsx}
 \alias{write_linked_xlsx}
-\title{Write Excel xlsx file with links to CSVs}
+\title{Write Excel XLSX file with links to CSVs}
 \usage{
 write_linked_xlsx(name, fun, res, index, stats.tab, n.toptabs)
 }
@@ -20,5 +20,10 @@ write_linked_xlsx(name, fun, res, index, stats.tab, n.toptabs)
 \item{n.toptabs}{number of gene set toptables to write to CSV and link to from Excel.}
 }
 \description{
-Write Excel xlsx file with links to CSVs
+Write Excel XLSX file using package \code{xlsx} with links to CSVs
+}
+\details{
+This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in this 
+Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work}{thread}, 
+in which case you will get an error instructing you to call \code{library(xlsx)}.
 }

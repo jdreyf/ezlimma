@@ -3,7 +3,7 @@
 #'Combine p-values of a feature over multiple p-value columns of an object
 #'
 #'@param mat A matrix-like object with statistical columns, including some
-#'  containing p-values.
+#'  containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.
 #'@param pv.cols the column names or column indices with p-values. If
 #'  \code{NULL}, the function searches for columns that end with \code{.p} or
 #'  \code{.pval}.
@@ -18,7 +18,7 @@
 
 #don't export
 combine_pvalues <- function(mat, pv.cols=NULL){
-  stopifnot(ncol(mat) > 1, !is.null(pv.cols) || !is.null(colnames(mat)))
+  stopifnot(ncol(mat) > 1, nrow(mat) > 1, !is.null(pv.cols) || !is.null(colnames(mat)))
   #if pv.cols not given, grep for them at end of column names
   if (is.null(pv.cols)){
     pv.cols <- grep(pattern=paste0('(\\.|^)', '(p|pval)', '$'), colnames(mat), ignore.case=TRUE)
