@@ -8,7 +8,7 @@ combine_pvalues(mat, pv.cols = NULL)
 }
 \arguments{
 \item{mat}{A matrix-like object with statistical columns, including some
-containing p-values.}
+containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.}
 
 \item{pv.cols}{the column names or column indices with p-values. If
 \code{NULL}, the function searches for columns that end with \code{.p} or

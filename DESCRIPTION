@@ -1,14 +1,13 @@
 Package: ezlimma
 Type: Package
 Title: Automates and Adds Features to limma Package.
-Version: 0.1.2
+Version: 0.1.3
 Author: Jonathan Dreyfuss [aut, cre],
     Hui Pan [aut]
-Maintainer: Jonathan Dreyfuss <jdreyf@bu.edu>
 BugReports: https://github.com/jdreyf/ezlimma/issues
 Description: Functions for more easily using limma, such as to test multiple 
     contrasts for genes or pathways in one line. Also, an Excel front-end for
-	limma's pathway analysis functions roast and fry.
+	limma's pathway analysis functions roast and fry, and mediation analysis.
 Depends:
 	limma (>= 3.34.8)
 Suggests:

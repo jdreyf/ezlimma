@@ -4,13 +4,13 @@
 #'\code{design=model.matrix(~1+phenotype)}, testing 2nd coefficient.
 #'
 #'@param object A matrix-like data object containing log-ratios or 
-#'  log-expression values for a series of arrays, with rows corresponding to 
+#'  log-expression values for a series of samples, with rows corresponding to 
 #'  genes and columns to samples.
 #'@param phenotype Vector of phenotypes of the samples. Should be same length as
 #'  \code{ncol(object)}. If the vector is named, names should match 
 #'  \code{colnames(object)}.
 #'@param design the design matrix of the experiment, with rows corresponding to 
-#'  arrays and columns to coefficients to be estimated. Can be used to provide 
+#'  samples and columns to coefficients to be estimated. Can be used to provide 
 #'  covariates.
 #'@param prefix character string to add to beginning of column names.
 #'@param weights non-negative observation weights. Can be a numeric matrix of 
@@ -64,7 +64,8 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NU
     }
   }#end if !is.null(pheno)
   
-  stopifnot(colnames(design)[1] == '(Intercept)' & is.numeric(design[,2]))
+  if (!is.numeric(design[,2])) stop("design's 2nd column should be numeric, but it is not.")
+  # stopifnot(colnames(design)[1] == '(Intercept)' & is.numeric(design[,2]))
   
   if (!missing(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }

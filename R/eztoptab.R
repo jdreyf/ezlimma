@@ -10,19 +10,28 @@
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @param prefix character string to add to beginning of column names.
 #' @param coef column number or column name specifying which coefficient or 
-#' contrast of the linear model is of interest.
+#' contrast of the linear model is of interest. If \code{length(coef)>1}, an F-test will be performed,
+#' and \code{logFC} & \code{FC} will not be returned.
 #' @details See \code{\link[limma]{topTable}} for more details on many of 
 #' these, as this fuction is a wrapper for that one.
 #' @return Dataframe.
 
 #sort by p
 #assume that if 'logFC' in cols, then want 'FC'
+#limma_contrasts tests one coef at a time
 eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH', 
                      prefix='', coef=NULL){
   stopifnot(length(cols)>=1, 
     cols %in% c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
   
-  tt <- topTable(fit, number=Inf, sort.by='P', adjust.method=adjust.method, coef=coef)
+  if (!is.null(coef) && length(coef)>=2){
+    #topTableF tests all coefficients, so using topTable to potentially test a subset
+    tt <- topTable(fit, number=Inf, sort.by='F', adjust.method=adjust.method, coef=coef)
+    cols <- setdiff(cols, c("logFC", "t"))
+  } else {
+    tt <- topTable(fit, number=Inf, sort.by='P', adjust.method=adjust.method, coef=coef)
+  }
+  
   #FC
   if ('logFC' %in% cols){
     tt$FC <- logfc2fc(tt$logFC)

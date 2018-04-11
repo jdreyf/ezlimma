@@ -20,7 +20,8 @@ output, although the names are changed. If \code{logFC} is specified,
 \item{prefix}{character string to add to beginning of column names.}
 
 \item{coef}{column number or column name specifying which coefficient or 
-contrast of the linear model is of interest.}
+contrast of the linear model is of interest. If \code{length(coef)>1}, an F-test will be performed,
+and \code{logFC} & \code{FC} will not be returned.}
 }
 \value{
 Dataframe.
