@@ -1,6 +1,6 @@
-#' Mediation analysis
+#' High-throughput mediation analysis
 #'
-#' Mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on \code{Y}.
+#' High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on \code{Y}.
 #' @param E A vector representing exposure; can be a character with groups or numeric
 #' @param M A numeric matrix-like data object with one row per feature and one column per sample representing the mediator
 #' @param Y A numeric vector of \code{length(E)} of outcomes
@@ -8,7 +8,7 @@
 #' has rownames, they should match \code{names(E)}.
 #' @export
 
-limma_mediation <- function(E, M, Y, covar=NULL){
+hitman <- function(E, M, Y, covar=NULL){
   n <- length(E)
 
   tt.em <- limma_dep(object=M, y=E, covar=covar, prefix="EM")
