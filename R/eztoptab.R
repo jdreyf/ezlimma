@@ -26,10 +26,10 @@ eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method
   
   if (!is.null(coef) && length(coef)>=2){
     #topTableF tests all coefficients, so using topTable to potentially test a subset
-    tt <- topTable(fit, number=Inf, sort.by='F', adjust.method=adjust.method, coef=coef)
+    tt <- limma::topTable(fit, number=Inf, sort.by='F', adjust.method=adjust.method, coef=coef)
     cols <- setdiff(cols, c("logFC", "t"))
   } else {
-    tt <- topTable(fit, number=Inf, sort.by='P', adjust.method=adjust.method, coef=coef)
+    tt <- limma::topTable(fit, number=Inf, sort.by='P', adjust.method=adjust.method, coef=coef)
   }
   
   #FC

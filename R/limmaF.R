@@ -1,7 +1,7 @@
 #' F-test of each row of object using design matrix
 #'
 #' F-test of each row of object using design matrix for selected coefficients.
-#'
+#' 
 #' @param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of samples, with rows corresponding to 
 #'  genes and columns to samples.
@@ -41,11 +41,11 @@ limmaF <- function(object, design=NULL, coef=colnames(design), prefix='', weight
   
   if (!missing(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
-    fit <- lmFit(object, design, weights=weights)
+    fit <- limma::lmFit(object, design, weights=weights)
   } else {
-    fit <- lmFit(object, design)
+    fit <- limma::lmFit(object, design)
   }
-  fit2 <- eBayes(fit, trend=trend)
+  fit2 <- limma::eBayes(fit, trend=trend)
   res.mat <- eztoptab(fit2, coef=coef, cols=cols, adjust.method=adjust.method)
   
   if (!reorder.rows){ res.mat <- res.mat[rownames(object),] }

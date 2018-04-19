@@ -23,7 +23,7 @@ hitman <- function(E, M, Y, covar=NULL){
   ret <- cbind(tt.my, tt.em[rownames(tt.my),])
   max.p <- apply(ret[,c("EM.p", "MY.p")], MARGIN=1, FUN=max)
   comb.p <- max.p^2
-  comb.FDR <- p.adjust(comb.p, method="BH")
+  comb.FDR <- stats::p.adjust(comb.p, method="BH")
   ret <- cbind(comb.p, comb.FDR, ret)
   ret <- ret[order(ret$comb.p),]
   return(ret)

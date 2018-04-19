@@ -7,9 +7,12 @@
 #' @details This function converts log fold-changes < 0
 #' to their negative multiplicative reciprocal, 
 #' e.g. fc = 0.5 -> fc = -2, as is commonly done in biology.
-#' @examples
+#' @examples 
+#' \dontrun{
+#' # not run
 #' logfc2fc(2) #4
 #' logfc2fc(-2) #-4
+#' }
 
 #note: function doesn't need to be exported
 logfc2fc <- function(logFC){

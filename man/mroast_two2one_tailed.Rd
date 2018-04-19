@@ -15,6 +15,8 @@ mroast_two2one_tailed(tab, pv.col = "PValue", dir.col = "Direction",
 \item{dir.col}{name or index of column giving direction gene set has changed.}
 
 \item{direction}{direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
+
+\item{nrot}{number of rotations used to estimate the p-values for \code{mroast}.}
 }
 \value{
 Vector of p-values.

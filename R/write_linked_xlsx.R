@@ -28,7 +28,7 @@ write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   for(pwy in pwys){
     stat <- stats.tab[index[[pwy]], ]
     stat <- stat[order(combine_pvalues(stat)), ]
-    write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
+    utils::write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
   }
   
   wb <- xlsx::createWorkbook()

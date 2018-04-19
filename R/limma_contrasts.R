@@ -48,7 +48,7 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
   if (any(rownames(object)=="")) stop("'object' cannot have an empty rowname ''.")
 
   if (is.null(design)){
-    design <- model.matrix(~0+grp)
+    design <- stats::model.matrix(~0+grp)
     colnames(design) <- sub('grp', '', colnames(design), fixed=TRUE)
   }
   
@@ -56,14 +56,14 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
   #weights "if (missing(weights) && !is.null(y$weights))"
   if (!missing(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
-    fit <- lmFit(object, design, block = block, correlation = correlation, weights=weights)
+    fit <- limma::lmFit(object, design, block = block, correlation = correlation, weights=weights)
   } else {
-    fit <- lmFit(object, design, block = block, correlation = correlation)
+    fit <- limma::lmFit(object, design, block = block, correlation = correlation)
   }
   
-  contr.mat <- makeContrasts(contrasts=contrasts.v, levels=design)
-  fit2 <- contrasts.fit(fit, contr.mat)
-  fit2 <- eBayes(fit2, trend=trend)
+  contr.mat <- limma::makeContrasts(contrasts=contrasts.v, levels=design)
+  fit2 <- limma::contrasts.fit(fit, contr.mat)
+  fit2 <- limma::eBayes(fit2, trend=trend)
   #limma ignores names of contrasts.v when it's given as vector
   if (!is.null(names(contrasts.v))){
     stopifnot(colnames(fit2$contrasts)==contrasts.v)

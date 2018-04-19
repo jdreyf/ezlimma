@@ -19,7 +19,7 @@ multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.met
   contrasts <- gsub(' ', '', colnames(fit$contrasts))
   #get gene order
   #limma 3.16 has row.names=row number & 'ID' column; limma 3.18 has row.names=ID
-  ttf <- topTableF(fit, number=Inf)
+  ttf <- limma::topTableF(fit, number=Inf)
   genes <- rownames(ttf)
 	#go thru contrasts
 	for (i in 1:length(contrasts)){

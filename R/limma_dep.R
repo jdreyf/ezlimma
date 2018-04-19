@@ -1,6 +1,7 @@
 #' Test (conditional) dependence of two variables
 #'
 #' Test (conditional) dependence of \code{y} with rows of \code{object}.
+#' 
 #' @param object A matrix-like data object with rows corresponding to features and columns to samples.
 #' @param y A vector. If not numeric, treated as a nominal group variable. To ensure that \code{object} matches \code{y},
 #' it is checked that \code{colnames(object)==names(y)}. This check will pass if one of these is \code{NULL}.
@@ -21,7 +22,7 @@ limma_dep <- function(object, y, covar=NULL, prefix="", verbose=FALSE){
       tt <- limma_cor(object=object, phenotype = y, cols=c('t', 'P.Value'))
     } else {
       dat <- data.frame(y, covar)
-      design <- model.matrix(~., data=dat)
+      design <- stats::model.matrix(~., data=dat)
       tt <- limma_cor(object = object, design = design, cols=c('t', 'P.Value'))
     }
   } else {
@@ -31,11 +32,11 @@ limma_dep <- function(object, y, covar=NULL, prefix="", verbose=FALSE){
       stop("'y' is not numeric and has only one group, but needs more.")
     } else {
       if (!is.null(covar)){
-        design <- model.matrix(~y+covar)
+        design <- stats::model.matrix(~y+covar)
         covar.ncol <- ncol(as.matrix(covar))
         coef <- 2:(ncol(design)-covar.ncol)
       } else {
-        design <- model.matrix(~y)
+        design <- stats::model.matrix(~y)
         coef <- 2:ncol(design)
       }
 

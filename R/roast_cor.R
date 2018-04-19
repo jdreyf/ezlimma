@@ -1,55 +1,55 @@
-#'Test association of gene sets to phenotype using rotation testing with output
-#'to Excel
+#' Test association of gene sets to phenotype using rotation testing with output
+#' to Excel
 #'
-#'Test association of gene sets to phenotype using rotation testing with
-#'\code{\link[limma]{roast}} using \code{limma} functions \code{mroast} or \code{fry}.
-#'It returns a data frame with statistics per gene set, and writes this to an
-#'Excel file. The Excel file links to CSV files, which contain statistics per
-#'gene set.
+#' Test association of gene sets to phenotype using rotation testing with
+#' \code{\link[limma]{roast}} using \code{limma} functions \code{mroast} or \code{fry}.
+#' It returns a data frame with statistics per gene set, and writes this to an
+#' Excel file. The Excel file links to CSV files, which contain statistics per
+#' gene set.
 #'
-#'@param object A matrix-like data object containing log-ratios or 
+#' @param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of arrays, with rows corresponding to 
 #'  genes and columns to samples.
-#'@param G a gene set list as returned from \link{read_gmt}.
-#'@param stats.tab a table of feature (e.g. gene) statistics that the Excel 
+#' @param G a gene set list as returned from \link{read_gmt}.
+#' @param stats.tab a table of feature (e.g. gene) statistics that the Excel 
 #'  table can link to.
-#'@param name a name for the folder and Excel file that get written. Set to \code{NA} 
+#' @param name a name for the folder and Excel file that get written. Set to \code{NA} 
 #'  to avoid writing output.
-#'@param phenotype Vector of phenotypes of the samples. Should be same length as
+#' @param phenotype Vector of phenotypes of the samples. Should be same length as
 #'  \code{ncol(object)}. If the vector is named, names should match 
 #'  \code{colnames(object)}.
-#'@param design the design matrix of the experiment, with rows corresponding to 
+#' @param design the design matrix of the experiment, with rows corresponding to 
 #'  arrays and columns to coefficients to be estimated. The first column should be the intercept, 
 #'  the second column corresponds to the phenotype, and other columns to covariates. See vignette.
-#'@param fun function to use, either \code{fry} or \code{mroast}.
-#'@param set.statistic summary set statistic. Possibilities are \code{"mean"},
+#' @param fun function to use, either \code{fry} or \code{mroast}.
+#' @param set.statistic summary set statistic. Possibilities are \code{"mean"},
 #'  \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.
-#'@param weights non-negative precision weights passed to \code{lmFit}. Can be
+#' @param weights non-negative precision weights passed to \code{lmFit}. Can be
 #'  a numeric matrix of individual weights, of same size as the object 
 #'  expression matrix, or a numeric vector of array weights with length equal to
 #'  \code{ncol} of the expression matrix, or a numeric vector of gene weights 
 #'  with length equal to \code{nrow} of the expression matrix.
-#'@param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
+#' @param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
 #'  each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
 #'  vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.
-#'@param trend logical, should an intensity-trend be allowed for the prior 
+#' @param trend logical, should an intensity-trend be allowed for the prior 
 #'  variance? Default is that the prior variance is constant.
-#'@param block vector or factor specifying a blocking variable on the arrays. 
+#' @param block vector or factor specifying a blocking variable on the arrays. 
 #'  Has length equal to the number of arrays.
-#'@param correlation the inter-duplicate or inter-technical replicate 
+#' @param correlation the inter-duplicate or inter-technical replicate 
 #'  correlation.
-#'@param prefix character string to add to beginning of column names.
-#'@param adjust.method method used to adjust the p-values for multiple testing.
-#'@param min.ngenes minimum number of genes needed in a gene set for testing.
-#'@param max.ngenes maximum number of genes needed in a gene set for testing.
-#'@param alternative indicates the alternative hypothesis and must be one of 
+#' @param prefix character string to add to beginning of column names.
+#' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @param min.ngenes minimum number of genes needed in a gene set for testing.
+#' @param max.ngenes maximum number of genes needed in a gene set for testing.
+#' @param alternative indicates the alternative hypothesis and must be one of 
 #'  \code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"} 
 #'  corresponds to positive association, \code{"less"} to negative association.
-#'@param n.toptabs number of gene set toptables to write to CSV and link to from
+#' @param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
-#'@param nrot number of rotations used to compute the p-values in \code{mroast}.
-#'@return data frame of gene set statistics.
-#'@export
+#' @param nrot number of rotations used to compute the p-values in \code{mroast}.
+#' @return data frame of gene set statistics.
+#' @export
 
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = 'mean',
@@ -90,7 +90,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
       } else {
           pheno.nona <- phenotype
       } #end if/else n.na > 0
-      design <- model.matrix(~1+pheno.nona) 
+      design <- stats::model.matrix(~1+pheno.nona) 
       colnames(design) <- gsub('\\(|\\)', '', gsub('pheno.nona', '', colnames(design), fixed=TRUE))
   } else {
     if (!is.null(phenotype)) warning("Phenotype is ignored, since design is given.")
@@ -111,10 +111,10 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   
   ##run for contrast = 2
   if (fun=="fry"){
-    res <- fry(y = object, index = index, design = design, contrast = 2,
+    res <- limma::fry(y = object, index = index, design = design, contrast = 2,
                weights = weights, trend = trend, block = block, correlation = correlation)
   } else {
-    res <- mroast(y = object, index = index, design = design, contrast = 2,
+    res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
                   set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
                   trend = trend, block = block, correlation = correlation,
                   adjust.method = adjust.method, nrot = nrot)

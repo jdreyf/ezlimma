@@ -36,9 +36,9 @@ multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendal
   for (i in 1:ncol(pheno.mat)){
     prefix.tmp <- ifelse(prefix!='', paste(prefix, colnames(pheno.mat)[i], sep='.'), colnames(pheno.mat)[i])
     if (method=='limma'){
-      cor.tmp <- data.matrix(limma_cor(object, pheno.mat[,i], reorder=FALSE, prefix=prefix.tmp, cols=limma.cols))
+      cor.tmp <- data.matrix(limma_cor(object, pheno.mat[,i], reorder.rows=FALSE, prefix=prefix.tmp, cols=limma.cols))
     } else {
-      cor.tmp <- ezcor(object, pheno.mat[,i], method=method, reorder=FALSE, prefix=prefix.tmp, adjust.method=adjust.method)
+      cor.tmp <- ezcor(object, pheno.mat[,i], method=method, reorder.rows=FALSE, prefix=prefix.tmp, adjust.method=adjust.method)
     }
     if (!is.null(cor.mat)){ stopifnot(rownames(cor.mat)==rownames(cor.tmp)) }
     cor.mat <- cbind(cor.mat, cor.tmp)

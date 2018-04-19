@@ -26,8 +26,8 @@ combine_pvalues <- function(mat, pv.cols=NULL){
   stopifnot(length(pv.cols)>0)
   comb.p <- apply(as.matrix(mat[,pv.cols]), MARGIN=1, FUN=function(p){ 
     p.nona <- p[!is.na(p)]
-    z <- qnorm(p.nona, lower.tail = FALSE)
-    cp <- pnorm(sum(z)/sqrt(length(p.nona)), lower.tail = FALSE)
+    z <- stats::qnorm(p.nona, lower.tail = FALSE)
+    cp <- stats::pnorm(sum(z)/sqrt(length(p.nona)), lower.tail = FALSE)
     return(cp)
   })
   return(comb.p)
