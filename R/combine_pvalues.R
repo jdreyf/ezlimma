@@ -8,7 +8,7 @@
 #'  \code{NULL}, the function searches for columns that end with \code{.p} or
 #'  \code{.pval}.
 #'@details This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
-#'\code{method="z.transform"} in \code{\link[survcomp]{combine.test}}.
+#'\code{method="z.transform"} in \code{survcomp::combine.test}.
 #'@return A vector of p-values.
 #'@seealso \code{\link[survcomp]{combine.test}}.
 #'@examples

@@ -22,7 +22,7 @@ Combine p-values of a feature over multiple p-value columns of an object
 }
 \details{
 This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
-\code{method="z.transform"} in \code{\link[survcomp]{combine.test}}.
+\code{method="z.transform"} in \code{survcomp::combine.test}.
 }
 \examples{
 tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
