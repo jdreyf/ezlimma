@@ -1,4 +1,1 @@
 comment: false
-language: r
-sudo: false
-cache: packages
