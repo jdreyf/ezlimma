@@ -1,5 +1,3 @@
-library(ezlimma)
-
 #example from limma::contrasts.fit
 set.seed(0)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
@@ -17,6 +15,7 @@ pheno.v <- rnorm(ncol(M))
 pheno.v[1:3] <- pheno.v[1:3]-1
 pheno2 <- pheno.v
 pheno2[1] <- NA
+covar <- rnorm(length(pheno.v))
 
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
 eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)

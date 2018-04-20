@@ -4,7 +4,7 @@
 \alias{limmaF}
 \title{F-test of each row of object using design matrix}
 \usage{
-limmaF(object, design = NULL, coef = colnames(design), prefix = "",
+limmaF(object, design, coef = colnames(design), prefix = "",
   weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", reorder.rows = TRUE, cols = c("F", "P.Value"))
 }
@@ -17,7 +17,7 @@ genes and columns to samples.}
 samples and columns to coefficients to be estimated. Can be used to provide 
 covariates.}
 
-\item{coef}{Vector of 2 or more coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.}
+\item{coef}{Vector of coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.}
 
 \item{prefix}{character string to add to beginning of column names.}
 
@@ -44,13 +44,13 @@ correlation.}
 
 \item{cols}{columns of \code{topTable} output the user would like in the 
 result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-is specified, \code{FC} will also be given.}
+is specified, \code{FC} will also be given. \code{limma} doesn't return an F-statistic if \code{length(coef)==1}.}
 }
 \value{
 Dataframe.
 }
 \description{
-F-test of each row of object using design matrix for selected coefficients.
+F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, a t-test is applied.
 }
 \examples{
 object <- matrix(rnorm(60), nrow=10, ncol=6)

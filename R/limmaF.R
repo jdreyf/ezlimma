@@ -1,6 +1,6 @@
 #' F-test of each row of object using design matrix
 #'
-#' F-test of each row of object using design matrix for selected coefficients.
+#' F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, a t-test is applied.
 #' 
 #' @param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of samples, with rows corresponding to 
@@ -8,7 +8,7 @@
 #' @param design the design matrix of the experiment, with rows corresponding to 
 #'  samples and columns to coefficients to be estimated. Can be used to provide 
 #'  covariates.
-#' @param coef Vector of 2 or more coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.
+#' @param coef Vector of coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.
 #' @param prefix character string to add to beginning of column names.
 #' @param weights non-negative observation weights. Can be a numeric matrix of 
 #'  individual weights, of same size as the object expression matrix, or a 
@@ -24,7 +24,7 @@
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @param cols columns of \code{topTable} output the user would like in the 
 #'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-#'  is specified, \code{FC} will also be given.
+#'  is specified, \code{FC} will also be given. \code{limma} doesn't return an F-statistic if \code{length(coef)==1}.
 #' @param reorder.rows logical, should rows be reordered by F-statistic from 
 #'  \code{\link[limma]{toptable}} or be left in the same order as 
 #'  \code{object}?
@@ -38,11 +38,13 @@
 #' lf <- limmaF(object=object, design=design, coef=colnames(design)[1:3])
 #' @export
 
-limmaF <- function(object, design=NULL, coef=colnames(design), prefix='', weights=NULL, trend=FALSE, block = NULL, 
+limmaF <- function(object, design, coef=colnames(design), prefix='', weights=NULL, trend=FALSE, block = NULL, 
                    correlation = NULL, adjust.method='BH', reorder.rows=TRUE, cols=c('F', 'P.Value')){
   
   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object),
-            length(coef)>1, coef %in% colnames(design) | coef %in% 1:ncol(design))
+            coef %in% colnames(design) | coef %in% 1:ncol(design))
+  #limma only retains "F" if length(coef)>1
+  if (length(coef)==1 && "F" %in% cols) cols <- sub("^F$", "t", cols)
   
   int <- grep("intercept", coef, ignore.case = TRUE, value = TRUE)
   if (length(int)>0) message("You included the column ", int, " in 'coefs', which you may want to exclude.")
