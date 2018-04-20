@@ -1,38 +1,5 @@
-library("ezlimma")
+library(ezlimma)
 context("association")
-
-#example from limma::contrasts.fit
-set.seed(0)
-M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
-dimnames(M) <- list(paste0("gene", 1:nrow(M)), paste0("sample", 1:ncol(M)))
-design <- cbind(First3Arrays=c(1,1,1,0,0,0), Last3Arrays=c(0,0,0,1,1,1))
-grp <- rep(c("First3", "Last3"), each=3)
-M[1, 1:3] <- M[1, 1:3] + 2
-
-el <- new("EList")
-el$E <- M
-ww <- matrix(rexp(n=nrow(M)*ncol(M)), ncol=ncol(M), nrow=nrow(M))
-el$weights <- ww
-
-pheno.v <- rnorm(ncol(M))
-pheno.v[1:3] <- pheno.v[1:3]-1
-pheno2 <- pheno.v
-pheno2[1] <- NA
-
-contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
-eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
-lc <- limma_cor(M, phenotype = pheno.v)
-
-G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
-          list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
-          list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
-
-rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
-set.seed(0)
-rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
-rcr.f <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
-set.seed(0)
-rcr.m <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
 
 #######################################################################################################################
 ##gene-level
@@ -159,6 +126,13 @@ test_that("limma_cor weights", {
   #object$weights are being ignored
   expect_warning(lc.elw <- limma_cor(el, phenotype = pheno.v, weights = NULL))
   expect_equal(mean(lc.elw$p==lc$p), 1)
+})
+
+test_that("limmaF", {
+  des2 <- cbind(intercept=rep(1,6), Last3Arrays=c(0,0,0,1,1,1), covar=rnorm(6))
+  expect_message(lf <- limmaF(object=M, design=des2))
+  lf2 <- limmaF(object=M, design=des2, coef=colnames(des2)[2:3])
+  expect_equal(rownames(lf2)[1], "gene1")
 })
 
 #######################################################################################################################

@@ -21,11 +21,10 @@
 #limma_contrasts tests one coef at a time
 eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH', 
                      prefix='', coef=NULL){
-  stopifnot(length(cols)>=1, 
-    cols %in% c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
+  stopifnot(length(cols)>=1, cols %in% c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
   
   if (!is.null(coef) && length(coef)>=2){
-    #topTableF tests all coefficients, so using topTable to potentially test a subset
+    #topTableF tests all coefficients if at least 2, so using topTable to potentially test a subset
     tt <- limma::topTable(fit, number=Inf, sort.by='F', adjust.method=adjust.method, coef=coef)
     cols <- setdiff(cols, c("logFC", "t"))
   } else {

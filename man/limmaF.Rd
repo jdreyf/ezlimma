@@ -5,8 +5,8 @@
 \title{F-test of each row of object using design matrix}
 \usage{
 limmaF(object, design = NULL, coef = colnames(design), prefix = "",
-  weights = NULL, trend = FALSE, adjust.method = "BH",
-  reorder.rows = TRUE, cols = c("F", "P.Value"))
+  weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
+  adjust.method = "BH", reorder.rows = TRUE, cols = c("F", "P.Value"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -17,7 +17,7 @@ genes and columns to samples.}
 samples and columns to coefficients to be estimated. Can be used to provide 
 covariates.}
 
-\item{coef}{Coefficients to include in F-test. These should be in \code{colnames(design)}.}
+\item{coef}{Vector of 2 or more coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.}
 
 \item{prefix}{character string to add to beginning of column names.}
 
@@ -29,6 +29,12 @@ expression matrix, or a numeric vector of gene weights with length equal to
 
 \item{trend}{logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}
+
+\item{block}{vector or factor specifying a blocking variable on the arrays. 
+Has length equal to the number of arrays.}
+
+\item{correlation}{the inter-duplicate or inter-technical replicate 
+correlation.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
 
