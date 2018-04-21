@@ -54,6 +54,7 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
   
   #can't set weights=NULL in lmFit when using voom, since lmFit only assigns
   #weights "if (missing(weights) && !is.null(y$weights))"
+  #can't make this into separate function, since then !missing(weights)
   if (!missing(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
     fit <- limma::lmFit(object, design, block = block, correlation = correlation, weights=weights)

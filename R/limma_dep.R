@@ -18,7 +18,7 @@ limma_dep <- function(object, y, covar=NULL, prefix="", verbose=FALSE){
   p.col <- "p"
   if (is.numeric(y)){
     if (verbose) message("'y' treated as continuous numeric vector")
-    if (var(y, na.rm=TRUE)==0) stop("'y' treated as numeric, but has no variance.")
+    if (stats::var(y, na.rm=TRUE)==0) stop("'y' treated as numeric, but has no variance.")
     if (is.null(covar)){
       tt <- limma_cor(object=object, phenotype = y, cols=c('t', 'P.Value'))
     } else {

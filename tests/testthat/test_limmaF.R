@@ -12,4 +12,9 @@ test_that("limmaF", {
   lf3 <- limmaF(object=M, design=des2, coef=colnames(des2)[2:3])
   expect_equal(rownames(lf3)[1], "gene1")
   expect_equal(mean(lf2$p==lf3$p), 0)
+  
+  lf4 <- limmaF(object=M, design=des2[,1:2], coef=colnames(des2)[2], weights=runif(ncol(M)), reorder.rows = FALSE, prefix = "wts")
+  expect_equal(rownames(lf4)[2], "gene2")
+  expect_equal(colnames(lf4), c("wts.t", "wts.p"))
+  expect_equal(mean(lf2$p==lf4$wts.p), 0)
 })

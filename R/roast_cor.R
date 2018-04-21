@@ -79,7 +79,6 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
       if (n.na > 0){
           warning(n.na, ' NAs in phenotype removed')
           pheno.nona <- phenotype[!is.na(phenotype)]
-          object <- object[,!is.na(phenotype), drop=FALSE]
           if(!is.null(weights)){
             if (length(weights)==ncol(object)){ 
               weights <- weights[!is.na(phenotype)]
@@ -87,6 +86,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
               weights <- weights[,!is.na(phenotype)]
             }
           } #end if !is.null weights
+          object <- object[,!is.na(phenotype), drop=FALSE]
       } else {
           pheno.nona <- phenotype
       } #end if/else n.na > 0
