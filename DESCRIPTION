@@ -12,6 +12,7 @@ Depends:
 	limma (>= 3.34.8)
 Suggests:
     knitr,
+	rJava,
     rmarkdown,
 	statmod,
     testthat,
