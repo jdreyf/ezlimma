@@ -59,4 +59,3 @@ test_that("limma_contrasts weights", {
   expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrasts.v = contr.v, weights = NULL))
   expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
 })
-

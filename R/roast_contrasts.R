@@ -15,7 +15,7 @@
 #' @param grp Vector of phenotype groups of the samples, which represent valid
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the
 #'   vector is named, names should match \code{colnames(object)}.
-#' @param contrasts.v A named vector of contrasts for
+#' @param contrast.v A named vector of contrasts for
 #'   \code{\link[limma]{makeContrasts}}.
 #' @param design the design matrix of the experiment, with rows corresponding to
 #'  arrays and columns to coefficients to be estimated.
@@ -50,7 +50,7 @@
 #' @export
 
 #limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
-roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=NULL,
+roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=NULL,
                           fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
                           weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
                           correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000,
@@ -78,7 +78,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
       colnames(design) <- sub('grp', '', colnames(design), fixed=TRUE)
   }
 
-  contr.mat <- limma::makeContrasts(contrasts = contrasts.v, levels = design)
+  contr.mat <- limma::makeContrasts(contrasts = contrast.v, levels = design)
   
   #deal with weights
   if (!is.matrix(object)){
@@ -94,7 +94,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
 
   ##run fry or mroast for each contrast
   #block & correlation from lmFit, trend from eBayes
-  for (i in seq_along(contrasts.v)){
+  for (i in seq_along(contrast.v)){
     if (fun=="fry"){
       res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights, 
                      block=block, correlation=correlation, trend=trend)
@@ -115,7 +115,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrasts.v, design=
     colnames(res.tmp) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", 
                                                   gsub("PValue.Mixed", "Mixed.p", colnames(res.tmp))))
     #add contrast names to each column except 1st, which is NGenes
-    colnames(res.tmp)[-1] <- paste(names(contrasts.v[i]), colnames(res.tmp)[-1], sep = '.')
+    colnames(res.tmp)[-1] <- paste(names(contrast.v[i]), colnames(res.tmp)[-1], sep = '.')
     if (i == 1){
         res <- res.tmp
     } else {

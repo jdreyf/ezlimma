@@ -5,12 +5,12 @@
 \title{Test contrasts of gene sets between groups using rotation testing with output
 to Excel}
 \usage{
-roast_contrasts(object, G, stats.tab, grp = NULL, contrasts.v,
-  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
-  name = NA, weights = NULL, gene.weights = NULL, trend = FALSE,
-  block = NULL, correlation = NULL, adjust.method = "BH",
-  min.ngenes = 3, max.ngenes = 1000, nrot = 999,
-  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf)
+roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v, design = NULL,
+  fun = c("fry", "mroast"), set.statistic = "mean", name = NA,
+  weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
+  correlation = NULL, adjust.method = "BH", min.ngenes = 3,
+  max.ngenes = 1000, nrot = 999, alternative = c("two.sided", "less",
+  "greater"), n.toptabs = Inf)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or
@@ -26,7 +26,7 @@ table can link to.}
 variable names in R. Should be same length as \code{ncol(object)}. If the
 vector is named, names should match \code{colnames(object)}.}
 
-\item{contrasts.v}{A named vector of contrasts for
+\item{contrast.v}{A named vector of contrasts for
 \code{\link[limma]{makeContrasts}}.}
 
 \item{design}{the design matrix of the experiment, with rows corresponding to

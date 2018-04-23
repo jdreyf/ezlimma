@@ -9,7 +9,7 @@
 #' @param grp Vector of phenotype groups of the samples, which represent valid 
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the 
 #'   vector is named, names should match \code{colnames(object)}.
-#' @param contrasts.v A named vector of contrasts for 
+#' @param contrast.v A named vector of contrasts for 
 #'   \code{\link[limma]{makeContrasts}}.
 #' @param design the design matrix of the microarray experiment, with rows 
 #'   corresponding to arrays and columns to coefficients to be estimated.
@@ -40,7 +40,7 @@
 #' @export
 
 #don't include parameters for robust fitting, since ppl unlikely to use
-limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=NULL,
+limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NULL,
                             trend=FALSE, block=NULL, correlation=NULL, adjust.method='BH', 
                             add.means=TRUE, cols=c('P.Value', 'adj.P.Val', 'logFC')){
   if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
@@ -62,13 +62,13 @@ limma_contrasts <- function(object, grp=NULL, contrasts.v, design=NULL, weights=
     fit <- limma::lmFit(object, design, block = block, correlation = correlation)
   }
   
-  contr.mat <- limma::makeContrasts(contrasts=contrasts.v, levels=design)
+  contr.mat <- limma::makeContrasts(contrasts=contrast.v, levels=design)
   fit2 <- limma::contrasts.fit(fit, contr.mat)
   fit2 <- limma::eBayes(fit2, trend=trend)
-  #limma ignores names of contrasts.v when it's given as vector
-  if (!is.null(names(contrasts.v))){
-    stopifnot(colnames(fit2$contrasts)==contrasts.v)
-    colnames(fit2$contrasts) <- names(contrasts.v)
+  #limma ignores names of contrast.v when it's given as vector
+  if (!is.null(names(contrast.v))){
+    stopifnot(colnames(fit2$contrasts)==contrast.v)
+    colnames(fit2$contrasts) <- names(contrast.v)
   }
   mtt <- multiTopTab(fit2, cols=cols, adjust.method=adjust.method)
   

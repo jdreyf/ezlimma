@@ -4,7 +4,7 @@
 \alias{limma_contrasts}
 \title{Apply lmFit, contrasts.fit, & eBayes to one or more contrasts}
 \usage{
-limma_contrasts(object, grp = NULL, contrasts.v, design = NULL,
+limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", add.means = TRUE, cols = c("P.Value", "adj.P.Val",
   "logFC"))
@@ -18,7 +18,7 @@ genes and columns to samples.}
 variable names in R. Should be same length as \code{ncol(object)}. If the 
 vector is named, names should match \code{colnames(object)}.}
 
-\item{contrasts.v}{A named vector of contrasts for 
+\item{contrast.v}{A named vector of contrasts for 
 \code{\link[limma]{makeContrasts}}.}
 
 \item{design}{the design matrix of the microarray experiment, with rows 

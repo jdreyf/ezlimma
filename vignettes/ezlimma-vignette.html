@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-01-26" />
+<meta name="date" content="2018-04-23" />
 
 <title>ezlimma vignette</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-01-26</em></h4>
+<h4 class="date"><em>2018-04-23</em></h4>
 
 
 
@@ -100,7 +100,7 @@ M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><s
 <h2>Gene level analysis</h2>
 <p>Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
-res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrasts.v =</span> contr.v)</code></pre></div>
+res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
 <p>This returns a data frame that looks like:</p>
 <table>
 <thead>
@@ -666,7 +666,7 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy2&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>)),
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy3&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">21</span><span class="op">:</span><span class="dv">30</span>)))</code></pre></div>
 <p>This object would normally be read in using <code>read_gmt</code>. Then we can test each of these gene sets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res5 &lt;-<span class="st"> </span><span class="kw">roast_contrasts</span>(M, <span class="dt">G=</span>G, <span class="dt">stats.tab=</span>res0, <span class="dt">grp=</span>grp, <span class="dt">contrasts.v =</span> contr.v, <span class="dt">fun=</span><span class="st">&quot;fry&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res5 &lt;-<span class="st"> </span><span class="kw">roast_contrasts</span>(M, <span class="dt">G=</span>G, <span class="dt">stats.tab=</span>res0, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v, <span class="dt">fun=</span><span class="st">&quot;fry&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
 <p>If we set <code>name</code> to a value other than <code>NA</code>, this would create a folder with one CSV per pathway, and an Excel file that looks like</p>
 <table>
 <thead>
@@ -791,13 +791,13 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.1.1 limma_3.34.6 
+## [1] ezlimma_0.1.4 limma_3.34.9 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.15    digest_0.6.14   rprojroot_1.3-2 backports_1.1.2
 ##  [5] magrittr_1.5    evaluate_0.10.1 highr_0.6       stringi_1.1.6  
 ##  [9] rmarkdown_1.8   statmod_1.4.30  tools_3.4.3     stringr_1.2.0  
-## [13] yaml_2.1.16     compiler_3.4.3  htmltools_0.3.6 knitr_1.18</code></pre>
+## [13] yaml_2.1.16     compiler_3.4.3  htmltools_0.3.6 knitr_1.19</code></pre>
 </div>
 
 

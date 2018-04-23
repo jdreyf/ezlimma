@@ -34,7 +34,7 @@ M[1,1:3] <- M[1,1:3] + 2
 Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,
 ```{r lc}
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
-res0 <- limma_contrasts(M, grp=grp, contrasts.v = contr.v)
+res0 <- limma_contrasts(M, grp=grp, contrast.v = contr.v)
 ```
 
 This returns a data frame that looks like:
@@ -107,7 +107,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
 ```
 This object would normally be read in using `read_gmt`. Then we can test each of these gene sets.
 ```{r}
-res5 <- roast_contrasts(M, G=G, stats.tab=res0, grp=grp, contrasts.v = contr.v, fun="fry", name=NA)
+res5 <- roast_contrasts(M, G=G, stats.tab=res0, grp=grp, contrast.v = contr.v, fun="fry", name=NA)
 ```
 
 If we set `name` to a value other than `NA`, this would create a folder with one CSV per pathway, and an Excel file that looks like

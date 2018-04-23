@@ -18,16 +18,16 @@ pheno2[1] <- NA
 covar <- rnorm(length(pheno.v))
 
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
-eztt <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
+eztt <- limma_contrasts(M, grp = grp, contrast.v = contr.v)
 lc <- limma_cor(M, phenotype = pheno.v)
 
 G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 
-rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="fry")
+rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
 set.seed(0)
-rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrasts.v = contr.v, fun="mroast")
+rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast")
 rcr.f <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
 set.seed(0)
 rcr.m <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast")
