@@ -9,8 +9,7 @@
 #' @param grp Vector of phenotype groups of the samples, which represent valid 
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the 
 #'   vector is named, names should match \code{colnames(object)}.
-#' @param contrast.v A named vector of contrasts for 
-#'   \code{\link[limma]{makeContrasts}}.
+#' @param contrast.v A named vector of contrasts for \code{\link[limma]{makeContrasts}}.
 #' @param design the design matrix of the microarray experiment, with rows 
 #'   corresponding to arrays and columns to coefficients to be estimated.
 #' @param weights non-negative observation weights. Can be a numeric matrix of 

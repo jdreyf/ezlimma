@@ -27,35 +27,35 @@ test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
   expect_equal(eztt.ss, toptab[rownames(eztt.ss), col.nms])
   
   #give only p-val column
-  eztt.p <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, cols = "P.Value", add.means = FALSE)
+  eztt.p <- limma_contrasts(M, grp = grp, contrast.v = contr.v, cols = "P.Value", add.means = FALSE)
   expect_equal(eztt.p, eztt[rownames(eztt.p), grep("\\.p$", colnames(eztt))])
 })
 
 test_that("limma_contrasts trend has effect", {
   #give only p-val column
-  ezttt.p <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, cols = "P.Value", add.means = FALSE, trend=TRUE)
+  ezttt.p <- limma_contrasts(M, grp = grp, contrast.v = contr.v, cols = "P.Value", add.means = FALSE, trend=TRUE)
   #most p-values should be different
   expect_equal(mean(ezttt.p == eztt[rownames(ezttt.p), grep("\\.p$", colnames(eztt))]), 0)
 })
 
 test_that("empty contr_names don't create cols that start with '.'", {
   contr.v <- c("First3")
-  eztt.nonm <- limma_contrasts(M, grp = grp, contrasts.v = contr.v)
+  eztt.nonm <- limma_contrasts(M, grp = grp, contrast.v = contr.v)
   expect_equal(length(grep("^\\.$", colnames(eztt.nonm))), 0)
 })
 
 test_that("limma_contrasts weights", {
-  eztt.w <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, weights = 1:ncol(M))
+  eztt.w <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = 1:ncol(M))
   expect_equal(mean(eztt.w$First3.p==eztt$First3.p), 0)
   
-  eztt.gw <- limma_contrasts(M, grp = grp, contrasts.v = contr.v, weights = 1:nrow(M))
+  eztt.gw <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = 1:nrow(M))
   expect_equal(mean(eztt.gw$First3.p==eztt$First3.p), 0)
   
   #create EList object
-  eztt.el <- limma_contrasts(el, grp = grp, contrasts.v = contr.v)
+  eztt.el <- limma_contrasts(el, grp = grp, contrast.v = contr.v)
   expect_equal(mean(eztt.el$First3.p==eztt$First3.p), 0)
   
   #object$weights are being ignored
-  expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrasts.v = contr.v, weights = NULL))
+  expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrast.v = contr.v, weights = NULL))
   expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
 })

@@ -18,8 +18,7 @@ genes and columns to samples.}
 variable names in R. Should be same length as \code{ncol(object)}. If the 
 vector is named, names should match \code{colnames(object)}.}
 
-\item{contrast.v}{A named vector of contrasts for 
-\code{\link[limma]{makeContrasts}}.}
+\item{contrast.v}{A named vector of contrasts for \code{\link[limma]{makeContrasts}}.}
 
 \item{design}{the design matrix of the microarray experiment, with rows 
 corresponding to arrays and columns to coefficients to be estimated.}
