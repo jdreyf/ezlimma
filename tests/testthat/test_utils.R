@@ -1,4 +1,3 @@
-library("ezlimma")
 context("utils")
 
 test_that("df_signif doesn't corrupt inputs", {
