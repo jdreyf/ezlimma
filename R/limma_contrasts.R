@@ -26,6 +26,9 @@
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @param add.means logical indicating if (unweighted) group means per row
 #'   should be added to the output.
+#' @param treat.lfc Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
+#'  rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
+#'  which is \code{treat.lfc=log2(1.1)}.
 #' @param cols columns of \code{topTable} the user would like in the 
 #'   output. Possibilities include \code{'logFC', 'AveExpr', 't', 'P.Value', 'adj.P.Val', 'B'}. 
 #'   Once selected, the column names of the output may be different than \code{cols}.
@@ -35,13 +38,16 @@
 #'   be calculated as \code{model.matrix(~0+grp)}. However, \code{grp} isn't
 #'   needed if \code{design} is provided & \code{add.means} is \code{FALSE}. See
 #'   further details in \code{\link[limma]{lmFit}}.
-#' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
+#' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. Bioinformatics 25, 765-771.
+#' @seealso \code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
 #don't include parameters for robust fitting, since ppl unlikely to use
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NULL,
                             trend=FALSE, block=NULL, correlation=NULL, adjust.method='BH', 
-                            add.means=TRUE, cols=c('P.Value', 'adj.P.Val', 'logFC')){
+                            add.means=TRUE, treat.lfc=NULL, cols=c('P.Value', 'adj.P.Val', 'logFC')){
+  
+  stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
   if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
   if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
   if (any(rownames(object)=="")) stop("'object' cannot have an empty rowname ''.")
@@ -63,12 +69,17 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   
   contr.mat <- limma::makeContrasts(contrasts=contrast.v, levels=design)
   fit2 <- limma::contrasts.fit(fit, contr.mat)
-  fit2 <- limma::eBayes(fit2, trend=trend)
+  if (is.null(treat.lfc)){
+    fit2 <- limma::eBayes(fit2, trend=trend)
+  } else {
+    fit2 <- limma::treat(fit2, lfc=treat.lfc, trend=trend)
+  }
   #limma ignores names of contrast.v when it's given as vector
   if (!is.null(names(contrast.v))){
     stopifnot(colnames(fit2$contrasts)==contrast.v)
     colnames(fit2$contrasts) <- names(contrast.v)
   }
+  
   mtt <- multiTopTab(fit2, cols=cols, adjust.method=adjust.method)
   
   #cbind grp means

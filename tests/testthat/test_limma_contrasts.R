@@ -17,7 +17,7 @@ test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
   fit <- lmFit(M, design=design)
   #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
   contrast.matrix <- cbind(First3=c(1,0),Last3=c(0,1),Last3vsFirst3=c(-1,1))
-  fit2 <- contrasts.fit(fit,contrast.matrix)
+  fit2 <- contrasts.fit(fit, contrast.matrix)
   fit2 <- eBayes(fit2)
   toptab <- topTable(fit2, num=Inf, coef=3)
   
@@ -58,4 +58,17 @@ test_that("limma_contrasts weights", {
   #object$weights are being ignored
   expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrast.v = contr.v, weights = NULL))
   expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
+})
+
+test_that("limma_contrasts with treat matches topTable(treat(contrasts.fit(lmfit(M))))", {
+  fit <- lmFit(M, design=design)
+  #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
+  contrast.matrix <- c(Last3vsFirst3=c(1, -1))
+  expect_warning(fit2 <- contrasts.fit(fit, contrasts=contrast.matrix))
+  fit2 <- treat(fit2, lfc=log2(1.1))
+  toptab <- topTable(fit2, num=Inf, coef=1, sort.by="p")
+  
+  #give only p-val column
+  eztt.p <- limma_contrasts(M, grp = grp, contrast.v = contr.v[3], cols = "P.Value", add.means = FALSE, treat.lfc = log2(1.1))
+  expect_equal(eztt.p[,1], toptab$P.Value)
 })

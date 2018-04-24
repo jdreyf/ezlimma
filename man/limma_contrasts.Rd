@@ -6,8 +6,8 @@
 \usage{
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", add.means = TRUE, cols = c("P.Value", "adj.P.Val",
-  "logFC"))
+  adjust.method = "BH", add.means = TRUE, treat.lfc = NULL,
+  cols = c("P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -43,6 +43,10 @@ correlation.}
 \item{add.means}{logical indicating if (unweighted) group means per row
 should be added to the output.}
 
+\item{treat.lfc}{Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
+rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
+which is \code{treat.lfc=log2(1.1)}.}
+
 \item{cols}{columns of \code{topTable} the user would like in the 
 output. Possibilities include \code{'logFC', 'AveExpr', 't', 'P.Value', 'adj.P.Val', 'B'}. 
 Once selected, the column names of the output may be different than \code{cols}.
@@ -61,6 +65,9 @@ If \code{design} is \code{NULL} and \code{grp} is given, design will
   needed if \code{design} is provided & \code{add.means} is \code{FALSE}. See
   further details in \code{\link[limma]{lmFit}}.
 }
+\references{
+McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. Bioinformatics 25, 765-771.
+}
 \seealso{
-\code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
+\code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 }
