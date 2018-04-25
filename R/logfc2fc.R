@@ -4,9 +4,8 @@
 #' 
 #' @param logFC A numeric log2 fold-change.
 #' @return The fold-change.
-#' @details This function converts log fold-changes < 0
-#' to their negative multiplicative reciprocal, 
-#' e.g. fc = 0.5 -> fc = -2, as is commonly done in biology.
+#' @details This function converts log fold-changes < 0 to their negative multiplicative reciprocal, e.g. 
+#' fc = 0.5 -> fc = -2, as is commonly done in biology. This function is not meant to be called directly by the user.
 #' @examples 
 #' \dontrun{
 #' # not run

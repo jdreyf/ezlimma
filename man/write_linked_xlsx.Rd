@@ -25,5 +25,6 @@ Write Excel XLSX file using package \code{xlsx} with links to CSVs
 \details{
 This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in this 
 Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work}{thread}, 
-in which case you will get an error instructing you to call \code{library(xlsx)}.
+in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
+called directly by the user.
 }

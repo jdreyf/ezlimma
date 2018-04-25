@@ -27,3 +27,6 @@ Modified result from \code{mroast} or \code{fry}.
 Convert \code{mroast} or \code{fry} two-tailed results to one-tailed and remove 
 non-directional, termed "Mixed", statistics.
 }
+\details{
+This function is not meant to be called directly by the user.
+}

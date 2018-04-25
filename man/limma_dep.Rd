@@ -25,3 +25,6 @@ Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per r
 \description{
 Test (conditional) dependence of \code{y} with rows of \code{object}.
 }
+\details{
+This function is not meant to be called directly by the user.
+}

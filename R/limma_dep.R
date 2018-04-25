@@ -10,6 +10,7 @@
 #' @param prefix Character string to add to beginning of column names.
 #' @param verbose If \code{TRUE} reports messages.
 #' @return Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
+#' @details This function is not meant to be called directly by the user.
 
 #transform to |z-score| using sqrt of chisq w/ df=1
 limma_dep <- function(object, y, covar=NULL, prefix="", verbose=FALSE){

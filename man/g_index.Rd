@@ -23,3 +23,6 @@ Index of acceptable gene sets in \code{G}.
 \description{
 Create object with indices of genes per gene set.
 }
+\details{
+This function is not meant to be called directly by the user.
+}

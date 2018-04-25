@@ -22,3 +22,6 @@ p-values.
 \description{
 Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{fry}.
 }
+\details{
+This function is not meant to be called directly by the user.
+}
