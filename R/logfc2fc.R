@@ -13,7 +13,6 @@
 #' logfc2fc(-2) #-4
 #' }
 
-#note: function doesn't need to be exported
 logfc2fc <- function(logFC){
   #sign is -1 if logFC<0; 1 if logFC>=0
   sgn <- (-1)^(1+as.numeric(logFC>=0))

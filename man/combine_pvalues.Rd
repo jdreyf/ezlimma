@@ -11,8 +11,7 @@ combine_pvalues(mat, pv.cols = NULL)
 containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.}
 
 \item{pv.cols}{the column names or column indices with p-values. If
-\code{NULL}, the function searches for columns that end with \code{.p} or
-\code{.pval}.}
+\code{NULL}, the function searches for columns that end with \code{.p} or \code{.pval}.}
 }
 \value{
 A vector of p-values.
@@ -25,8 +24,8 @@ This function uses the z-transform method to combine p-values across rows, equiv
 \code{method="z.transform"} in \code{survcomp::combine.test}.
 }
 \examples{
-tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
-combine_pvalues(tab)
+ tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
+ combine_pvalues(tab)
 }
 \seealso{
 \code{\link[survcomp]{combine.test}}.

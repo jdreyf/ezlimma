@@ -1,20 +1,20 @@
-#'Combine p-values of a feature over multiple p-value columns of an object
-#'
-#'Combine p-values of a feature over multiple p-value columns of an object
-#'
-#'@param mat A matrix-like object with statistical columns, including some
-#'  containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.
-#'@param pv.cols the column names or column indices with p-values. If
-#'  \code{NULL}, the function searches for columns that end with \code{.p} or
-#'  \code{.pval}.
-#'@details This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
-#'\code{method="z.transform"} in \code{survcomp::combine.test}.
-#'@return A vector of p-values.
-#'@seealso \code{\link[survcomp]{combine.test}}.
-#'@examples
-#' tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
-#' combine_pvalues(tab)
-#'@export
+#' Combine p-values of a feature over multiple p-value columns of an object
+#' 
+#' Combine p-values of a feature over multiple p-value columns of an object
+#' 
+#' @param mat A matrix-like object with statistical columns, including some
+#'   containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.
+#' @param pv.cols the column names or column indices with p-values. If
+#'   \code{NULL}, the function searches for columns that end with \code{.p} or \code{.pval}.
+#' @details This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
+#' \code{method="z.transform"} in \code{survcomp::combine.test}.
+#' @return A vector of p-values.
+#' @seealso \code{\link[survcomp]{combine.test}}.
+#' @examples
+#'  tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
+#'  combine_pvalues(tab)
+#' @export
+#' @import stats
 
 #don't export
 combine_pvalues <- function(mat, pv.cols=NULL){

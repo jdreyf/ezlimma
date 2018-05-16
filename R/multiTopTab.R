@@ -13,6 +13,7 @@
 #' fuction is a wrapper for that one.
 #' @return Dataframe
 #' @details This function is not meant to be called directly by the user.
+#' @import limma
 
 #not exported
 multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH'){

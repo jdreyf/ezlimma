@@ -8,11 +8,12 @@
 #' @param index index of pathways in G
 #' @param stats.tab a table of feature (e.g. gene) statistics that the Excel file can link to
 #' @param n.toptabs number of gene set toptables to write to CSV and link to from Excel.
-#' @details This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in this 
-#' Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work}{thread}, 
+#' @details This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in
+#' this Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-packag-doesnt-work}{thread}, 
 #' in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
 #' called directly by the user.
 
+# don't @import xlsx, since don't want it to be installed with ezlimma
 write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   #https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work 
   if (!requireNamespace("xlsx", quietly = TRUE)){
@@ -37,7 +38,7 @@ write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   #below throws "Error in .jfindClass(as.character(class)) : class not found" if xlsx not loaded & attached
   try.xlsx <- try(xlsx::addDataFrame(x=df_signif(res, 3), sheet=sheet))
   if (class(try.xlsx)=="try-error"){
-    stop("Please execute 'library(xlsx)' manually, as it did not work automatically.")
+    stop("You need to load and attach 'xlsx' via 'library(xlsx)'.")
   }
   rows  <- xlsx::getRows(sheet)
   cells <- xlsx::getCells(rows, 1)

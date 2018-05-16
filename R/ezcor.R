@@ -1,27 +1,28 @@
-#'Test correlation of each row of an object to a phenotype vector
-#'
-#'Test correlation of each row of an object to a phenotype vector using one of 
-#'several correlation methods.
-#'
-#'@param object A matrix-like data object containing log-ratios or 
-#'  log-expression values, with rows corresponding to 
-#'  genes and columns to samples.
-#'@param phenotype Vector of phenotypes of the samples. Should be same length as
-#'  \code{ncol(object)}. If the vector is named, names should match 
-#'  \code{colnames(object)}.
-#'@param method a character string indicating which correlation coefficient is
-#'  to be used for the test. One of \code{"pearson"}, \code{"kendall"}, or
-#'  \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.
-#'@param reorder.rows logical, should rows be reordered by p-value or be left in 
-#'  the same order as \code{object}?
-#'@param prefix character string to add to beginning of column names.
-#'@param adjust.method method used to adjust the p-values for multiple testing.
-#'@param alternative indicates the alternative hypothesis and must be one of 
-#'  \code{"two.sided"}, \code{"greater"}, or \code{"less"}. You can specify just
-#'  the initial letter. \code{"greater"} corresponds to positive association, 
-#'  \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.
-#'@return Dataframe.
-#'@export
+#' Test correlation of each row of an object to a phenotype vector
+#' 
+#' Test correlation of each row of an object to a phenotype vector using one of 
+#' several correlation methods.
+#' 
+#' @param object A matrix-like data object containing log-ratios or 
+#'   log-expression values, with rows corresponding to 
+#'   genes and columns to samples.
+#' @param phenotype Vector of phenotypes of the samples. Should be same length as
+#'   \code{ncol(object)}. If the vector is named, names should match 
+#'   \code{colnames(object)}.
+#' @param method a character string indicating which correlation coefficient is
+#'   to be used for the test. One of \code{"pearson"}, \code{"kendall"}, or
+#'   \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.
+#' @param reorder.rows logical, should rows be reordered by p-value or be left in 
+#'   the same order as \code{object}?
+#' @param prefix character string to add to beginning of column names.
+#' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @param alternative indicates the alternative hypothesis and must be one of 
+#'   \code{"two.sided"}, \code{"greater"}, or \code{"less"}. You can specify just
+#'   the initial letter. \code{"greater"} corresponds to positive association, 
+#'   \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.
+#' @return Dataframe.
+#' @export
+#' @import stats
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
                   prefix=NULL, adjust.method='BH', alternative='two.sided'){

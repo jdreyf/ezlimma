@@ -10,14 +10,16 @@ Description: Functions for more easily using limma, such as to test multiple
 	limma's pathway analysis functions roast and fry, and mediation analysis.
 Depends:
 	limma (>= 3.34.8)
+Imports:
+	stats
 Suggests:
+	covr,
     knitr,
 	rJava,
     rmarkdown,
 	statmod,
     testthat,
-	xlsx,
-    covr
+	xlsx
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

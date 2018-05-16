@@ -7,6 +7,7 @@
 #' @param covar A matrix-like data object with rows corresponding to samples and columns to covariates. If \code{covar}
 #' has rownames, they should match \code{names(E)}.
 #' @export
+#' @import stats
 
 hitman <- function(E, M, Y, covar=NULL){
   n <- length(E)

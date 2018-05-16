@@ -48,6 +48,8 @@
 #'  Excel
 #' @return data frame of gene set statistics.
 #' @export
+#' @import limma
+#' @import stats
 
 #limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=NULL,

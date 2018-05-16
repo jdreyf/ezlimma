@@ -8,6 +8,7 @@
 #' @param direction direction of gene set change. Can be \code{"Up"} or \code{"Down"}.
 #' @return p-values.
 #' @details This function is not meant to be called directly by the user.
+#' @import stats
 
 fry_two2one_tailed <- function(tab, pv.col='PValue', dir.col='Direction', direction='Up'){
   stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,pv.col]<=1, tab[,pv.col]>=0)

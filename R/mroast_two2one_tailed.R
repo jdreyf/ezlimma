@@ -9,6 +9,7 @@
 #' @param nrot number of rotations used to estimate the p-values for \code{mroast}.
 #' @return Vector of p-values.
 #' @details This function is not meant to be called directly by the user.
+#' @import stats
 
 mroast_two2one_tailed <- function(tab, pv.col='PValue', dir.col='Direction', direction='Up',
                                   nrot = 9999){

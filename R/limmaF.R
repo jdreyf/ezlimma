@@ -37,6 +37,7 @@
 #' design <- model.matrix(~0+grp+covar)
 #' lf <- limmaF(object=object, design=design, coef=colnames(design)[1:3])
 #' @export
+#' @import limma
 
 limmaF <- function(object, design, coef=colnames(design), prefix='', weights=NULL, trend=FALSE, block = NULL, 
                    correlation = NULL, adjust.method='BH', reorder.rows=TRUE, cols=c('F', 'P.Value')){
