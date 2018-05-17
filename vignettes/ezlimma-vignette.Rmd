@@ -10,14 +10,14 @@ vignette: >
 ---
 
 ## Introduction
-Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. This introduction demonstrates feature-level analysis and pathway-level analysis.
+Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results.
 
 ## Install package
 See README.md.
 
 ## Load package
 ```{r lib}
-library("ezlimma")
+library(ezlimma)
 ```
 
 ## Simulate data
@@ -95,6 +95,16 @@ knitr::kable(signif(res4[1:10,], 3))
 ```
 
 where the result is ordered by the combined p-value of the two associations per gene. The `method` options for the association test are: "pearson" (the default), "spearman", "kendall", as before, or "limma", where it will use `limma_cor`. This function only allows one method for all phenotypes.
+
+We  can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (`hitman`). We set the exposure (E) to group, the outcome (Y) to `pheno.v`, and test each gene in `M` as a mediator.  
+```{r}
+res.hit <- hitman(E = grp, M = M, Y = pheno.v)
+```
+
+`hitman` returns a table with a combined ("comb") p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in M, and the conditional association of the gene in M to Y given E.
+```{r, echo=FALSE}
+knitr::kable(signif(res.hit[1:10,], 3))
+```
 
 ## Gene set level analysis
 At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with limma's function `roast`, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.

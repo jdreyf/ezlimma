@@ -10,7 +10,7 @@ test_that("lmFit array weights only affect if given in 'weights'", {
   expect_false(identical(fit0, fit.w))
   
   fit.gw <- lmFit(M, design=design, weights=1:nrow(M))
-  expect_false(identical(fit0, fit.w))
+  expect_false(identical(fit0, fit.gw))
 })
 
 test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {

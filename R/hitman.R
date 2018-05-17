@@ -1,6 +1,7 @@
 #' High-throughput mediation analysis
 #'
-#' High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on \code{Y}.
+#' High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
+#' \code{Y}.
 #' @param E A vector representing exposure; can be a character with groups or numeric
 #' @param M A numeric matrix-like data object with one row per feature and one column per sample representing the mediator
 #' @param Y A numeric vector of \code{length(E)} of outcomes
