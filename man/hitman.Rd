@@ -17,5 +17,6 @@ hitman(E, M, Y, covar = NULL)
 has rownames, they should match \code{names(E)}.}
 }
 \description{
-High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on \code{Y}.
+High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
+\code{Y}.
 }
