@@ -4,16 +4,16 @@
 \alias{limma_dep}
 \title{Test (conditional) dependence of two variables}
 \usage{
-limma_dep(object, y, covar = NULL, prefix = "", verbose = FALSE)
+limma_dep(object, Y, covar = NULL, prefix = "", verbose = FALSE)
 }
 \arguments{
 \item{object}{A matrix-like data object with rows corresponding to features and columns to samples.}
 
-\item{y}{A vector. If not numeric, treated as a nominal group variable. To ensure that \code{object} matches \code{y},
-it is checked that \code{colnames(object)==names(y)}. This check will pass if one of these is \code{NULL}.}
+\item{Y}{A vector. If not numeric, treated as a nominal group variable. To ensure that \code{object} matches \code{Y},
+it is checked that \code{colnames(object)==names(Y)}. This check will pass if one of these is \code{NULL}.}
 
 \item{covar}{A matrix-like data object with rows corresponding to samples and columns to covariates. If \code{covar}
-has rownames, they should match \code{names(y)}.}
+has rownames, they should match \code{names(Y)}.}
 
 \item{prefix}{Character string to add to beginning of column names.}
 
@@ -23,8 +23,5 @@ has rownames, they should match \code{names(y)}.}
 Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
 }
 \description{
-Test (conditional) dependence of \code{y} with rows of \code{object}.
-}
-\details{
-This function is not meant to be called directly by the user.
+Test (conditional) dependence of \code{Y} with rows of \code{object}.
 }

@@ -18,5 +18,5 @@ has rownames, they should match \code{names(E)}.}
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
-\code{Y}.
+\code{Y}. P-values are corrected with Benjamini-Hochberg FDR.
 }

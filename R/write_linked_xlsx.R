@@ -1,6 +1,6 @@
 #' Write Excel XLSX file with links to CSVs
 #' 
-#' Write Excel XLSX file using package \code{xlsx} with links to CSVs
+#' Write Excel XLSX file using package \code{xlsx} with links to CSVs. 
 #' 
 #' @param name a name for the folder and Excel file that get written.
 #' @param fun function to use, either \code{fry} or \code{mroast}.
@@ -13,7 +13,7 @@
 #' in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
 #' called directly by the user.
 
-# don't @import xlsx, since don't want it to be installed with ezlimma
+# don't import xlsx, since don't want it to be installed with ezlimma
 write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   #https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work 
   if (!requireNamespace("xlsx", quietly = TRUE)){
@@ -27,6 +27,9 @@ write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
   
   pwys <- rownames(res)[1:n.toptabs]
+  #don't allow invalid names in pwys, which are written as filenames
+  pwys <- rescue_filenames(pwys)
+  names(index) <- rescue_filenames(names(index))
   for(pwy in pwys){
     stat <- stats.tab[index[[pwy]], ]
     stat <- stat[order(combine_pvalues(stat)), ]

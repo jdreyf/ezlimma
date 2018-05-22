@@ -82,3 +82,6 @@ Test contrasts of gene sets using \code{\link[limma]{roast}} with functions
 and writes this to an Excel file. The Excel file links to CSV files, which contain 
 statistics per gene set. Some of the arguments only apply to \code{mroast}.
 }
+\details{
+Pathway names are altered to be valid filenames in Windows and Linux.
+}

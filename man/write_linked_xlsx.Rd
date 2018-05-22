@@ -20,7 +20,7 @@ write_linked_xlsx(name, fun, res, index, stats.tab, n.toptabs)
 \item{n.toptabs}{number of gene set toptables to write to CSV and link to from Excel.}
 }
 \description{
-Write Excel XLSX file using package \code{xlsx} with links to CSVs
+Write Excel XLSX file using package \code{xlsx} with links to CSVs.
 }
 \details{
 This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in

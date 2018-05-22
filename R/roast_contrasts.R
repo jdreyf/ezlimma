@@ -47,6 +47,7 @@
 #' @param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
 #' @return data frame of gene set statistics.
+#' @details Pathway names are altered to be valid filenames in Windows and Linux.
 #' @export
 #' @import limma
 #' @import stats
