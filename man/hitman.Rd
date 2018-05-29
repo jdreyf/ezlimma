@@ -4,22 +4,19 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covar = NULL, my.method = c("lm", "limma"))
+hitman(E, M, Y, covar = NULL)
 }
 \arguments{
-\item{E}{A vector representing exposure; can be a character with groups or numeric}
+\item{E}{A vector representing exposure; can be a character with groups or numeric.}
 
-\item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator}
+\item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.}
 
-\item{Y}{A numeric vector of \code{length(E)} of outcomes}
+\item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
 \item{covar}{A matrix-like data object with rows corresponding to samples and columns to covariates. If \code{covar}
 has rownames, they should match \code{names(E)}.}
-
-\item{my.method}{Method for testing conditional dependence of \code{M} and \code{Y}. Either \code{lm} for a linear
-model or \code{limma} for using limma, where \code{M} is the dependent variable whose variance is estimated.}
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
-\code{Y}. P-values are corrected with Benjamini-Hochberg FDR.
+\code{Y}.
 }

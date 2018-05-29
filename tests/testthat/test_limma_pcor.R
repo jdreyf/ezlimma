@@ -7,5 +7,5 @@ test_that("ezpcor", {
   resp1 <- ezpreg(M, pheno.v, covar=numeric(length(pheno.v)), reorder.rows = FALSE)
   expect_equal(res1[,2:3], resp1[,2:3])
   
-  ezpc <- ezpcor(object=M, phenotype=pheno.v, covar=covar)
+  ezpc <- limma_pcor(object=M, phenotype=pheno.v, covar=covar)
 })

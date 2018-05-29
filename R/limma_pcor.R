@@ -18,7 +18,7 @@
 #' @import stats
 #' @importFrom limma removeBatchEffect
 
-ezpcor <- function(object, phenotype, covar, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
+limma_pcor <- function(object, phenotype, covar, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
   stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), nrow(covar)==ncol(object))
   
   #pheno residuals

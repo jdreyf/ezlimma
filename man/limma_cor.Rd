@@ -4,7 +4,7 @@
 \alias{limma_cor}
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
-limma_cor(object, phenotype = NULL, design = NULL, prefix = "",
+limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
   weights = NULL, trend = FALSE, adjust.method = "BH",
   reorder.rows = TRUE, reduce.df = 0, cols = c("AveExpr", "P.Value",
   "adj.P.Val", "logFC"))

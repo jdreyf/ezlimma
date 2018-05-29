@@ -40,7 +40,7 @@
 #' @import limma
 #' @import stats
 
-limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NULL, 
+limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NULL, 
                       trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|
@@ -92,6 +92,6 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NU
   res.mat <- res.mat[,setdiff(colnames(res.mat), 'FC')]
   
   if (!reorder.rows){ res.mat <- res.mat[rownames(object),] }
-  if (prefix!=''){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
+  if (!is.null(prefix)){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
   return(res.mat)
 }
