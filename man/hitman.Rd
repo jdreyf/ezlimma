@@ -4,7 +4,7 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covar = NULL)
+hitman(E, M, Y, covar = NULL, my.method = c("lm", "limma"))
 }
 \arguments{
 \item{E}{A vector representing exposure; can be a character with groups or numeric}
@@ -15,6 +15,9 @@ hitman(E, M, Y, covar = NULL)
 
 \item{covar}{A matrix-like data object with rows corresponding to samples and columns to covariates. If \code{covar}
 has rownames, they should match \code{names(E)}.}
+
+\item{my.method}{Method for testing conditional dependence of \code{M} and \code{Y}. Either \code{lm} for a linear
+model or \code{limma} for using limma, where \code{M} is the dependent variable whose variance is estimated.}
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome

@@ -6,7 +6,8 @@
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = "",
   weights = NULL, trend = FALSE, adjust.method = "BH",
-  reorder.rows = TRUE, cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
+  reorder.rows = TRUE, reduce.df = 0, cols = c("AveExpr", "P.Value",
+  "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -32,11 +33,14 @@ expression matrix, or a numeric vector of gene weights with length equal to
 \item{trend}{logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{method used to adjust the p-values for multiple testing.
+#' @param reorder.rows logical, should rows be reordered by F-statistic from 
+ \code{\link[limma]{toptable}} or be left in the same order as 
+ \code{object}?}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}?}
+\item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if
+\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
+\code{\link[limma]{lmFit}}.}
 
 \item{cols}{columns of \code{topTable} output the user would like in the 
 result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}

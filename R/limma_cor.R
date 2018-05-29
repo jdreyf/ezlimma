@@ -21,12 +21,15 @@
 #' @param trend logical, should an intensity-trend be allowed for the prior 
 #'  variance? Default is that the prior variance is constant.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
+#' #' @param reorder.rows logical, should rows be reordered by F-statistic from 
+#'  \code{\link[limma]{toptable}} or be left in the same order as 
+#'  \code{object}?
+#' @param reduce.df Number of degrees of freedom to subtract from residual. This may be necessary if
+#' \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
+#' \code{\link[limma]{lmFit}}.
 #' @param cols columns of \code{topTable} output the user would like in the 
 #'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
 #'  is specified, \code{FC} will also be given.
-#' @param reorder.rows logical, should rows be reordered by F-statistic from 
-#'  \code{\link[limma]{toptable}} or be left in the same order as 
-#'  \code{object}?
 #' @return Dataframe.
 #' @details If \code{design} is \code{NULL} and \code{phenotype} is given, design
 #'  will be calculated as \code{model.matrix(~0+phenotype)}. However, 
@@ -38,10 +41,10 @@
 #' @import stats
 
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NULL, 
-                      trend=FALSE, adjust.method='BH', reorder.rows=TRUE,
+                      trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|
-               length(weights)==ncol(object))
+               length(weights)==ncol(object), is.numeric(reduce.df), reduce.df >= 0)
   
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), 
@@ -75,6 +78,12 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix='', weights=NU
   } else {
     fit <- limma::lmFit(object, design)
   }
+  
+  if (reduce.df > 0){
+    if (any(reduce.df >= fit$df.residual)) stop("reduce.df >= df.residual.")
+    fit$df.residual <- fit$df.residual - reduce.df
+  }
+  
   fit2 <- limma::eBayes(fit, trend=trend)
   res.mat <- eztoptab(fit2, coef=2, cols=cols, adjust.method=adjust.method)
   

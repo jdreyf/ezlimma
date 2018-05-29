@@ -11,7 +11,8 @@ el$E <- M
 ww <- matrix(rexp(n=nrow(M)*ncol(M)), ncol=ncol(M), nrow=nrow(M))
 el$weights <- ww
 
-pheno.v <- rnorm(ncol(M))
+phenotype <- pheno.v <- rnorm(ncol(M))
+names(phenotype) <- names(pheno.v) <- colnames(M)
 pheno.v[1:3] <- pheno.v[1:3]-1
 pheno2 <- pheno.v
 pheno2[1] <- NA
