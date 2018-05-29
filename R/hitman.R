@@ -12,6 +12,8 @@
 #' @import stats
 
 hitman <- function(E, M, Y, covar=NULL){
+  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M))
+  
   n <- length(E)
 
   tt.em <- limma_dep(object=M, Y=E, covar=covar, prefix="EM")
