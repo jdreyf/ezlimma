@@ -21,7 +21,7 @@
 #' @param trend logical, should an intensity-trend be allowed for the prior 
 #'  variance? Default is that the prior variance is constant.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
-#' #' @param reorder.rows logical, should rows be reordered by F-statistic from 
+#' @param reorder.rows logical, should rows be reordered by F-statistic from 
 #'  \code{\link[limma]{toptable}} or be left in the same order as 
 #'  \code{object}?
 #' @param reduce.df Number of degrees of freedom to subtract from residual. This may be necessary if
