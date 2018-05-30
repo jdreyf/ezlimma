@@ -98,7 +98,7 @@ where the result is ordered by the combined p-value of the two associations per 
 
 We  can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (`hitman`). We set the exposure (E) to group, the outcome (Y) to `pheno.v`, and test each gene in `M` as a mediator. For `hitman` we make the exposure numeric, and set the names of the `phenoype` to those of `M`.  
 ```{r}
-res.hit <- hitman(E = as.numeric(grp=="First3"), M = M, Y = setNames(pheno.v, nm=colnames(M)))
+res.hit <- hitman(E = grp, M = M, Y = setNames(pheno.v, nm=colnames(M)))
 ```
 
 `hitman` returns a table with a combined ("comb") p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in M, and the conditional association of the gene in M to Y given E.

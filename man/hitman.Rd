@@ -4,7 +4,7 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covar = NULL)
+hitman(E, M, Y, covariates = NULL, verbose = FALSE)
 }
 \arguments{
 \item{E}{A vector representing exposure; can be a character with groups or numeric.}
@@ -13,8 +13,9 @@ hitman(E, M, Y, covar = NULL)
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
-\item{covar}{A matrix-like data object with rows corresponding to samples and columns to covariates. If \code{covar}
-has rownames, they should match \code{names(E)}.}
+\item{covariates}{Numeric vector or matrix of covariates.}
+
+\item{verbose}{Logical indicating if messages should be reported.}
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome

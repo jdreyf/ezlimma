@@ -1,11 +1,24 @@
 context("ezpcor")
 
-
-
-test_that("ezpcor", {
-  res1 <- ezcor(M, pheno.v, method="pearson", reorder.rows = FALSE)
-  resp1 <- ezpreg(M, pheno.v, covar=numeric(length(pheno.v)), reorder.rows = FALSE)
-  expect_equal(res1[,2:3], resp1[,2:3])
+test_that("no covar", {
+  res0 <- limma_pcor(object=M, phenotype=pheno.v, batch=grp)
+  res1 <- limma_pcor(object=M, phenotype=pheno.v, covariates = as.numeric(as.factor(grp)))
+  # expect_equal(res0, res1)
   
-  ezpc <- limma_pcor(object=M, phenotype=pheno.v, covar=covar)
+  m2 <- rbind(M, phenotype)
+  res2 <- limma_pcor(object=m2, phenotype=pheno.v, batch=grp)
+  expect_equal(rownames(res2)[1], "phenotype")
+})
+
+test_that("with covar", {
+  res0 <- limma_pcor(object=M, phenotype=pheno.v, batch=grp, covariates = covar)
+  res1 <- limma_pcor(object=M, phenotype=pheno.v, batch=as.numeric(as.factor(grp)), covariates = covar)
+  expect_equal(res0, res1)
+  
+  m2 <- rbind(M, phenotype, covariates = covar)
+  res2 <- limma_pcor(object=m2, phenotype=pheno.v, batch=grp, covariates = covar)
+  #possible that phenotype wouldn't be first, but it is most likely
+  expect_equal(rownames(res2)[1], "phenotype")
+  
+  expect_error(res2 <- limma_pcor(object=m2, phenotype=pheno.v, batch=grp, covariates = grp))
 })

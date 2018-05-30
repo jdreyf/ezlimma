@@ -1,8 +1,11 @@
 context("hitman")
 
 test_that("hitman", {
-  hm <- hitman(E=rnorm(length(pheno.v)), M=M, Y=pheno.v)
+  ee <- rnorm(length(pheno.v))
+  hm <- hitman(E=ee, M=M, Y=pheno.v)
   expect_lt(mean(hm$comb.p < 0.05), 0.1)
-  hm2 <- hitman(E=rnorm(length(pheno.v)), M=M, Y=pheno.v, covar = covar)
-  expect_equal(mean(hm2$comb.p==hm$comb.p), 0)
+  
+  covar.tmp <- rnorm(length(pheno.v))
+  hm2 <- hitman(E=ee, M=M, Y=pheno.v, covariates=covar.tmp)
+  expect_lte(mean(hm$comb.p==hm2[rownames(hm), "comb.p"]), 0.01)
 })
