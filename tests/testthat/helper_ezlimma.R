@@ -1,3 +1,5 @@
+library(testthat)
+
 #example from limma::contrasts.fit
 set.seed(0)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)

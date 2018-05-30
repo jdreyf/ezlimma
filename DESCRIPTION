@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and Extends limma Package
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"))
 BugReports: https://github.com/jdreyf/ezlimma/issues

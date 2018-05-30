@@ -5,7 +5,7 @@
 #' @param object A matrix-like data object containing log-ratios or 
 #'   log-expression values, with rows corresponding to 
 #'   genes and columns to samples.
-#' @param phenotype Vector of phenotypes of the samples. Should be same length as
+#' @param phenotype Numeric vector of phenotypes of the samples. Should be same length as
 #'   \code{ncol(object)}. If the vector is named, names should match 
 #'   \code{colnames(object)}.
 #' @param batch Batch vector passed to \code{\link[limma]{removeBatchEffect}}, which coerces it to factor.
@@ -23,19 +23,15 @@
 
 limma_pcor <- function(object, phenotype, batch=NULL, covariates=NULL, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
   stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), !is.null(batch)|!is.null(covariates),
-            is.null(batch)|length(batch)==ncol(object),
-            is.null(covariates)|is.numeric(covariates))
+            is.null(batch)|length(batch)==ncol(object), is.null(covariates)|is.numeric(covariates))
   
   #pheno residuals
-  if (is.null(covariates)){
-    pheno.fm <- stats::lm(phenotype ~ ., data=data.frame(phenotype, batch))
-  } 
-  if (is.null(batch)){
-    pheno.fm <- stats::lm(phenotype ~ ., data=data.frame(phenotype, covariates))
+  #data.frame(cbind()) can handle NULLs but not factors
+  dat <- data.frame(cbind(phenotype, covariates))
+  if (!is.null(batch)){
+    dat <- data.frame(dat, batch)
   }
-  if (!is.null(batch) & !is.null(covariates)){
-    pheno.fm <- stats::lm(phenotype ~ ., data=data.frame(phenotype, batch, covariates))
-  }
+  pheno.fm <- stats::lm(phenotype ~ ., data=dat)
   pheno.res <- stats::residuals(pheno.fm)
   #names get corrupted
   names(pheno.res) <- names(phenotype)
@@ -48,5 +44,6 @@ limma_pcor <- function(object, phenotype, batch=NULL, covariates=NULL, reorder.r
   
   lc <- limma_cor(object=object.res, phenotype=pheno.res, reduce.df=reduce.df, reorder.rows=reorder.rows, prefix=prefix, 
                   adjust.method=adjust.method)
+  lc <- lc[,setdiff(colnames(lc), grep("\\.AveExpr$", colnames(lc), value=TRUE))]
   return(lc)
 }

@@ -50,7 +50,8 @@ is specified, \code{FC} will also be given. \code{limma} doesn't return an F-sta
 Dataframe.
 }
 \description{
-F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, a t-test is applied.
+F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, 
+a t-test is applied.
 }
 \examples{
 object <- matrix(rnorm(60), nrow=10, ncol=6)

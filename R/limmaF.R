@@ -1,6 +1,7 @@
 #' F-test of each row of object using design matrix
 #'
-#' F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, a t-test is applied.
+#' F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, 
+#' a t-test is applied.
 #' 
 #' @param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of samples, with rows corresponding to 

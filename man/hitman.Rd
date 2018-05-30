@@ -7,7 +7,7 @@
 hitman(E, M, Y, covariates = NULL, verbose = FALSE)
 }
 \arguments{
-\item{E}{A vector representing exposure; can be a character with groups or numeric.}
+\item{E}{A vector representing exposure; can be numeric or a character/factor with nominal groups.}
 
 \item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.}
 
@@ -20,4 +20,7 @@ hitman(E, M, Y, covariates = NULL, verbose = FALSE)
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
 \code{Y}.
+}
+\details{
+If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match.
 }

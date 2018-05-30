@@ -19,7 +19,7 @@ limma_dep <- function(object, Y, covariates=NULL, prefix=NULL, verbose=FALSE){
             !is.null(covariates)||all(nrow(covariates)==length(Y)))
   p.col <- "p"
   if (is.numeric(Y)){
-    if (verbose) message("'Y' treated as continuous numeric vector")
+    if (verbose) message("Y treated as continuous numeric vector.")
     if (stats::var(Y, na.rm=TRUE)==0) stop("'Y' treated as numeric, but has no variance.")
     if (is.null(covariates)){
       tt <- limma_cor(object=object, phenotype = Y, cols=c('t', 'P.Value'))
@@ -29,10 +29,10 @@ limma_dep <- function(object, Y, covariates=NULL, prefix=NULL, verbose=FALSE){
       tt <- limma_cor(object = object, design = design, cols=c('t', 'P.Value'))
     }
   } else {
-    if (verbose) message("'Y' treated as an unordered factor")
+    if (verbose) message("Y treated as an unordered factor.")
     ngrps <- length(unique(Y))
-    if (ngrps==1) stop("'Y' is not numeric, but has only one group.")
-    if (any(is.na(Y))) stop("'Y' is not numeric, but has an NA.")
+    if (ngrps==1) stop("Y is not numeric, but has only one group.")
+    if (any(is.na(Y))) stop("Y is not numeric, but has an NA.")
     if (!is.null(covariates)){
       design <- stats::model.matrix(~1+Y+covariates)
       covar.ncol <- ncol(as.matrix(covariates))

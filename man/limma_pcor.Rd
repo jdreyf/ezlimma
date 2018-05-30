@@ -12,7 +12,7 @@ limma_pcor(object, phenotype, batch = NULL, covariates = NULL,
 log-expression values, with rows corresponding to 
 genes and columns to samples.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as
+\item{phenotype}{Numeric vector of phenotypes of the samples. Should be same length as
 \code{ncol(object)}. If the vector is named, names should match 
 \code{colnames(object)}.}
 
