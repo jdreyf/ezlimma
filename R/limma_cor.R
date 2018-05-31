@@ -54,7 +54,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
     if (is.null(design)){
       #model.matrix clips NAs in pheno, so need to also remove from mat
       n.na <- sum(is.na(phenotype))
-      if (n.na>0){
+      if (n.na > 0){
         message(n.na, ' NAs removed')
         pheno.nona <- phenotype[!is.na(phenotype)]
         object <- object[,!is.na(phenotype)]
@@ -69,7 +69,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
     }
   }#end if !is.null(pheno)
   
-  if (!is.numeric(design[,2])) stop("design's 2nd column should be numeric, but it is not.")
+  if (!is.numeric(design[,2])) stop("2nd column of design must be numeric.")
   # stopifnot(colnames(design)[1] == '(Intercept)' & is.numeric(design[,2]))
   
   if (!missing(weights)){

@@ -36,6 +36,7 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
   #if mult grps, get an F-stat
   ey.sign <- NA
   if (is.numeric(E) || ngrps==2){
+    #Y treated as gene expression -> dependent variable
     tt.ey <- limma_dep(object=Y, Y=E, covariates=covariates, prefix="EY")
     if (tt.ey$EY.t != 0){
       ey.sign <- sign(tt.ey$EY.t)

@@ -26,6 +26,7 @@ limma_dep <- function(object, Y, covariates=NULL, prefix=NULL, verbose=FALSE){
     } else {
       dat <- data.frame(Y, covariates)
       design <- stats::model.matrix(~., data=dat)
+      #design includes an intercept, so coefficient of Y is tested
       tt <- limma_cor(object = object, design = design, cols=c('t', 'P.Value'))
     }
   } else {
