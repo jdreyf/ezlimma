@@ -19,7 +19,7 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
   if (is.numeric(E)){
     if (verbose) message("E treated as continuous numeric vector.")
     batch <- NULL
-    if (stats::var(Y, na.rm=TRUE)==0) stop("E treated as numeric, but has no variance.")
+    if (stats::var(E, na.rm=TRUE)==0) stop("E treated as numeric, but has no variance.")
     #ok if covariates is NULL
     my.covar <- cbind(E, covariates)
 
@@ -33,7 +33,7 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     my.covar <- covariates
   }
   
-  #if mult grps, get an F-stat
+  #if mult grps, get an F-stat -> no ey.sign
   ey.sign <- NA
   if (is.numeric(E) || ngrps==2){
     #Y treated as gene expression -> dependent variable
@@ -41,7 +41,8 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     if (tt.ey$EY.t != 0){
       ey.sign <- sign(tt.ey$EY.t)
     } else {
-      warning("E and Y should be associated, but they are not.")
+      #leave ey.sign as NA
+      warning("E and Y are not associated, so not accounting for direction of association.")
     }
   }
   

@@ -9,4 +9,6 @@ test_that("multi_cor matches ezcor & limma_cor", {
   res.lm <- data.matrix(limma_cor(M, pheno2, reorder.rows = FALSE))
   res.mc <- multi_cor(M, cbind(a=pheno.v, b=pheno2), method="limma", reorder.rows = FALSE)
   expect_equal(res.lm[,"p"], res.mc[,"b.p"])
+  
+  expect_error(multi_cor(M, pheno2, method="limma", reorder.rows = FALSE))
 })
