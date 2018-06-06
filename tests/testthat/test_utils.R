@@ -29,11 +29,11 @@ test_that("combine_pvals", {
   expect_error(combine_pvalues(tab1))
 })
 
-test_that("rescue filenames", {
-  expect_equal(rescue_filenames("a"), "a")
-  expect_equal(rescue_filenames("."), "_")
+test_that("clean filenames", {
+  expect_equal(clean_filenames("a"), "a")
+  expect_equal(clean_filenames("."), "_")
   nm.test <- c("~", "`", "sulfate/sulfite met", "hi**", "hellohello", "hello world.", "CON", "coM2", "con.", "CON", "CON")
-  res <- rescue_filenames(nm.test)
+  res <- clean_filenames(nm.test)
   expect_false(any(duplicated(res)))
   expect_equal(res, c('_', '__', 'sulfate_sulfite_met', 'hi__', 'hellohello', "hello_world_",
                                'CON_', 'coM2_', 'con_', 'CON__', 'CON___'))

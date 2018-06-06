@@ -4,9 +4,10 @@
 #' and ensure they are unique. Improper characters are replaced with "_".
 #'
 #' @param nm Character string of names.
+#' @export
 
 # https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names.
-rescue_filenames <- function(nm){
+clean_filenames <- function(nm){
   #safe characters
   nm <- gsub("[^[:alnum:]\\.]", "_", nm)
   #can't end in " " or "."
