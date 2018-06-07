@@ -50,7 +50,6 @@
 #' @param nrot number of rotations used to compute the p-values in \code{mroast}.
 #' @return data frame of gene set statistics.
 #' @export
-#' @import limma
 #' @import stats
 
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
