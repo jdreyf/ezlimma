@@ -27,6 +27,3 @@ This function uses the z-transform method to combine p-values across rows, equiv
  tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
  combine_pvalues(tab)
 }
-\seealso{
-\code{\link[survcomp]{combine.test}}.
-}
