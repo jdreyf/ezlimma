@@ -36,7 +36,7 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for
 }
 \value{
 Dataframe with several statistical columns corresponding to each
- phenotype and one row per feature.
+  phenotype and one row per feature.
 }
 \description{
 Test correlation of each row of an object to each column of pheno.mat using 

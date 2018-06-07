@@ -41,7 +41,6 @@
 #' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. Bioinformatics 25, 765-771.
 #' @seealso \code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
-#' @import stats
 
 #don't include parameters for robust fitting, since ppl unlikely to use
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NULL,

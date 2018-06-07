@@ -22,7 +22,6 @@
 #'   \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.
 #' @return Dataframe.
 #' @export
-#' @import stats
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
                   prefix=NULL, adjust.method='BH', alternative='two.sided'){

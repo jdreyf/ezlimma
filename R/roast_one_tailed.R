@@ -13,7 +13,6 @@
 #' Only for \code{mroast}.
 #' @return Modified result from \code{mroast} or \code{fry}.
 #' @details This function is not meant to be called directly by the user.
-#' @import stats
 
 roast_one_tailed <- function(roast.res, fun, alternative, nrot, adjust.method){
   direction <- sub("greater", "Up", sub("less", "Down", alternative))

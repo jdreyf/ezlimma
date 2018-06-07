@@ -18,8 +18,6 @@
 #' @return Dataframe.
 #' @details \code{\link[limma]{removeBatchEffect}} treats \code{batch} differently form \code{covariates}, even if 
 #' \code{covariates=as.numeric(as.factor(batch))}.
-#' @import stats
-#' @importFrom limma removeBatchEffect
 
 limma_pcor <- function(object, phenotype, batch=NULL, covariates=NULL, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
   stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), !is.null(batch)|!is.null(covariates),

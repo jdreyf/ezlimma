@@ -9,7 +9,6 @@
 #' @param alternative direction of change. Can be a vector. \code{"greater"} or \code{"less"}.
 #' @return p-values.
 #' @details This function is not meant to be called directly by the user.
-#' @import stats
 
 two2one_tailed <- function(tab, stat.col=1, p.col=2, alternative=c("greater", "less")){
   alternative <- match.arg(alternative)

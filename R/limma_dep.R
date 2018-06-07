@@ -11,7 +11,6 @@
 #' @param verbose If \code{TRUE} reports messages.
 #' @return Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
 #' @export
-#' @import stats
 
 #transform to |z-score| using sqrt of chisq w/ df=1
 limma_dep <- function(object, Y, covariates=NULL, prefix=NULL, verbose=FALSE){
