@@ -10,7 +10,6 @@
 #' @param verbose Logical indicating if messages should be reported.
 #' @details If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match.
 #' @export
-#' @import stats
 
 #can add covariates in future
 hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){

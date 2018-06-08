@@ -9,12 +9,10 @@
 #' @details This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
 #' \code{method="z.transform"} in \code{survcomp::combine.test}.
 #' @return A vector of p-values.
-#' @seealso \code{\link[survcomp]{combine.test}}.
 #' @examples
 #'  tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
 #'  combine_pvalues(tab)
 #' @export
-#' @import stats
 
 #don't export
 combine_pvalues <- function(mat, pv.cols=NULL){

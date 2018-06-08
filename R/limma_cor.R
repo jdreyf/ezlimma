@@ -37,8 +37,6 @@
 #'  details in \code{\link[limma]{lmFit}}.
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
-#' @import limma
-#' @import stats
 
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NULL, 
                       trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,

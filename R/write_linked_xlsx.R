@@ -28,8 +28,8 @@ write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
   
   pwys <- rownames(res)[1:n.toptabs]
   #don't allow invalid names in pwys, which are written as filenames
-  pwys <- rescue_filenames(pwys)
-  names(index) <- rescue_filenames(names(index))
+  pwys <- clean_filenames(pwys)
+  names(index) <- clean_filenames(names(index))
   for(pwy in pwys){
     stat <- stats.tab[index[[pwy]], ]
     stat <- stat[order(combine_pvalues(stat)), ]

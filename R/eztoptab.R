@@ -15,7 +15,6 @@
 #' @details See \code{\link[limma]{topTable}} for more details on many of 
 #' these, as this fuction is a wrapper for that one.
 #' @return Dataframe.
-#' @import limma
 
 #sort by p
 #assume that if 'logFC' in cols, then want 'FC'
