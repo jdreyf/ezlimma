@@ -59,3 +59,13 @@ test_that("roast_contrasts trend has effect", {
   p.cols <- grep("\\.p", colnames(rc.res2))
   expect_equal(mean(rc.res2[,p.cols] == rc.res2t[,p.cols]), 0)
 })
+
+test_that("roast_contrasts works for other values of adjust.method", {
+  bonferroni  <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6,adjust.method = 'bonferroni')
+  default <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6)
+  expect_false(all(colnames(default) == colnames(bonferroni)))
+  
+  rownames(bonferroni) <- rownames(default)
+  colnames(bonferroni) <- colnames(default)
+  expect_false(all(bonferroni == default))
+})
