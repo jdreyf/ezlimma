@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ## Introduction
-Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results.
+Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of limma's parameters, such as those in `lmFit`; when the parameters are not exposed, limma's default is used.
 
 ## Install package
 See README.md.
@@ -36,6 +36,7 @@ Assume we want to test if genes are changed in First3, in Last3, or in Last3 - F
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
 res0 <- limma_contrasts(M, grp=grp, contrast.v = contr.v)
 ```
+First3 tests if the mean expression of genes in these samples differs from zero, and Last3vsFirst3 tests difference between groups. 
 
 This returns a data frame that looks like:
 ```{r, echo=FALSE}

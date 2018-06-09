@@ -5,7 +5,7 @@
 #' 
 #' @param object A matrix-like data object containing log-ratios or 
 #'   log-expression values for a series of arrays, with rows corresponding to 
-#'   genes and columns to samples.
+#'   genes and columns to samples. Must have non-duplicated, non-empty rownames.
 #' @param grp Vector of phenotype groups of the samples, which represent valid 
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the 
 #'   vector is named, names should match \code{colnames(object)}.
@@ -34,11 +34,11 @@
 #'   Once selected, the column names of the output may be different than \code{cols}.
 #'   If \code{logFC} is specified, \code{FC} will automatically also be given.
 #' @return Data frame.
-#' @details If \code{design} is \code{NULL} and \code{grp} is given, design will
-#'   be calculated as \code{model.matrix(~0+grp)}. However, \code{grp} isn't
-#'   needed if \code{design} is provided & \code{add.means} is \code{FALSE}. See
-#'   further details in \code{\link[limma]{lmFit}}.
-#' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. Bioinformatics 25, 765-771.
+#' @details If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
+#' \code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
+#' is \code{FALSE}. See further details in \code{\link[limma]{lmFit}}.
+#' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
+#' Bioinformatics 25, 765-771.
 #' @seealso \code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
@@ -50,7 +50,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
   if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
   if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
-  if (any(rownames(object)=="")) stop("'object' cannot have an empty rowname ''.")
+  if (any(rownames(object)=="")) stop("object cannot have an empty rowname ''.")
 
   if (is.null(design)){
     design <- stats::model.matrix(~0+grp)
