@@ -12,7 +12,7 @@ limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
 log-expression values for a series of arrays, with rows corresponding to 
-genes and columns to samples.}
+genes and columns to samples. Must have non-duplicated, non-empty rownames.}
 
 \item{grp}{Vector of phenotype groups of the samples, which represent valid 
 variable names in R. Should be same length as \code{ncol(object)}. If the 
@@ -60,13 +60,13 @@ Apply lmFit, contrasts.fit, & eBayes to one or more contrasts by passing each
 object row, phenotype groups, and contrasts to only this function.
 }
 \details{
-If \code{design} is \code{NULL} and \code{grp} is given, design will
-  be calculated as \code{model.matrix(~0+grp)}. However, \code{grp} isn't
-  needed if \code{design} is provided & \code{add.means} is \code{FALSE}. See
-  further details in \code{\link[limma]{lmFit}}.
+If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
+\code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
+is \code{FALSE}. See further details in \code{\link[limma]{lmFit}}.
 }
 \references{
-McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. Bioinformatics 25, 765-771.
+McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
+Bioinformatics 25, 765-771.
 }
 \seealso{
 \code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
