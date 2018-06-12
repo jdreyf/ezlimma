@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-05-17" />
+<meta name="date" content="2018-06-08" />
 
 <title>ezlimma vignette</title>
 
@@ -70,13 +70,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-05-17</em></h4>
+<h4 class="date"><em>2018-06-08</em></h4>
 
 
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results.</p>
+<p>Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of limma’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, limma’s default is used.</p>
 </div>
 <div id="install-package" class="section level2">
 <h2>Install package</h2>
@@ -101,6 +101,7 @@ M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><s
 <p>Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
 res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
+<p>First3 tests if the mean expression of genes in these samples differs from zero, and Last3vsFirst3 tests difference between groups.</p>
 <p>This returns a data frame that looks like:</p>
 <table>
 <thead>
@@ -657,8 +658,8 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 </tbody>
 </table>
 <p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: “pearson” (the default), “spearman”, “kendall”, as before, or “limma”, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
-<p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (E) to group, the outcome (Y) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp, <span class="dt">M =</span> M, <span class="dt">Y =</span> pheno.v)</code></pre></div>
+<p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (E) to group, the outcome (Y) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator. For <code>hitman</code> we make the exposure numeric, and set the names of the <code>phenoype</code> to those of <code>M</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno.v, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
 <p><code>hitman</code> returns a table with a combined (“comb”) p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in M, and the conditional association of the gene in M to Y given E.</p>
 <table>
 <thead>
@@ -666,102 +667,135 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <th></th>
 <th align="right">comb.p</th>
 <th align="right">comb.FDR</th>
-<th align="right">MY.t</th>
-<th align="right">MY.p</th>
+<th align="right">EM2.p</th>
+<th align="right">MY2.p</th>
 <th align="right">EM.t</th>
 <th align="right">EM.p</th>
+<th align="right">MY.p</th>
+<th align="right">MY.FDR</th>
+<th align="right">MY.slope</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>gene37</td>
-<td align="right">0.0084</td>
-<td align="right">0.490</td>
-<td align="right">2.01</td>
-<td align="right">0.04560</td>
-<td align="right">-1.69</td>
-<td align="right">0.09170</td>
+<td>gene1</td>
+<td align="right">0.00545</td>
+<td align="right">0.477</td>
+<td align="right">0.00000</td>
+<td align="right">0.073800</td>
+<td align="right">-7.76</td>
+<td align="right">0.00000</td>
+<td align="right">0.073800</td>
+<td align="right">0.4920</td>
+<td align="right">-0.240</td>
 </tr>
 <tr class="even">
 <td>gene19</td>
-<td align="right">0.0138</td>
-<td align="right">0.490</td>
-<td align="right">1.95</td>
-<td align="right">0.05260</td>
+<td align="right">0.01380</td>
+<td align="right">0.477</td>
+<td align="right">0.11700</td>
+<td align="right">0.025400</td>
 <td align="right">1.57</td>
 <td align="right">0.11700</td>
-</tr>
-<tr class="odd">
-<td>gene1</td>
-<td align="right">0.0147</td>
-<td align="right">0.490</td>
-<td align="right">-1.55</td>
-<td align="right">0.12100</td>
-<td align="right">-7.76</td>
-<td align="right">0.00000</td>
-</tr>
-<tr class="even">
-<td>gene15</td>
-<td align="right">0.0238</td>
-<td align="right">0.596</td>
-<td align="right">2.12</td>
-<td align="right">0.03500</td>
-<td align="right">1.43</td>
-<td align="right">0.15400</td>
+<td align="right">0.025400</td>
+<td align="right">0.2660</td>
+<td align="right">0.301</td>
 </tr>
 <tr class="odd">
 <td>gene99</td>
-<td align="right">0.0347</td>
-<td align="right">0.635</td>
-<td align="right">-1.32</td>
-<td align="right">0.18600</td>
+<td align="right">0.01610</td>
+<td align="right">0.477</td>
+<td align="right">0.06800</td>
+<td align="right">0.127000</td>
 <td align="right">-1.83</td>
 <td align="right">0.06800</td>
+<td align="right">0.127000</td>
+<td align="right">0.5600</td>
+<td align="right">-0.205</td>
+</tr>
+<tr class="even">
+<td>gene66</td>
+<td align="right">0.02360</td>
+<td align="right">0.477</td>
+<td align="right">0.00989</td>
+<td align="right">0.154000</td>
+<td align="right">-2.59</td>
+<td align="right">0.00989</td>
+<td align="right">0.154000</td>
+<td align="right">0.5600</td>
+<td align="right">-0.192</td>
+</tr>
+<tr class="odd">
+<td>gene15</td>
+<td align="right">0.02380</td>
+<td align="right">0.477</td>
+<td align="right">0.15400</td>
+<td align="right">0.015000</td>
+<td align="right">1.43</td>
+<td align="right">0.15400</td>
+<td align="right">0.015000</td>
+<td align="right">0.2400</td>
+<td align="right">0.328</td>
 </tr>
 <tr class="even">
 <td>gene80</td>
-<td align="right">0.0381</td>
+<td align="right">0.03810</td>
 <td align="right">0.635</td>
-<td align="right">1.36</td>
-<td align="right">0.17600</td>
+<td align="right">0.19500</td>
+<td align="right">0.118000</td>
 <td align="right">1.30</td>
 <td align="right">0.19500</td>
+<td align="right">0.118000</td>
+<td align="right">0.5600</td>
+<td align="right">0.210</td>
 </tr>
 <tr class="odd">
-<td>gene66</td>
-<td align="right">0.0468</td>
-<td align="right">0.668</td>
-<td align="right">-1.24</td>
-<td align="right">0.21600</td>
-<td align="right">-2.59</td>
-<td align="right">0.00989</td>
+<td>gene48</td>
+<td align="right">0.07680</td>
+<td align="right">0.820</td>
+<td align="right">0.12700</td>
+<td align="right">0.277000</td>
+<td align="right">-1.53</td>
+<td align="right">0.12700</td>
+<td align="right">0.277000</td>
+<td align="right">0.7410</td>
+<td align="right">-0.146</td>
 </tr>
 <tr class="even">
 <td>gene9</td>
-<td align="right">0.0772</td>
-<td align="right">0.691</td>
-<td align="right">-2.91</td>
-<td align="right">0.00383</td>
+<td align="right">0.07720</td>
+<td align="right">0.820</td>
+<td align="right">0.27800</td>
+<td align="right">0.000864</td>
 <td align="right">-1.09</td>
 <td align="right">0.27800</td>
+<td align="right">0.000864</td>
+<td align="right">0.0864</td>
+<td align="right">-0.451</td>
 </tr>
 <tr class="odd">
-<td>gene46</td>
-<td align="right">0.0802</td>
-<td align="right">0.691</td>
-<td align="right">1.83</td>
-<td align="right">0.06810</td>
-<td align="right">-1.07</td>
-<td align="right">0.28300</td>
-</tr>
-<tr class="even">
 <td>gene47</td>
-<td align="right">0.0947</td>
-<td align="right">0.691</td>
-<td align="right">1.02</td>
-<td align="right">0.30800</td>
+<td align="right">0.08090</td>
+<td align="right">0.820</td>
+<td align="right">0.28400</td>
+<td align="right">0.239000</td>
 <td align="right">1.07</td>
 <td align="right">0.28400</td>
+<td align="right">0.239000</td>
+<td align="right">0.7100</td>
+<td align="right">0.158</td>
+</tr>
+<tr class="even">
+<td>gene25</td>
+<td align="right">0.08200</td>
+<td align="right">0.820</td>
+<td align="right">0.12500</td>
+<td align="right">0.286000</td>
+<td align="right">1.54</td>
+<td align="right">0.12500</td>
+<td align="right">0.286000</td>
+<td align="right">0.7410</td>
+<td align="right">0.143</td>
 </tr>
 </tbody>
 </table>
@@ -882,7 +916,7 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <h2>System info</h2>
 <p>Here is the information on the system on which this document was compiled:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.4.3 (2017-11-30)
+<pre><code>## R version 3.5.0 (2018-04-23)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
 ## Running under: Windows 7 x64 (build 7601) Service Pack 1
 ## 
@@ -899,13 +933,13 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.1.4 limma_3.34.9 
+## [1] ezlimma_0.1.6 limma_3.36.1 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.16    digest_0.6.15   rprojroot_1.3-2 backports_1.1.2
+##  [1] Rcpp_0.12.17    digest_0.6.15   rprojroot_1.3-2 backports_1.1.2
 ##  [5] magrittr_1.5    evaluate_0.10.1 highr_0.6       stringi_1.1.7  
-##  [9] rmarkdown_1.9   statmod_1.4.30  tools_3.4.3     stringr_1.3.0  
-## [13] yaml_2.1.18     compiler_3.4.3  htmltools_0.3.6 knitr_1.20</code></pre>
+##  [9] rmarkdown_1.9   statmod_1.4.30  tools_3.5.0     stringr_1.3.1  
+## [13] yaml_2.1.19     compiler_3.5.0  htmltools_0.3.6 knitr_1.20</code></pre>
 </div>
 
 
