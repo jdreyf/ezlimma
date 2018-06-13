@@ -7,7 +7,7 @@ setup({
   write.table(g.tab, tmp, col.names = FALSE, row.names = FALSE, sep="\t", quote = FALSE)
 })
 
-test_that("read_gmat", {
+test_that("read_gmt", {
   rg <- read_gmt(tmp)
   expect_equal(names(rg), c(G[[1]]$name, G[[2]]$name, G[[3]]$name))
   expect_equal(rg[[2]]$genes, G[[2]]$genes)

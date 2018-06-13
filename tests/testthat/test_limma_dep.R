@@ -1,8 +1,7 @@
 context("limma_dep")
 
-
 # lc <- limma_cor(M, phenotype = pheno.v) in helper
-test_that("limma_dep with numeric covariate", {
+test_that("numeric covariate", {
   ld <- limma_dep(M, Y = pheno.v)
   expect_equal(ld$p, lc$p)
   
@@ -10,14 +9,12 @@ test_that("limma_dep with numeric covariate", {
   expect_equal(mean(ld2$p == lc$p), 0)
   
   #pheno2 has an NA
-  expect_message(lc2 <- limma_cor(M, phenotype = pheno2))
-  ld3 <- limma_dep(M, Y = pheno2)
-  expect_equal(ld3$p, lc2$p)
+  expect_error(limma_dep(M, Y = pheno2))
   
   expect_error(limma_dep(M, Y = rep(1, ncol(M))))
 })
 
-test_that("limma_dep with non-numeric y", {
+test_that("non-numeric y", {
   expect_error(limma_dep(M, Y = rep("a", ncol(M))))
   expect_error(limma_dep(M, Y = c(letters[1:(ncol(M)-1)], NA)))
   

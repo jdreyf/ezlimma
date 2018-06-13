@@ -55,10 +55,8 @@ Test correlation of each row of object to phenotype using
 \code{design=model.matrix(~1+phenotype)}, testing 2nd coefficient.
 }
 \details{
-If \code{design} is \code{NULL} and \code{phenotype} is given, design
- will be calculated as \code{model.matrix(~0+phenotype)}. However, 
- \code{phenotype} isn't needed if \code{design} is provided. See further 
- details in \code{\link[limma]{lmFit}}.
+Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
+is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details in \code{\link[limma]{lmFit}}.
 }
 \seealso{
 \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
