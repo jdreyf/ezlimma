@@ -61,11 +61,12 @@ test_that("roast_contrasts trend has effect", {
 })
 
 test_that("roast_contrasts works for other values of adjust.method", {
-  bonferroni  <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6,adjust.method = 'bonferroni')
+  set.seed(0) #make permutations comparable between adjust.methods
+  bonferroni  <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6, 
+                                 adjust.method = 'bonferroni')
+  set.seed(0)
   default <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6)
   expect_false(all(colnames(default) == colnames(bonferroni)))
   
-  rownames(bonferroni) <- rownames(default)
-  colnames(bonferroni) <- colnames(default)
-  expect_false(all(bonferroni == default))
+  expect_true(all(bonferroni$First3.bonferroni >= default[rownames(bonferroni), "First3.FDR"]))
 })
