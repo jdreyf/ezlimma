@@ -36,7 +36,7 @@ test_that("roast_cor weights", {
   expect_equal(mean(rcr.mw$p==rcr.mw2$p), 0)
 })
 
-test_that("roast_cor one sided testing", {
+test_that("one sided testing", {
   tmp <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
   tmp2 <- roast_cor(object=M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", alternative = "less")
   expect_equal(tmp["pwy1", "p"]/2, tmp2["pwy1", "p"])
@@ -54,7 +54,7 @@ test_that("roast_cor one sided testing", {
   expect_lt(abs(tmp3["pwy3", "p"]/2 - tmp4["pwy3", "p"]), 0.001)
 })
 
-test_that("roast_cor trend has effect", {
+test_that("trend has effect", {
   rc.res3 <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6)
   rc.res3t <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6, trend = TRUE)
   p.cols <- grep("\\.p", colnames(rc.res3))

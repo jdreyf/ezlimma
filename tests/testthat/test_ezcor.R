@@ -1,6 +1,6 @@
 context("ezcor")
 
-test_that("ezcor with different methods matches cor", {
+test_that("matches cor", {
   #make separate apply calls to ensure no bugs
   m.r <- apply(M, 1, function(v){
     cor(v, pheno.v)

@@ -31,44 +31,26 @@
 #'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
 #'  is specified, \code{FC} will also be given.
 #' @return Dataframe.
-#' @details If \code{design} is \code{NULL} and \code{phenotype} is given, design
-#'  will be calculated as \code{model.matrix(~0+phenotype)}. However, 
-#'  \code{phenotype} isn't needed if \code{design} is provided. See further 
-#'  details in \code{\link[limma]{lmFit}}.
+#' @details Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
+#' is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details in \code{\link[limma]{lmFit}}.
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NULL, 
                       trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
-   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|
-               length(weights)==ncol(object), is.numeric(reduce.df), reduce.df >= 0)
+   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
+             reduce.df >= 0, is.null(phenotype)!=is.null(design))
   
   if (!is.null(phenotype)){
-    stopifnot(length(phenotype)==ncol(object), is.numeric(phenotype), 
-              names(phenotype)==colnames(object))
-    #model.matrix clips NAs in phenotype, so need to also remove from mat
-    n.na <- sum(is.na(phenotype))
-    if (is.null(design)){
-      #model.matrix clips NAs in pheno, so need to also remove from mat
-      n.na <- sum(is.na(phenotype))
-      if (n.na > 0){
-        message(n.na, ' NAs removed')
-        pheno.nona <- phenotype[!is.na(phenotype)]
-        object <- object[,!is.na(phenotype)]
-        if (!is.null(weights)){ 
-          if (length(weights)==ncol(object)){ weights <- weights[!is.na(phenotype)] }
-          if (dim(weights)[2]==ncol(object)){ weights <- weights[,!is.na(phenotype)] }
-        }
-      } else {
-        pheno.nona <- phenotype
-      }
-      design <- stats::model.matrix(~1+pheno.nona) 
-    }
-  }#end if !is.null(pheno)
-  
-  if (!is.numeric(design[,2])) stop("2nd column of design must be numeric.")
-  # stopifnot(colnames(design)[1] == '(Intercept)' & is.numeric(design[,2]))
+    stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), is.numeric(phenotype), 
+              !is.na(phenotype))
+    #if want to handle NAs in pheno, need to account for object, object$weights, and weights (as vector or matrix)
+    design <- stats::model.matrix(~1+phenotype)
+  } else {
+    #if pheno is NULL, design was given
+    stopifnot(is.numeric(design[,2]))
+  }
   
   if (!missing(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }

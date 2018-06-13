@@ -13,7 +13,7 @@ test_that("lmFit array weights only affect if given in 'weights'", {
   expect_false(identical(fit0, fit.gw))
 })
 
-test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
+test_that("matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
   fit <- lmFit(M, design=design)
   #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
   contrast.matrix <- cbind(First3=c(1,0),Last3=c(0,1),Last3vsFirst3=c(-1,1))
@@ -31,7 +31,7 @@ test_that("limma_contrasts matches topTable(eBayes(contrasts.fit(lmfit(M))))", {
   expect_equal(eztt.p, eztt[rownames(eztt.p), grep("\\.p$", colnames(eztt))])
 })
 
-test_that("limma_contrasts trend has effect", {
+test_that("trend has effect", {
   #give only p-val column
   ezttt.p <- limma_contrasts(M, grp = grp, contrast.v = contr.v, cols = "P.Value", add.means = FALSE, trend=TRUE)
   #most p-values should be different
@@ -44,7 +44,7 @@ test_that("empty contr_names don't create cols that start with '.'", {
   expect_equal(length(grep("^\\.$", colnames(eztt.nonm))), 0)
 })
 
-test_that("limma_contrasts weights", {
+test_that("weights", {
   eztt.w <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = 1:ncol(M))
   expect_equal(mean(eztt.w$First3.p==eztt$First3.p), 0)
   
@@ -60,7 +60,7 @@ test_that("limma_contrasts weights", {
   expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
 })
 
-test_that("limma_contrasts with treat matches topTable(treat(contrasts.fit(lmfit(M))))", {
+test_that("with treat matches topTable(treat(contrasts.fit(lmfit(M))))", {
   fit <- lmFit(M, design=design)
   #  Would like to consider original two estimates plus difference between first 3 and last 3 arrays
   contrast.matrix <- c(Last3vsFirst3=c(1, -1))
