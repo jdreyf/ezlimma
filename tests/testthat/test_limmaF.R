@@ -18,3 +18,8 @@ test_that("limmaF", {
   expect_equal(colnames(lf4), c("wts.t", "wts.p"))
   expect_equal(mean(lf2$p==lf4$wts.p), 0)
 })
+
+test_that("warning message fires when weights are missing in object, and object is not a matrix",{
+
+  expect_warning(limmaF(object = el, design = design,weights = el$weights))
+})

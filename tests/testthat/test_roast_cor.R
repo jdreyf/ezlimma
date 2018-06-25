@@ -73,3 +73,12 @@ test_that("p adjust", {
   mr.by <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="mroast", adjust.method = "BY")
   expect_equal(colnames(mr.by)[ncol(mr.by)], "Mixed.BY")
 })
+
+test_that("warning fires", {
+  expect_warning(roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry",design = design, weights=1:6))
+})
+
+test_that("prefixes added",{
+  res.rc <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6,prefix = 'abc')
+  expect_true(all(grepl(pattern = 'abc',x = colnames(res.rc)[-1])))
+})

@@ -24,3 +24,10 @@ test_that("non-numeric y", {
   ld2 <- limma_dep(object=M, Y=grp, covar=covar)
   expect_equal(mean(ld2$p == eztt[rownames(ld2), "Last3vsFirst3.p"]), 0)
 })
+
+test_that("non-error messages fire", {
+  
+  expect_message(limma_dep(M, Y = pheno.v, covar=covar, verbose = TRUE))
+  expect_message(limma_dep(object=M, Y=grp,verbose = TRUE))
+  
+})
