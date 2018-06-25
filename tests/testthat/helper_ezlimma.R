@@ -1,4 +1,5 @@
 library(testthat)
+library(covr)
 
 #example from limma::contrasts.fit
 set.seed(0)

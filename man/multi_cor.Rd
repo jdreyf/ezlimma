@@ -10,7 +10,7 @@ multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
-log-expression values, with rows corresponding to features (eg genes) and 
+log-expression values, with rows corresponding to features (e.g. genes) and 
 columns to samples.}
 
 \item{pheno.mat}{matrix-like data object of phenotypes of the samples, with each column one 
@@ -19,8 +19,7 @@ correspond to columns of \code{object}.}
 
 \item{method}{a character string indicating which association is to be used 
 for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
-from \code{\link[stats]{cor.test}} or \code{"limma"} for 
-\code{\link{limma_cor}}.}
+from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}.}
 
 \item{reorder.rows}{logical, should rows be reordered by F-statistic from 
 \code{\link[limma]{toptable}} or be left in the same order as 
@@ -39,7 +38,10 @@ Dataframe with several statistical columns corresponding to each
   phenotype and one row per feature.
 }
 \description{
-Test correlation of each row of an object to each column of pheno.mat using 
+Test correlation of each row of an object to each column of \code{pheno.mat} using 
 one of Pearson's, Kendall's, or Spearman's correlation methods, or limma 
 regression in \code{\link{limma_cor}}.
+}
+\details{
+Each column of \code{pheno.mat} is tested independently.
 }
