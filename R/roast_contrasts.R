@@ -46,6 +46,8 @@
 #'  corresponds to positive association, \code{"less"} to negative association.
 #' @param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
+#' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
+#' simulations. Ignored if \code{fun="fry"}.
 #' @return data frame of gene set statistics.
 #' @details Pathway names are altered to be valid filenames in Windows and Linux.
 #' @export
@@ -55,7 +57,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
                           fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
                           weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
                           correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000,
-                          nrot=999, alternative=c("two.sided", "less", "greater"), n.toptabs = Inf){
+                          nrot=999, alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, seed=0){
 
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(grp),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
@@ -69,6 +71,8 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
   }
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
+  
+  if (fun=="mroast") set.seed(seed=seed)
 
   ##get G index
   index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)

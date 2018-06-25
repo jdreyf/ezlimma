@@ -48,6 +48,8 @@
 #' @param n.toptabs number of gene set toptables to write to CSV and link to from
 #'  Excel
 #' @param nrot number of rotations used to compute the p-values in \code{mroast}.
+#' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
+#' simulations. Ignored if \code{fun="fry"}.
 #' @return data frame of gene set statistics.
 #' @export
 
@@ -55,7 +57,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
                     fun=c("fry", "mroast"), set.statistic = 'mean',
                     weights = NULL, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, prefix=NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
-                    alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999){
+                    alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999, seed=0){
   
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object))
@@ -69,6 +71,8 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   }
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
+  
+  if (fun=="mroast") set.seed(seed=seed)
   
   ##get G index
   index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)

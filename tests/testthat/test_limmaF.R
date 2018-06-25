@@ -20,6 +20,5 @@ test_that("limmaF", {
 })
 
 test_that("warning message fires when weights are missing in object, and object is not a matrix",{
-
   expect_warning(limmaF(object = el, design = design,weights = el$weights))
 })

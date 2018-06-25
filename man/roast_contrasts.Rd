@@ -10,7 +10,7 @@ roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v, design = NULL,
   weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, adjust.method = "BH", min.ngenes = 3,
   max.ngenes = 1000, nrot = 999, alternative = c("two.sided", "less",
-  "greater"), n.toptabs = Inf)
+  "greater"), n.toptabs = Inf, seed = 0)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or
@@ -72,6 +72,9 @@ corresponds to positive association, \code{"less"} to negative association.}
 
 \item{n.toptabs}{number of gene set toptables to write to CSV and link to from
 Excel}
+
+\item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
+simulations. Ignored if \code{fun="fry"}.}
 }
 \value{
 data frame of gene set statistics.
