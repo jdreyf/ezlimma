@@ -58,11 +58,11 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     p.cols <- c("EM.p", "MY.p")
   }
   
-  comb.p <- apply(ret[,p.cols], MARGIN=1, FUN=function(v){
+  EMY.p <- apply(ret[,p.cols], MARGIN=1, FUN=function(v){
     max(v)^2
   })
-  comb.FDR <- stats::p.adjust(comb.p, method="BH")
-  ret <- cbind(comb.p, comb.FDR, ret)
-  ret <- ret[order(ret$comb.p),]
+  EMY.FDR <- stats::p.adjust(EMY.p, method="BH")
+  ret <- cbind(EMY.p, EMY.FDR, ret)
+  ret <- ret[order(ret$EMY.p),]
   return(ret)
 }
