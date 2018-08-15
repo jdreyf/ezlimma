@@ -16,7 +16,8 @@
 #'   individual weights, of same size as the object expression matrix, or a 
 #'   numeric vector of array weights with length equal to \code{ncol} of the 
 #'   expression matrix, or a numeric vector of gene weights with length equal to
-#'   \code{nrow} of the expression matrix.
+#'   \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+#'   (with length one) doesn't pass weights to \code{limma}.
 #' @param trend logical, should an intensity-trend be allowed for the prior 
 #'   variance? Default is that the prior variance is constant.
 #' @param block vector or factor specifying a blocking variable on the arrays. 
@@ -43,7 +44,7 @@
 #' @export
 
 #don't include parameters for robust fitting, since ppl unlikely to use
-limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NULL,
+limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA,
                             trend=FALSE, block=NULL, correlation=NULL, adjust.method='BH', 
                             add.means=TRUE, treat.lfc=NULL, cols=c('P.Value', 'adj.P.Val', 'logFC')){
   
@@ -60,7 +61,8 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   #can't set weights=NULL in lmFit when using voom, since lmFit only assigns
   #weights "if (missing(weights) && !is.null(y$weights))"
   #can't make this into separate function, since then !missing(weights)
-  if (!missing(weights)){
+  #length(NULL)=0; other weights should have length > 1
+  if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
     fit <- limma::lmFit(object, design, block = block, correlation = correlation, weights=weights)
   } else {

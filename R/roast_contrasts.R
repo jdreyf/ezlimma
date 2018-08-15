@@ -26,7 +26,8 @@
 #' @param weights non-negative precision weights passed to \code{lmFit}. Can be
 #'  a numeric matrix of individual weights of same size as \code{object} or a numeric 
 #'  vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
-#'  of gene weights with length equal to \code{nrow(object)}.
+#'  of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+#'   (with length one) doesn't pass weights to \code{limma}.
 #' @param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
 #'  each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
 #'  vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.
@@ -55,12 +56,12 @@
 #limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=NULL,
                           fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
-                          weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
+                          weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
                           correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000,
                           nrot=999, alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, seed=0){
 
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(grp),
-            is.null(gene.weights)|length(gene.weights)==nrow(object))
+            is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
   #only mroast takes some arguments
   if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
     warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
@@ -88,7 +89,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
   #deal with weights
   if (!is.matrix(object)){
       if (!is.null(object$weights)){
-          if (!is.null(weights)){
+          if (length(weights) != 1){
               warning('object$weights are being ignored')
           } else {
               if (is.null(dimnames(object$weights))) dimnames(object$weights) <- dimnames(object)
@@ -101,13 +102,24 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
   #block & correlation from lmFit, trend from eBayes
   for (i in seq_along(contrast.v)){
     if (fun=="fry"){
-      res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights, 
-                     block=block, correlation=correlation, trend=trend)
+      if (length(weights) == 1 && is.na(weights)){
+        res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], 
+                              block=block, correlation=correlation, trend=trend)
+      } else {
+        res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights, 
+                              block=block, correlation=correlation, trend=trend)
+      }
     } else {
-      res.tmp <- limma::mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
-                     weights = weights, gene.weights = gene.weights, trend = trend,
-                     block = block, correlation = correlation, adjust.method = adjust.method,
-                     set.statistic = set.statistic, nrot=nrot)
+      if (length(weights) == 1 && is.na(weights)){
+        res.tmp <- limma::mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
+                       gene.weights = gene.weights, trend = trend, block = block, correlation = correlation, 
+                       adjust.method = adjust.method, set.statistic = set.statistic, nrot=nrot)
+      } else {
+        res.tmp <- limma::mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
+                                 weights = weights, gene.weights = gene.weights, trend = trend,
+                                 block = block, correlation = correlation, adjust.method = adjust.method,
+                                 set.statistic = set.statistic, nrot=nrot)
+      }
     }
     #need to coerce "direction" from factor to char
     res.tmp$Direction <- as.character(res.tmp$Direction)

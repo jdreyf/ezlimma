@@ -28,7 +28,8 @@
 #'  a numeric matrix of individual weights, of same size as the object 
 #'  expression matrix, or a numeric vector of array weights with length equal to
 #'  \code{ncol} of the expression matrix, or a numeric vector of gene weights 
-#'  with length equal to \code{nrow} of the expression matrix.
+#'  with length equal to \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+#'   (with length one) doesn't pass weights to \code{limma}.
 #' @param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
 #'  each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
 #'  vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.
@@ -55,12 +56,12 @@
 
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = 'mean',
-                    weights = NULL, gene.weights=NULL, trend = FALSE, block = NULL, 
+                    weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, prefix=NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999, seed=0){
   
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
-            is.null(gene.weights)|length(gene.weights)==nrow(object))
+            is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
   #only mroast takes some arguments
   if (fun=="fry" && (set.statistic!="mean" || !is.null(gene.weights) || adjust.method!="BH")){
     warning("fry method does not take arguments: set.statistic, gene.weights, or adjust.method. These arguments will be ignored.")
@@ -83,7 +84,8 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
       if (n.na > 0){
           warning(n.na, ' NAs in phenotype removed')
           pheno.nona <- phenotype[!is.na(phenotype)]
-          if(!is.null(weights)){
+          #len > 1 excludes NA and NULL
+          if(length(weights) > 1){
             if (length(weights)==ncol(object)){ 
               weights <- weights[!is.na(phenotype)]
             } else {
@@ -104,9 +106,11 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   #deal with weights
   if (!is.matrix(object)){
       if (!is.null(object$weights)){
-          if (!is.null(weights)){
+          #NULL has len = 0, given weights should have len > 1 -> only weights=NA has len 1
+          if (length(weights) != 1){
             warning('object$weights are being ignored') 
           } else {
+              #weights = NA
               if (is.null(dimnames(object$weights))) dimnames(object$weights) <- dimnames(object)
               weights <- object$weights
           }
@@ -114,14 +118,26 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   }#end if(!is.matrix(object))
   
   ##run for contrast = 2
+  #mroast vs fry x is.na(weights) vs not, so 4 conditions
   if (fun=="fry"){
-    res <- limma::fry(y = object, index = index, design = design, contrast = 2,
-               weights = weights, trend = trend, block = block, correlation = correlation)
+    if (length(weights) == 1 && is.na(weights)){
+      res <- limma::fry(y = object, index = index, design = design, contrast = 2, trend = trend, block = block, correlation = correlation)
+    } else {
+      res <- limma::fry(y = object, index = index, design = design, contrast = 2,
+                        weights = weights, trend = trend, block = block, correlation = correlation)
+    }
   } else {
-    res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
-                  set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
-                  trend = trend, block = block, correlation = correlation,
-                  adjust.method = adjust.method, nrot = nrot)
+    if (length(weights) == 1 && is.na(weights)){
+      res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
+                           set.statistic = set.statistic, gene.weights = gene.weights,  
+                           trend = trend, block = block, correlation = correlation,
+                           adjust.method = adjust.method, nrot = nrot)
+    } else {
+      res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
+                           set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
+                           trend = trend, block = block, correlation = correlation,
+                           adjust.method = adjust.method, nrot = nrot)
+    }
   }
   #need to coerce Direction from factor to char
   res$Direction <- as.character(res$Direction)

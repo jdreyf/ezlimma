@@ -7,7 +7,7 @@ to Excel}
 \usage{
 roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
-  weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
+  weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
   min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided", "less",
   "greater"), n.toptabs = Inf, nrot = 999, seed = 0)
@@ -42,7 +42,8 @@ the second column corresponds to the phenotype, and other columns to covariates.
 a numeric matrix of individual weights, of same size as the object 
 expression matrix, or a numeric vector of array weights with length equal to
 \code{ncol} of the expression matrix, or a numeric vector of gene weights 
-with length equal to \code{nrow} of the expression matrix.}
+with length equal to \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+ (with length one) doesn't pass weights to \code{limma}.}
 
 \item{gene.weights}{numeric vector of directional (positive or negative) genewise weights. These represent
 each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 

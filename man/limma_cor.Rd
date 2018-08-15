@@ -5,7 +5,7 @@
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
-  weights = NULL, trend = FALSE, adjust.method = "BH",
+  weights = NA, trend = FALSE, adjust.method = "BH",
   reorder.rows = TRUE, reduce.df = 0, cols = c("AveExpr", "P.Value",
   "adj.P.Val", "logFC"))
 }
@@ -28,7 +28,8 @@ covariates.}
 individual weights, of same size as the object expression matrix, or a 
 numeric vector of array weights with length equal to \code{ncol} of the 
 expression matrix, or a numeric vector of gene weights with length equal to 
-\code{nrow} of the expression matrix.}
+\code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+ (with length one) doesn't pass weights to \code{limma}.}
 
 \item{trend}{logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}

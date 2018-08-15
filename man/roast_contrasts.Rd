@@ -7,7 +7,7 @@ to Excel}
 \usage{
 roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v, design = NULL,
   fun = c("fry", "mroast"), set.statistic = "mean", name = NA,
-  weights = NULL, gene.weights = NULL, trend = FALSE, block = NULL,
+  weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, adjust.method = "BH", min.ngenes = 3,
   max.ngenes = 1000, nrot = 999, alternative = c("two.sided", "less",
   "greater"), n.toptabs = Inf, seed = 0)
@@ -42,7 +42,8 @@ arrays and columns to coefficients to be estimated.}
 \item{weights}{non-negative precision weights passed to \code{lmFit}. Can be
 a numeric matrix of individual weights of same size as \code{object} or a numeric 
 vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
-of gene weights with length equal to \code{nrow(object)}.}
+of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+ (with length one) doesn't pass weights to \code{limma}.}
 
 \item{gene.weights}{numeric vector of directional (positive or negative) genewise weights. These represent
 each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 

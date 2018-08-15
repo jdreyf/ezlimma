@@ -17,7 +17,8 @@
 #'  individual weights, of same size as the object expression matrix, or a 
 #'  numeric vector of array weights with length equal to \code{ncol} of the 
 #'  expression matrix, or a numeric vector of gene weights with length equal to 
-#'  \code{nrow} of the expression matrix.
+#'  \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+#'   (with length one) doesn't pass weights to \code{limma}.
 #' @param trend logical, should an intensity-trend be allowed for the prior 
 #'  variance? Default is that the prior variance is constant.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
@@ -36,7 +37,7 @@
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
-limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NULL, 
+limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, 
                       trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
@@ -52,7 +53,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
     stopifnot(is.numeric(design[,2]))
   }
   
-  if (!missing(weights)){
+  if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
     fit <- limma::lmFit(object, design, weights=weights)
   } else {

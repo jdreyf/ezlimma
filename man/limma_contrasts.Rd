@@ -5,7 +5,7 @@
 \title{Apply lmFit, contrasts.fit, & eBayes to one or more contrasts}
 \usage{
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
-  weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
+  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", add.means = TRUE, treat.lfc = NULL,
   cols = c("P.Value", "adj.P.Val", "logFC"))
 }
@@ -27,7 +27,8 @@ corresponding to arrays and columns to coefficients to be estimated.}
 individual weights, of same size as the object expression matrix, or a 
 numeric vector of array weights with length equal to \code{ncol} of the 
 expression matrix, or a numeric vector of gene weights with length equal to
-\code{nrow} of the expression matrix.}
+\code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
+(with length one) doesn't pass weights to \code{limma}.}
 
 \item{trend}{logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}
