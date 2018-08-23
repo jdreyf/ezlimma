@@ -13,59 +13,59 @@ roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v, design = NULL,
   "greater"), n.toptabs = Inf, seed = 0)
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or
+\item{object}{Matrix-like data object containing log-ratios or
 log-expression values for a series of arrays, with rows corresponding to
 genes and columns to samples.}
 
-\item{G}{a gene set list as returned from \code{\link{read_gmt}}.}
+\item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{a table of feature (e.g. gene) statistics that the Excel
+\item{stats.tab}{Table of feature (e.g. gene) statistics that the Excel
 table can link to.}
 
 \item{grp}{Vector of phenotype groups of the samples, which represent valid
 variable names in R. Should be same length as \code{ncol(object)}. If the
 vector is named, names should match \code{colnames(object)}.}
 
-\item{contrast.v}{A named vector of contrasts for
+\item{contrast.v}{Named vector of contrasts for
 \code{\link[limma]{makeContrasts}}.}
 
-\item{design}{the design matrix of the experiment, with rows corresponding to
+\item{design}{Design matrix of the experiment, with rows corresponding to
 arrays and columns to coefficients to be estimated.}
 
-\item{fun}{function to use, either \code{fry} or \code{mroast}.}
+\item{fun}{Function to use, either \code{fry} or \code{mroast}.}
 
 \item{set.statistic}{summary set statistic. Possibilities are \code{"mean"},
 \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.}
 
-\item{name}{a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
+\item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{weights}{non-negative precision weights passed to \code{lmFit}. Can be
+\item{weights}{Non-negative precision weights passed to \code{lmFit}. Can be
 a numeric matrix of individual weights of same size as \code{object} or a numeric 
 vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
 of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
  (with length one) doesn't pass weights to \code{limma}.}
 
-\item{gene.weights}{numeric vector of directional (positive or negative) genewise weights. These represent
+\item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent
 each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
 vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
-\item{trend}{logical, should an intensity-trend be allowed for the prior
+\item{trend}{Logical, should an intensity-trend be allowed for the prior
 variance? Default is that the prior variance is constant.}
 
-\item{block}{vector or factor specifying a blocking variable on the arrays.
+\item{block}{Vector or factor specifying a blocking variable on the arrays.
 Has length equal to the number of arrays.}
 
-\item{correlation}{the inter-duplicate or inter-technical replicate
+\item{correlation}{Inter-duplicate or inter-technical replicate
 correlation.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.
+\item{adjust.method}{Method used to adjust the p-values for multiple testing.
 Only for \code{mroast}.}
 
-\item{min.ngenes}{minimum number of genes needed in a gene set for testing.}
+\item{min.ngenes}{Minimum number of genes needed in a gene set for testing.}
 
-\item{max.ngenes}{maximum number of genes needed in a gene set for testing.}
+\item{max.ngenes}{Maximum number of genes needed in a gene set for testing.}
 
-\item{nrot}{number of rotations used to estimate the p-values for \code{mroast}.}
+\item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 
 \item{alternative}{indicates the alternative hypothesis and must be one of
 \code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"}

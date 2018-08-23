@@ -1,6 +1,6 @@
 #' Combine p-values of a feature over multiple p-value columns of an object
 #' 
-#' Combine p-values of a feature over multiple p-value columns of an object
+#' Combine p-values of a feature over multiple p-value columns of an object.
 #' 
 #' @param mat A matrix-like object with statistical columns, including some
 #'   containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.

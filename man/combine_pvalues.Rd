@@ -17,7 +17,7 @@ containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.}
 A vector of p-values.
 }
 \description{
-Combine p-values of a feature over multiple p-value columns of an object
+Combine p-values of a feature over multiple p-value columns of an object.
 }
 \details{
 This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 

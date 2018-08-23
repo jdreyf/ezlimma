@@ -6,42 +6,42 @@
 #' and writes this to an Excel file. The Excel file links to CSV files, which contain 
 #' statistics per gene set. Some of the arguments only apply to \code{mroast}.
 #' 
-#' @param object A matrix-like data object containing log-ratios or
+#' @param object Matrix-like data object containing log-ratios or
 #'  log-expression values for a series of arrays, with rows corresponding to
 #'  genes and columns to samples.
-#' @param G a gene set list as returned from \code{\link{read_gmt}}.
-#' @param stats.tab a table of feature (e.g. gene) statistics that the Excel
+#' @param G Gene set list as returned from \code{\link{read_gmt}}.
+#' @param stats.tab Table of feature (e.g. gene) statistics that the Excel
 #'  table can link to.
 #' @param grp Vector of phenotype groups of the samples, which represent valid
 #'   variable names in R. Should be same length as \code{ncol(object)}. If the
 #'   vector is named, names should match \code{colnames(object)}.
-#' @param contrast.v A named vector of contrasts for
+#' @param contrast.v Named vector of contrasts for
 #'   \code{\link[limma]{makeContrasts}}.
-#' @param design the design matrix of the experiment, with rows corresponding to
+#' @param design Design matrix of the experiment, with rows corresponding to
 #'  arrays and columns to coefficients to be estimated.
-#' @param fun function to use, either \code{fry} or \code{mroast}.
+#' @param fun Function to use, either \code{fry} or \code{mroast}.
 #' @param set.statistic summary set statistic. Possibilities are \code{"mean"},
 #'  \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.
-#' @param name a name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
-#' @param weights non-negative precision weights passed to \code{lmFit}. Can be
+#' @param name Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
+#' @param weights Non-negative precision weights passed to \code{lmFit}. Can be
 #'  a numeric matrix of individual weights of same size as \code{object} or a numeric 
 #'  vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
 #'  of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
 #'   (with length one) doesn't pass weights to \code{limma}.
-#' @param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
+#' @param gene.weights Numeric vector of directional (positive or negative) genewise weights. These represent
 #'  each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
 #'  vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.
-#' @param trend logical, should an intensity-trend be allowed for the prior
+#' @param trend Logical, should an intensity-trend be allowed for the prior
 #'  variance? Default is that the prior variance is constant.
-#' @param block vector or factor specifying a blocking variable on the arrays.
+#' @param block Vector or factor specifying a blocking variable on the arrays.
 #'  Has length equal to the number of arrays.
-#' @param correlation the inter-duplicate or inter-technical replicate
+#' @param correlation Inter-duplicate or inter-technical replicate
 #'  correlation.
-#' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @param adjust.method Method used to adjust the p-values for multiple testing.
 #' Only for \code{mroast}.
-#' @param min.ngenes minimum number of genes needed in a gene set for testing.
-#' @param max.ngenes maximum number of genes needed in a gene set for testing.
-#' @param nrot number of rotations used to estimate the p-values for \code{mroast}.
+#' @param min.ngenes Minimum number of genes needed in a gene set for testing.
+#' @param max.ngenes Maximum number of genes needed in a gene set for testing.
+#' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
 #' @param alternative indicates the alternative hypothesis and must be one of
 #'  \code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"}
 #'  corresponds to positive association, \code{"less"} to negative association.
@@ -54,11 +54,10 @@
 #' @export
 
 #limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
-roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=NULL,
-                          fun=c("fry", "mroast"), set.statistic = 'mean', name=NA,
-                          weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
-                          correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000,
-                          nrot=999, alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, seed=0){
+roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
+                            set.statistic = 'mean', name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
+                            correlation = NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, nrot=999,
+                            alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, seed=0){
 
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(grp),
             is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
@@ -120,9 +119,20 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
                                  block = block, correlation = correlation, adjust.method = adjust.method,
                                  set.statistic = set.statistic, nrot=nrot)
       }
+      
+      #PropUp & PropDown don't use stats.tab & threshold at z=sqrt(2) -> p=0.1
+      res.tmp <- res.tmp[,setdiff(colnames(res.tmp), c("PropDown", "PropUp"))]
     }
     #need to coerce "direction" from factor to char
     res.tmp$Direction <- as.character(res.tmp$Direction)
+    
+    #add propup & propdown from stats.tab if same contr
+    contr.nm <- names(contrast.v)[i]
+    contr.cols <- paste(contr.nm, c("logFC", "p"), sep=".")
+    if (all(contr.cols %in% colnames(stats.tab))){
+      prop.diff <- prop_changed(feat.tab=stats.tab[,contr.cols,drop=FALSE], index=index)
+      res.tmp <- data.frame(res.tmp[,1:2], prop.diff[rownames(res.tmp),], res.tmp[,-(1:2)])
+    }
     
     #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
     if (alternative!="two.sided"){

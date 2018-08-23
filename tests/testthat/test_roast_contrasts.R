@@ -61,3 +61,13 @@ test_that("other values of adjust.method", {
   
   expect_true(all(bonferroni$First3.bonferroni >= default[rownames(bonferroni), "First3.FDR"]))
 })
+
+test_that("proportion up & down", {
+  #First3.PropDownP05 is all zero
+  g.genes <- c(G[[1]]$genes, G[[2]]$genes, G[[3]]$genes)
+  expect_equal(sum(eztt[g.genes, "First3.p"] <= 0.05 & eztt[g.genes, "First3.logFC"] < 0), 0)
+  expect_equal(mean(eztt[G[[1]]$genes, "First3.p"] <= 0.05 & eztt[G[[1]]$genes, "First3.logFC"] > 0), 0.1)
+  
+  #same behavior from fry & mroast
+  expect_equal(rcn.f[,grep("^Prop", colnames(rcn.f))], rcn.m[,grep("^Prop", colnames(rcn.m))])
+})

@@ -118,13 +118,14 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
 ```
 This object would normally be read in using `read_gmt`. Then we can test each of these gene sets.
 ```{r}
-res5 <- roast_contrasts(M, G=G, stats.tab=res0, grp=grp, contrast.v = contr.v, fun="fry", name=NA)
+res5 <- roast_contrasts(object=M, G=G, stats.tab=res0, grp=grp, contrast.v = contr.v, fun="fry", name=NA)
 ```
 
 If we set `name` to a value other than `NA`, this would create a folder with one CSV per pathway, and an Excel file that looks like
 ```{r, echo=FALSE}
 knitr::kable(res5)
 ```
+
 except the first column would have links to the CSVs in the folder. Similarly, we can use `roast_cor`.
 
 ## System info

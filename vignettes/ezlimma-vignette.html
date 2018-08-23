@@ -12,9 +12,9 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-06-14" />
+<meta name="date" content="2018-08-23" />
 
-<title>ezlimmaplot vignette</title>
+<title>ezlimma vignette</title>
 
 
 
@@ -68,15 +68,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">ezlimmaplot vignette</h1>
+<h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-06-14</em></h4>
+<h4 class="date"><em>2018-08-23</em></h4>
 
 
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to <strong>ezlimmaplot</strong>. This package is for plotting bioinformatics results, especially those from the <strong>ezlimma</strong> package. Here, I’ll load both packages, create some output with <strong>ezlimma</strong>, and then plot it with <strong>ezlimmaplot</strong>.</p>
+<p>Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of limma’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, limma’s default is used.</p>
 </div>
 <div id="install-package" class="section level2">
 <h2>Install package</h2>
@@ -86,36 +86,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Load package</h2>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ezlimma)</code></pre></div>
 <pre><code>## Loading required package: limma</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ezlimmaplot)</code></pre></div>
 </div>
 <div id="simulate-data" class="section level2">
 <h2>Simulate data</h2>
-<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <strong>limma</strong> <code>contrasts.fit</code>.</p>
+<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from limma <code>contrasts.fit</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
 M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">100</span><span class="op">*</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="fl">0.3</span>), <span class="dt">nrow=</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">6</span>)
 <span class="kw">dimnames</span>(M) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(M)), <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(M)))
 grp &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;First3&quot;</span>, <span class="st">&quot;Last3&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
-tissue &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;muscle&quot;</span>, <span class="st">&quot;liver&quot;</span>), <span class="dt">times=</span><span class="dv">3</span>)
-pheno &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">row.names =</span> <span class="kw">colnames</span>(M), <span class="dt">sample=</span><span class="kw">colnames</span>(M), <span class="dt">grp=</span>grp, <span class="dt">tissue=</span>tissue, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
 </div>
-<div id="principal-component-analysis-pca" class="section level2">
-<h2>Principal component analysis (PCA)</h2>
-<p>We can plot the samples by their first two principal components using the <strong>ggplot2</strong> package.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezpca</span>(M, pheno, <span class="dt">color=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>We set <code>name=NA</code> to suppress plotting to a PNG file. We pass <code>color=&quot;grp&quot;</code> via … to <strong>ggplot2</strong> <code>aes_string</code>, where <code>&quot;grp&quot;</code> can be any of <code>colnames(pheno)}</code>. We could similarly have used <code>color=&quot;tissue&quot;</code>. We can also facet by a phenotype column using the <code>facet</code> argument, which takes a formula.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezpca</span>(M, pheno, <span class="dt">color=</span><span class="st">&quot;grp&quot;</span>, <span class="dt">facet =</span> <span class="st">&quot;. ~ tissue&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-</div>
-<div id="gene-level-differential-analysis" class="section level2">
-<h2>Gene level differential analysis</h2>
+<div id="gene-level-analysis" class="section level2">
+<h2>Gene level analysis</h2>
 <p>Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
-res &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
-<p>We add a column of gene symbols to the top genes.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res.df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">signif</span>(res, <span class="dv">3</span>), <span class="dt">Gene.Symbol=</span><span class="ot">NA</span>)
-res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] &lt;-<span class="st"> </span>LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</code></pre></div>
+res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
+<p>First3 tests if the mean expression of genes in these samples differs from zero, and Last3vsFirst3 tests difference between groups.</p>
 <p>This returns a data frame that looks like:</p>
 <table>
 <thead>
@@ -135,7 +121,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <th align="right">Last3vsFirst3.FDR</th>
 <th align="right">Last3vsFirst3.logFC</th>
 <th align="right">Last3vsFirst3.FC</th>
-<th align="left">Gene.Symbol</th>
 </tr>
 </thead>
 <tbody>
@@ -155,7 +140,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.0000</td>
 <td align="right">-1.820</td>
 <td align="right">-3.53</td>
-<td align="left">A</td>
 </tr>
 <tr class="even">
 <td>gene25</td>
@@ -173,7 +157,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.7080</td>
 <td align="right">0.360</td>
 <td align="right">1.28</td>
-<td align="left">B</td>
 </tr>
 <tr class="odd">
 <td>gene74</td>
@@ -191,7 +174,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.0713</td>
 <td align="right">-0.726</td>
 <td align="right">-1.65</td>
-<td align="left">C</td>
 </tr>
 <tr class="even">
 <td>gene59</td>
@@ -209,7 +191,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.0297</td>
 <td align="right">0.813</td>
 <td align="right">1.76</td>
-<td align="left">D</td>
 </tr>
 <tr class="odd">
 <td>gene17</td>
@@ -227,7 +208,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.7080</td>
 <td align="right">-0.376</td>
 <td align="right">-1.30</td>
-<td align="left">E</td>
 </tr>
 <tr class="even">
 <td>gene12</td>
@@ -245,7 +225,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.2430</td>
 <td align="right">-0.591</td>
 <td align="right">-1.51</td>
-<td align="left">F</td>
 </tr>
 <tr class="odd">
 <td>gene4</td>
@@ -263,7 +242,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.7080</td>
 <td align="right">-0.362</td>
 <td align="right">-1.29</td>
-<td align="left">G</td>
 </tr>
 <tr class="even">
 <td>gene66</td>
@@ -281,7 +259,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.2430</td>
 <td align="right">-0.609</td>
 <td align="right">-1.52</td>
-<td align="left">H</td>
 </tr>
 <tr class="odd">
 <td>gene13</td>
@@ -299,7 +276,6 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.8940</td>
 <td align="right">-0.206</td>
 <td align="right">-1.15</td>
-<td align="left">I</td>
 </tr>
 <tr class="even">
 <td>gene60</td>
@@ -317,49 +293,630 @@ res.df<span class="op">$</span>Gene.Symbol[<span class="dv">1</span><span class=
 <td align="right">0.4170</td>
 <td align="right">-0.514</td>
 <td align="right">-1.43</td>
-<td align="left">J</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly, we can test association to a phenotype variable. Let’s say we have a phenotype vector,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno.v &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M))
+pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span><span class="dv">1</span></code></pre></div>
+<p>we can test association with,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1 &lt;-<span class="st"> </span><span class="kw">ezcor</span>(M, pheno.v, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</code></pre></div>
+<p>where <code>method</code> can be any of “pearson”, “kendall”, or “spearman”. This returns a data frame like,</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">cor</th>
+<th align="right">p</th>
+<th align="right">FDR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gene9</td>
+<td align="right">-0.898</td>
+<td align="right">0.0152</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene22</td>
+<td align="right">0.856</td>
+<td align="right">0.0296</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">-0.840</td>
+<td align="right">0.0362</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">0.820</td>
+<td align="right">0.0457</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene15</td>
+<td align="right">0.808</td>
+<td align="right">0.0515</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene19</td>
+<td align="right">0.791</td>
+<td align="right">0.0607</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene98</td>
+<td align="right">0.788</td>
+<td align="right">0.0629</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene95</td>
+<td align="right">0.783</td>
+<td align="right">0.0653</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td>gene80</td>
+<td align="right">0.780</td>
+<td align="right">0.0673</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="even">
+<td>gene47</td>
+<td align="right">0.767</td>
+<td align="right">0.0754</td>
+<td align="right">0.73</td>
+</tr>
+</tbody>
+</table>
+<p>Similarly, we can test association using linear regression with limma, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno.v)</code></pre></div>
+<p>The output is,</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">AveExpr</th>
+<th align="right">p</th>
+<th align="right">FDR</th>
+<th align="right">slope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gene1</td>
+<td align="right">1.1500</td>
+<td align="right">0.00000</td>
+<td align="right">1.10e-06</td>
+<td align="right">-0.742</td>
+</tr>
+<tr class="even">
+<td>gene9</td>
+<td align="right">0.0285</td>
+<td align="right">0.00505</td>
+<td align="right">2.53e-01</td>
+<td align="right">-0.358</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">0.0757</td>
+<td align="right">0.01340</td>
+<td align="right">3.04e-01</td>
+<td align="right">-0.316</td>
+</tr>
+<tr class="even">
+<td>gene15</td>
+<td align="right">0.0376</td>
+<td align="right">0.01540</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.309</td>
+</tr>
+<tr class="odd">
+<td>gene19</td>
+<td align="right">-0.2180</td>
+<td align="right">0.01720</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.304</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">-0.1610</td>
+<td align="right">0.01820</td>
+<td align="right">3.04e-01</td>
+<td align="right">0.301</td>
+</tr>
+<tr class="odd">
+<td>gene98</td>
+<td align="right">0.0289</td>
+<td align="right">0.03620</td>
+<td align="right">4.67e-01</td>
+<td align="right">0.267</td>
+</tr>
+<tr class="even">
+<td>gene99</td>
+<td align="right">-0.0156</td>
+<td align="right">0.03740</td>
+<td align="right">4.67e-01</td>
+<td align="right">-0.266</td>
+</tr>
+<tr class="odd">
+<td>gene60</td>
+<td align="right">-0.1380</td>
+<td align="right">0.05830</td>
+<td align="right">5.86e-01</td>
+<td align="right">-0.241</td>
+</tr>
+<tr class="even">
+<td>gene31</td>
+<td align="right">0.0857</td>
+<td align="right">0.05860</td>
+<td align="right">5.86e-01</td>
+<td align="right">-0.241</td>
+</tr>
+</tbody>
+</table>
+<p>Because this is a regression, we can also adjust for covariates. We do this by creating our own design matrix instead of letting <code>limma_cor</code> create one from <code>phenotype</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">covar &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M))
+design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="dv">1</span><span class="op">+</span>pheno.v<span class="op">+</span>covar)
+res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">design =</span> design)</code></pre></div>
+<p>which gives</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">AveExpr</th>
+<th align="right">p</th>
+<th align="right">FDR</th>
+<th align="right">slope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gene1</td>
+<td align="right">1.1500</td>
+<td align="right">0.00000</td>
+<td align="right">0.000</td>
+<td align="right">-0.878</td>
+</tr>
+<tr class="even">
+<td>gene9</td>
+<td align="right">0.0285</td>
+<td align="right">0.00796</td>
+<td align="right">0.282</td>
+<td align="right">-0.343</td>
+</tr>
+<tr class="odd">
+<td>gene66</td>
+<td align="right">0.0757</td>
+<td align="right">0.01010</td>
+<td align="right">0.282</td>
+<td align="right">-0.333</td>
+</tr>
+<tr class="even">
+<td>gene15</td>
+<td align="right">0.0376</td>
+<td align="right">0.01130</td>
+<td align="right">0.282</td>
+<td align="right">0.328</td>
+</tr>
+<tr class="odd">
+<td>gene99</td>
+<td align="right">-0.0156</td>
+<td align="right">0.02380</td>
+<td align="right">0.417</td>
+<td align="right">-0.292</td>
+</tr>
+<tr class="even">
+<td>gene60</td>
+<td align="right">-0.1380</td>
+<td align="right">0.02510</td>
+<td align="right">0.417</td>
+<td align="right">-0.289</td>
+</tr>
+<tr class="odd">
+<td>gene19</td>
+<td align="right">-0.2180</td>
+<td align="right">0.02920</td>
+<td align="right">0.417</td>
+<td align="right">0.282</td>
+</tr>
+<tr class="even">
+<td>gene39</td>
+<td align="right">-0.1610</td>
+<td align="right">0.04330</td>
+<td align="right">0.542</td>
+<td align="right">0.261</td>
+</tr>
+<tr class="odd">
+<td>gene80</td>
+<td align="right">0.1620</td>
+<td align="right">0.05950</td>
+<td align="right">0.633</td>
+<td align="right">0.243</td>
+</tr>
+<tr class="even">
+<td>gene74</td>
+<td align="right">-0.2460</td>
+<td align="right">0.07160</td>
+<td align="right">0.633</td>
+<td align="right">-0.232</td>
+</tr>
+</tbody>
+</table>
+<p>We can also test multiple phenotypes together. Say we had a matrix of phenotypes as</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno.mat &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">pheno1=</span>pheno.v, <span class="dt">pheno2=</span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M)))</code></pre></div>
+<p>then we could test both phenotypes together in one line, as</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res4 &lt;-<span class="st"> </span><span class="kw">multi_cor</span>(M, <span class="dt">pheno.mat =</span> pheno.mat, <span class="dt">reorder.rows =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">pheno1.cor</th>
+<th align="right">pheno1.p</th>
+<th align="right">pheno1.FDR</th>
+<th align="right">pheno2.cor</th>
+<th align="right">pheno2.p</th>
+<th align="right">pheno2.FDR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gene59</td>
+<td align="right">0.313</td>
+<td align="right">0.5450</td>
+<td align="right">0.923</td>
+<td align="right">-0.895</td>
+<td align="right">0.0159</td>
+<td align="right">0.797</td>
+</tr>
+<tr class="even">
+<td>gene85</td>
+<td align="right">0.459</td>
+<td align="right">0.3600</td>
+<td align="right">0.923</td>
+<td align="right">-0.810</td>
+<td align="right">0.0509</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="odd">
+<td>gene12</td>
+<td align="right">-0.572</td>
+<td align="right">0.2350</td>
+<td align="right">0.923</td>
+<td align="right">0.672</td>
+<td align="right">0.1440</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="even">
+<td>gene48</td>
+<td align="right">-0.709</td>
+<td align="right">0.1140</td>
+<td align="right">0.763</td>
+<td align="right">0.525</td>
+<td align="right">0.2850</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="odd">
+<td>gene36</td>
+<td align="right">0.484</td>
+<td align="right">0.3300</td>
+<td align="right">0.923</td>
+<td align="right">-0.741</td>
+<td align="right">0.0918</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="even">
+<td>gene40</td>
+<td align="right">-0.650</td>
+<td align="right">0.1620</td>
+<td align="right">0.901</td>
+<td align="right">-0.575</td>
+<td align="right">0.2320</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="odd">
+<td>gene15</td>
+<td align="right">0.808</td>
+<td align="right">0.0515</td>
+<td align="right">0.730</td>
+<td align="right">0.369</td>
+<td align="right">0.4710</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="even">
+<td>gene45</td>
+<td align="right">0.489</td>
+<td align="right">0.3250</td>
+<td align="right">0.923</td>
+<td align="right">-0.708</td>
+<td align="right">0.1160</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="odd">
+<td>gene1</td>
+<td align="right">-0.726</td>
+<td align="right">0.1020</td>
+<td align="right">0.730</td>
+<td align="right">0.423</td>
+<td align="right">0.4040</td>
+<td align="right">0.977</td>
+</tr>
+<tr class="even">
+<td>gene31</td>
+<td align="right">-0.664</td>
+<td align="right">0.1500</td>
+<td align="right">0.901</td>
+<td align="right">-0.483</td>
+<td align="right">0.3320</td>
+<td align="right">0.977</td>
+</tr>
+</tbody>
+</table>
+<p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: “pearson” (the default), “spearman”, “kendall”, as before, or “limma”, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
+<p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (E) to group, the outcome (Y) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator. For <code>hitman</code> we make the exposure numeric, and set the names of the <code>phenoype</code> to those of <code>M</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno.v, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
+<p><code>hitman</code> returns a table with a combined (“comb”) p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in M, and the conditional association of the gene in M to Y given E.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">EMY.p</th>
+<th align="right">EMY.FDR</th>
+<th align="right">EM2.p</th>
+<th align="right">MY2.p</th>
+<th align="right">EM.t</th>
+<th align="right">EM.p</th>
+<th align="right">MY.p</th>
+<th align="right">MY.FDR</th>
+<th align="right">MY.slope</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>gene1</td>
+<td align="right">0.00545</td>
+<td align="right">0.477</td>
+<td align="right">0.00000</td>
+<td align="right">0.073800</td>
+<td align="right">-7.76</td>
+<td align="right">0.00000</td>
+<td align="right">0.073800</td>
+<td align="right">0.4920</td>
+<td align="right">-0.240</td>
+</tr>
+<tr class="even">
+<td>gene19</td>
+<td align="right">0.01380</td>
+<td align="right">0.477</td>
+<td align="right">0.11700</td>
+<td align="right">0.025400</td>
+<td align="right">1.57</td>
+<td align="right">0.11700</td>
+<td align="right">0.025400</td>
+<td align="right">0.2660</td>
+<td align="right">0.301</td>
+</tr>
+<tr class="odd">
+<td>gene99</td>
+<td align="right">0.01610</td>
+<td align="right">0.477</td>
+<td align="right">0.06800</td>
+<td align="right">0.127000</td>
+<td align="right">-1.83</td>
+<td align="right">0.06800</td>
+<td align="right">0.127000</td>
+<td align="right">0.5600</td>
+<td align="right">-0.205</td>
+</tr>
+<tr class="even">
+<td>gene66</td>
+<td align="right">0.02360</td>
+<td align="right">0.477</td>
+<td align="right">0.00989</td>
+<td align="right">0.154000</td>
+<td align="right">-2.59</td>
+<td align="right">0.00989</td>
+<td align="right">0.154000</td>
+<td align="right">0.5600</td>
+<td align="right">-0.192</td>
+</tr>
+<tr class="odd">
+<td>gene15</td>
+<td align="right">0.02380</td>
+<td align="right">0.477</td>
+<td align="right">0.15400</td>
+<td align="right">0.015000</td>
+<td align="right">1.43</td>
+<td align="right">0.15400</td>
+<td align="right">0.015000</td>
+<td align="right">0.2400</td>
+<td align="right">0.328</td>
+</tr>
+<tr class="even">
+<td>gene80</td>
+<td align="right">0.03810</td>
+<td align="right">0.635</td>
+<td align="right">0.19500</td>
+<td align="right">0.118000</td>
+<td align="right">1.30</td>
+<td align="right">0.19500</td>
+<td align="right">0.118000</td>
+<td align="right">0.5600</td>
+<td align="right">0.210</td>
+</tr>
+<tr class="odd">
+<td>gene48</td>
+<td align="right">0.07680</td>
+<td align="right">0.820</td>
+<td align="right">0.12700</td>
+<td align="right">0.277000</td>
+<td align="right">-1.53</td>
+<td align="right">0.12700</td>
+<td align="right">0.277000</td>
+<td align="right">0.7410</td>
+<td align="right">-0.146</td>
+</tr>
+<tr class="even">
+<td>gene9</td>
+<td align="right">0.07720</td>
+<td align="right">0.820</td>
+<td align="right">0.27800</td>
+<td align="right">0.000864</td>
+<td align="right">-1.09</td>
+<td align="right">0.27800</td>
+<td align="right">0.000864</td>
+<td align="right">0.0864</td>
+<td align="right">-0.451</td>
+</tr>
+<tr class="odd">
+<td>gene47</td>
+<td align="right">0.08090</td>
+<td align="right">0.820</td>
+<td align="right">0.28400</td>
+<td align="right">0.239000</td>
+<td align="right">1.07</td>
+<td align="right">0.28400</td>
+<td align="right">0.239000</td>
+<td align="right">0.7100</td>
+<td align="right">0.158</td>
+</tr>
+<tr class="even">
+<td>gene25</td>
+<td align="right">0.08200</td>
+<td align="right">0.820</td>
+<td align="right">0.12500</td>
+<td align="right">0.286000</td>
+<td align="right">1.54</td>
+<td align="right">0.12500</td>
+<td align="right">0.286000</td>
+<td align="right">0.7410</td>
+<td align="right">0.143</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="significance-histogram" class="section level2">
-<h2>Significance histogram</h2>
-<p>We can plot a histogram of the p-values and FDRs for all comparisons with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">signif_hist</span>(res, <span class="dt">name=</span><span class="ot">NA</span>) <span class="co">#not run</span></code></pre></div>
-<p><code>signif_hist</code> plots four histograms per page, and this line will plot two histograms per comparison x 3 comparisons = 6 histograms. Thus, this takes more than one page, so it is not shown here.</p>
-</div>
-<div id="venn-diagram" class="section level2">
-<h2>Venn diagram</h2>
-<p>We may want to see which genes are up or down in each comparison, and how the significant genes (say p-value &lt; 0.05) behave in different comparisons using a Venn diagram.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezvenn</span>(<span class="dt">tab=</span>res, <span class="dt">p.cutoff =</span> <span class="fl">0.05</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-</div>
-<div id="dotplot-and-boxplot" class="section level2">
-<h2>Dotplot and boxplot</h2>
-<p>We can plot the top gene by group in a dotplot or boxplot using <strong>ggplot2</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_by_grp</span>(M[<span class="dv">1</span>,], pheno<span class="op">$</span>grp, <span class="dt">name=</span><span class="ot">NA</span>, <span class="dt">type=</span><span class="st">&quot;dot&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_by_grp</span>(M[<span class="dv">1</span>,], pheno<span class="op">$</span>grp, <span class="dt">name=</span><span class="ot">NA</span>, <span class="dt">type=</span><span class="st">&quot;box&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>We can plot multiple genes, such as the first 5 genes where each gene will be on its own page in a PDF, by passing <code>object=M[1:5,]</code>.</p>
-</div>
-<div id="heatmap" class="section level2">
-<h2>Heatmap</h2>
-<p>We plot a heatmap of the expression of the first five genes across all samples using the <strong>pheatmap</strong> package. We assume their gene symbols are “A”, “B”, “C”, “D”, “E”. We make a phenotype dataframe with only one column for the group, and with , which <strong>pheatmap</strong> checks for.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sym &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>, <span class="st">&quot;E&quot;</span>)
-pheno.df &lt;-<span class="st"> </span>pheno[,<span class="st">&quot;grp&quot;</span>,drop=F]
-topgenes &lt;-<span class="st"> </span><span class="kw">rownames</span>(res.df)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]
-<span class="kw">ezheat</span>(M[topgenes,], <span class="dt">symbols =</span> res.df[topgenes, <span class="st">&quot;Gene.Symbol&quot;</span>], <span class="dt">pheno.df=</span>pheno.df, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>We see a color bar for the phenotype groups and the strongest change in metabolite “A”.</p>
-</div>
-<div id="volcano-plots" class="section level2">
-<h2>Volcano plots</h2>
-<p>We can create volcano plots, which have logFC on the x-axis and log(p-value) on the y-axis, for a comparison using <strong>ggplot2</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ezvolcano</span>(<span class="dt">tab=</span>res.df, <span class="dt">comparison =</span> <span class="st">&quot;First3&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>, <span class="dt">lab.col=</span><span class="st">&quot;Gene.Symbol&quot;</span>, <span class="dt">ntop.sig =</span> <span class="dv">1</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
-<p>We can automatically create a PDF with volcano plots for all comparisons with:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">multi_volcano</span>(<span class="dt">tab=</span>res.df, <span class="dt">lab.col=</span><span class="st">&quot;Gene.Symbol&quot;</span>, <span class="dt">ntop.sig =</span> <span class="dv">1</span>)</code></pre></div>
+<div id="gene-set-level-analysis" class="section level2">
+<h2>Gene set level analysis</h2>
+<p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with limma’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
+<p>Let’s make the gene set object,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy1&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)),
+          <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy2&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>)),
+          <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy3&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">21</span><span class="op">:</span><span class="dv">30</span>)))</code></pre></div>
+<p>This object would normally be read in using <code>read_gmt</code>. Then we can test each of these gene sets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res5 &lt;-<span class="st"> </span><span class="kw">roast_contrasts</span>(<span class="dt">object=</span>M, <span class="dt">G=</span>G, <span class="dt">stats.tab=</span>res0, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v, <span class="dt">fun=</span><span class="st">&quot;fry&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
+<p>If we set <code>name</code> to a value other than <code>NA</code>, this would create a folder with one CSV per pathway, and an Excel file that looks like</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">NGenes</th>
+<th align="left">First3.Direction</th>
+<th align="right">First3.PropUpP05</th>
+<th align="right">First3.PropDownP05</th>
+<th align="right">First3.p</th>
+<th align="right">First3.FDR</th>
+<th align="right">First3.Mixed.p</th>
+<th align="right">First3.Mixed.FDR</th>
+<th align="left">Last3.Direction</th>
+<th align="right">Last3.PropUpP05</th>
+<th align="right">Last3.PropDownP05</th>
+<th align="right">Last3.p</th>
+<th align="right">Last3.FDR</th>
+<th align="right">Last3.Mixed.p</th>
+<th align="right">Last3.Mixed.FDR</th>
+<th align="left">Last3vsFirst3.Direction</th>
+<th align="right">Last3vsFirst3.PropUpP05</th>
+<th align="right">Last3vsFirst3.PropDownP05</th>
+<th align="right">Last3vsFirst3.p</th>
+<th align="right">Last3vsFirst3.FDR</th>
+<th align="right">Last3vsFirst3.Mixed.p</th>
+<th align="right">Last3vsFirst3.Mixed.FDR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>pwy1</td>
+<td align="right">10</td>
+<td align="left">Up</td>
+<td align="right">0.2</td>
+<td align="right">0.0</td>
+<td align="right">0.0147405</td>
+<td align="right">0.0442216</td>
+<td align="right">0.0003846</td>
+<td align="right">0.0011539</td>
+<td align="left">Down</td>
+<td align="right">0.0</td>
+<td align="right">0.0</td>
+<td align="right">0.9380988</td>
+<td align="right">0.9380988</td>
+<td align="right">0.8452777</td>
+<td align="right">0.8452777</td>
+<td align="left">Down</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">0.0413832</td>
+<td align="right">0.1241496</td>
+<td align="right">0.0042642</td>
+<td align="right">0.0127927</td>
+</tr>
+<tr class="even">
+<td>pwy3</td>
+<td align="right">10</td>
+<td align="left">Down</td>
+<td align="right">0.0</td>
+<td align="right">0.2</td>
+<td align="right">0.1277691</td>
+<td align="right">0.1916536</td>
+<td align="right">0.0771335</td>
+<td align="right">0.1157002</td>
+<td align="left">Up</td>
+<td align="right">0.1</td>
+<td align="right">0.0</td>
+<td align="right">0.5373521</td>
+<td align="right">0.8060281</td>
+<td align="right">0.1031779</td>
+<td align="right">0.3095336</td>
+<td align="left">Up</td>
+<td align="right">0</td>
+<td align="right">0.0</td>
+<td align="right">0.1409461</td>
+<td align="right">0.2114191</td>
+<td align="right">0.3117519</td>
+<td align="right">0.3849170</td>
+</tr>
+<tr class="odd">
+<td>pwy2</td>
+<td align="right">10</td>
+<td align="left">Down</td>
+<td align="right">0.1</td>
+<td align="right">0.1</td>
+<td align="right">0.7183857</td>
+<td align="right">0.7183857</td>
+<td align="right">0.3703035</td>
+<td align="right">0.3703035</td>
+<td align="left">Down</td>
+<td align="right">0.0</td>
+<td align="right">0.2</td>
+<td align="right">0.3875927</td>
+<td align="right">0.8060281</td>
+<td align="right">0.2362813</td>
+<td align="right">0.3544220</td>
+<td align="left">Down</td>
+<td align="right">0</td>
+<td align="right">0.1</td>
+<td align="right">0.7020194</td>
+<td align="right">0.7020194</td>
+<td align="right">0.3849170</td>
+<td align="right">0.3849170</td>
+</tr>
+</tbody>
+</table>
+<p>except the first column would have links to the CSVs in the folder. Similarly, we can use <code>roast_cor</code>.</p>
 </div>
 <div id="system-info" class="section level2">
 <h2>System info</h2>
@@ -382,19 +939,13 @@ topgenes &lt;-<span class="st"> </span><span class="kw">rownames</span>(res.df)[
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimmaplot_0.0.0.9000 ezlimma_0.1.6          limma_3.36.1          
+## [1] ezlimma_0.1.6 limma_3.36.1 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.17       knitr_1.20         magrittr_1.5      
-##  [4] munsell_0.4.3      colorspace_1.3-2   rlang_0.2.1       
-##  [7] highr_0.6          stringr_1.3.1      plyr_1.8.4        
-## [10] tools_3.5.0        grid_3.5.0         gtable_0.2.0      
-## [13] htmltools_0.3.6    yaml_2.1.19        lazyeval_0.2.1    
-## [16] rprojroot_1.3-2    digest_0.6.15      tibble_1.4.2      
-## [19] RColorBrewer_1.1-2 reshape2_1.4.3     ggplot2_2.2.1     
-## [22] evaluate_0.10.1    rmarkdown_1.9      labeling_0.3      
-## [25] pheatmap_1.0.10    stringi_1.1.7      pillar_1.2.3      
-## [28] compiler_3.5.0     scales_0.5.0       backports_1.1.2</code></pre>
+##  [1] Rcpp_0.12.17    digest_0.6.15   rprojroot_1.3-2 backports_1.1.2
+##  [5] magrittr_1.5    evaluate_0.10.1 highr_0.6       stringi_1.1.7  
+##  [9] rmarkdown_1.9   statmod_1.4.30  tools_3.5.0     stringr_1.3.1  
+## [13] yaml_2.1.19     compiler_3.5.0  htmltools_0.3.6 knitr_1.20</code></pre>
 </div>
 
 
