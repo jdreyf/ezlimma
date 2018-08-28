@@ -130,7 +130,7 @@ roast_contrasts <- function(object, G, stats.tab, grp=NULL, contrast.v, design=N
     contr.nm <- names(contrast.v)[i]
     contr.cols <- paste(contr.nm, c("logFC", "p"), sep=".")
     if (all(contr.cols %in% colnames(stats.tab))){
-      prop.diff <- prop_changed(feat.tab=stats.tab[,contr.cols,drop=FALSE], index=index)
+      prop.diff <- signif(prop_changed(feat.tab=stats.tab[,contr.cols,drop=FALSE], index=index), 2)
       res.tmp <- data.frame(res.tmp[,1:2], prop.diff[rownames(res.tmp),], res.tmp[,-(1:2)])
     }
     
