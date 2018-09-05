@@ -53,7 +53,7 @@ test_that("gene1", {
   hm <- hitman(E=grp, M=M, Y=M[1,])
   expect_equal(rownames(hm)[1], "gene1")
   
-  expect_equal(hm["gene1", "MY.p"], hm["gene1", "MY2.p"])
-  expect_equal(hm["gene1", "EM.p"], hm["gene1", "EM2.p"])
+  expect_equal(hm["gene1", "MY.p"], hm["gene1", "MY_dir.p"])
+  expect_equal(hm["gene1", "EM.p"], hm["gene1", "EM_dir.p"])
   expect_equal(hm["gene1", "EMY.p"], max(hm["gene1", "EM.p"], hm["gene1", "MY.p"])^2)
 })

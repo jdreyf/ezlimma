@@ -51,8 +51,8 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
   
   #modify separate columns, to keep stats of two-sided tests for inspection.
   if (!is.na(ey.sign)){
-    ret <- cbind(EM2.p=ret$EM.p, MY2.p=ret$MY.p, ret)
-    p.cols <- c("EM2.p", "MY2.p")
+    ret <- cbind(EM_dir.p=ret$EM.p, MY_dir.p=ret$MY.p, ret)
+    p.cols <- c("EM_dir.p", "MY_dir.p")
     ret <- modify_hitman_pvalues(tab=ret, overall.sign = ey.sign, p.cols=p.cols)
   } else {
     p.cols <- c("EM.p", "MY.p")
