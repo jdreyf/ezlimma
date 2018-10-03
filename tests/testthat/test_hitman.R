@@ -1,7 +1,11 @@
 context("hitman")
 
+#create associated phenotype, to avoid hitman warning about weak assoc
+pheno.v <- setNames(rnorm(ncol(M)), nm=colnames(M))
+pheno.v[1:3] <- pheno.v[1:3]-3
+
 test_that("E numeric", {
-  ee <- rnorm(length(pheno.v))
+  ee <- pheno.v + rnorm(length(pheno.v), sd=0.1)
   expect_message(hm <- hitman(E=ee, M=M, Y=pheno.v, verbose = TRUE))
   expect_lt(mean(hm$EMY.p < 0.05), 0.1)
   
@@ -9,7 +13,12 @@ test_that("E numeric", {
   hm2 <- hitman(E=ee, M=M, Y=pheno.v, covariates=covar.tmp)
   expect_lte(mean(hm$EMY.p==hm2[rownames(hm), "EMY.p"]), 0.01)
   
+  #no variance
   expect_error(hitman(E=numeric(length(pheno.v)), M=M, Y=pheno.v))
+  
+  ee2 <- rnorm(length(pheno.v), sd=0.1)
+  expect_warning(hm3 <- hitman(E=ee2, M=M, Y=pheno.v))
+  expect_lt(mean(hm3$EMY.p < 0.05), 0.1)
 })
 
 test_that("E binary", {
@@ -21,13 +30,12 @@ test_that("E binary", {
   expect_equal(hm$EMY.p, hm2[rownames(hm), "EMY.p"])
   
   covar.tmp <- rnorm(length(pheno.v))
-  hm3 <- hitman(E=grp, M=M, Y=pheno.v, covariates=covar.tmp)
+  expect_warning(hm3 <- hitman(E=grp, M=M, Y=pheno.v, covariates=covar.tmp))
   expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
   
-  #try to get ey.t=0, but EY.t~=1e-16
-  # y <- rep(1:3, times=2)
-  # limma_dep(object=y, Y=grp, prefix="EY")
-  # hm4 <- hitman(E=grp, M=M, Y=rep(1:3, times=2))
+  y <- rep(1:3, times=2)
+  limma_dep(object=y, Y=grp, prefix="EY")
+  expect_warning(hm4 <- hitman(E=grp, M=M, Y=rep(1:3, times=2)))
 })
 
 test_that("E nominal", {

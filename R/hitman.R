@@ -13,7 +13,7 @@
 
 #can add covariates in future
 hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
-  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M))
+  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M), length(E) > 0)
   
   if (is.numeric(E)){
     if (verbose) message("E treated as continuous numeric vector.")
@@ -39,6 +39,9 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     tt.ey <- limma_dep(object=Y, Y=E, covariates=covariates, prefix="EY")
     if (tt.ey$EY.t != 0){
       ey.sign <- sign(tt.ey$EY.t)
+      if (abs(tt.ey$EY.t) < 1){
+        warning("E and Y are weakly associated, so mediation may not be meaningful.")
+      }
     } else {
       #leave ey.sign as NA
       warning("E and Y are not associated, so not accounting for direction of association.")
