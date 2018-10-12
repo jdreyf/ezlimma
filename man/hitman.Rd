@@ -9,7 +9,8 @@ hitman(E, M, Y, covariates = NULL, verbose = FALSE)
 \arguments{
 \item{E}{A vector representing exposure; can be numeric or a character/factor with nominal groups.}
 
-\item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.}
+\item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.
+Must have more than one feature.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 

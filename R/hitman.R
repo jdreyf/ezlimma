@@ -5,6 +5,7 @@
 #' 
 #' @param E A vector representing exposure; can be numeric or a character/factor with nominal groups. 
 #' @param M A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.
+#' Must have more than one feature.
 #' @param Y A numeric vector of \code{length(E)} of outcomes.
 #' @param covariates Numeric vector or matrix of covariates.
 #' @param verbose Logical indicating if messages should be reported.
@@ -13,7 +14,8 @@
 
 #can add covariates in future
 hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
-  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M), length(E) > 0)
+  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M), 
+            length(E) > 0, nrow(M) > 1)
   
   if (is.numeric(E)){
     if (verbose) message("E treated as continuous numeric vector.")
