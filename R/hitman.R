@@ -9,13 +9,26 @@
 #' @param Y A numeric vector of \code{length(E)} of outcomes.
 #' @param covariates Numeric vector or matrix of covariates.
 #' @param verbose Logical indicating if messages should be reported.
-#' @details If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match.
+#' @return Data frame with columns
+#' \describe{
+#' \item{EMY.p}{Overall p-value for mediation}
+#' \item{EMY.FDR}{Overall FDR for mediation}
+#' \item{EM_dir.p}{p-value for E-->M accounting for direction of mediation}
+#' \item{MY_dir.p}{p-value for M-->Y accounting for direction of mediation}
+#' \item{EM.p}{p-value for E-->M, not accounting for direction}
+#' \item{EM.t or EM.F}{F-statistic or t-statistic for E-->M, not accounting for direction}
+#' \item{MY.p}{p-value for M-->Y, not accounting for direction}
+#' \item{MY.slope}{slope of regression for M-->Y, not accounting for direction}
+#' }
+#' and annotation.
+#' @details If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match. \code{E} and \code{Y}
+#' cannot have \code{NA}s.
 #' @export
 
 #can add covariates in future
 hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
   stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M), 
-            length(E) > 0, nrow(M) > 1)
+            length(E) > 0, nrow(M) > 1, !is.na(E), !is.na(Y))
   
   if (is.numeric(E)){
     if (verbose) message("E treated as continuous numeric vector.")
@@ -23,7 +36,6 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     if (stats::var(E, na.rm=TRUE)==0) stop("E treated as numeric, but has no variance.")
     #ok if covariates is NULL
     my.covar <- cbind(E, covariates)
-
   } else {
     if (verbose) message("E treated as an unordered factor.")
     ngrps <- length(unique(E))
@@ -50,8 +62,10 @@ hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
     }
   }
   
-  tt.em <- limma_dep(object=M, Y=E, covariates=covariates, prefix="EM")
+  #change order of columns so it's consistent with c("MY.p", "MY.slope")
+  tt.em <- limma_dep(object=M, Y=E, covariates=covariates, prefix="EM")[,2:1]
   tt.my <- limma_pcor(object=M, phenotype=Y, batch=batch, covariates=my.covar, prefix="MY")
+  tt.my <- tt.my[,setdiff(colnames(tt.my), "MY.FDR")]
   ret <- cbind(tt.em[rownames(tt.my),], tt.my)
   
   #modify separate columns, to keep stats of two-sided tests for inspection.

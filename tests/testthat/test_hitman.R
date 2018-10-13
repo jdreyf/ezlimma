@@ -3,9 +3,9 @@ context("hitman")
 #create associated phenotype, to avoid hitman warning about weak assoc
 pheno.v <- setNames(rnorm(ncol(M)), nm=colnames(M))
 pheno.v[1:3] <- pheno.v[1:3]-3
+ee <- pheno.v + rnorm(length(pheno.v), sd=0.1)
 
 test_that("E numeric", {
-  ee <- pheno.v + rnorm(length(pheno.v), sd=0.1)
   expect_message(hm <- hitman(E=ee, M=M, Y=pheno.v, verbose = TRUE))
   expect_lt(mean(hm$EMY.p < 0.05), 0.1)
   
@@ -64,4 +64,15 @@ test_that("gene1", {
   expect_equal(hm["gene1", "MY.p"], hm["gene1", "MY_dir.p"])
   expect_equal(hm["gene1", "EM.p"], hm["gene1", "EM_dir.p"])
   expect_equal(hm["gene1", "EMY.p"], max(hm["gene1", "EM.p"], hm["gene1", "MY.p"])^2)
+})
+
+test_that("NAs", {
+  expect_error(hitman(E=grp, M=M, Y=pheno2))
+  
+  grp2 <- grp
+  grp2[1] <- NA
+  expect_error(hitman(E=grp2, M=M, Y=pheno.v))
+  
+  M[1, 1] <- NA
+  expect_silent(hitman(E=ee, M=M, Y=pheno.v))
 })
