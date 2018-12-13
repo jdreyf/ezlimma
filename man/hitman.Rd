@@ -4,19 +4,18 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covariates = NULL, verbose = FALSE)
+hitman(E, M, Y, covariates = NULL)
 }
 \arguments{
-\item{E}{A vector representing exposure; can be numeric or a character/factor with nominal groups.}
+\item{E}{A numeric vector or matrix of exposures. Can be a design matrix returned by 
+\code{\link[stats]{model.matrix}} or \code{\link[ezlimma]{batch2design}}.}
 
-\item{M}{A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.
+\item{M}{A numeric matrix-like data object with one row per feature and one column per sample of mediators.
 Must have more than one feature.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
 \item{covariates}{Numeric vector or matrix of covariates.}
-
-\item{verbose}{Logical indicating if messages should be reported.}
 }
 \value{
 Data frame with columns

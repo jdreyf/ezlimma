@@ -61,7 +61,9 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   }
   
   if (reduce.df > 0){
-    if (any(reduce.df >= fit$df.residual)) stop("reduce.df >= df.residual.")
+    if (any(reduce.df >= fit$df.residual)){
+      stop("reduce.df=", reduce.df, " >= df.residual=", min(fit$df.residual))
+    }
     fit$df.residual <- fit$df.residual - reduce.df
   }
   

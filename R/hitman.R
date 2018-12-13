@@ -3,12 +3,12 @@
 #' High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
 #' \code{Y}.
 #' 
-#' @param E A vector representing exposure; can be numeric or a character/factor with nominal groups. 
-#' @param M A numeric matrix-like data object with one row per feature and one column per sample representing the mediator.
+#' @param E A numeric vector or matrix of exposures. Can be a design matrix returned by 
+#' \code{\link[stats]{model.matrix}} or \code{\link[ezlimma]{batch2design}}.
+#' @param M A numeric matrix-like data object with one row per feature and one column per sample of mediators.
 #' Must have more than one feature.
 #' @param Y A numeric vector of \code{length(E)} of outcomes.
 #' @param covariates Numeric vector or matrix of covariates.
-#' @param verbose Logical indicating if messages should be reported.
 #' @return Data frame with columns
 #' \describe{
 #' \item{EMY.p}{Overall p-value for mediation}
@@ -26,45 +26,42 @@
 #' @export
 
 #can add covariates in future
-hitman <- function(E, M, Y, covariates=NULL, verbose=FALSE){
-  stopifnot(length(Y)==ncol(M), is.numeric(Y), names(Y)==colnames(M), length(E)==ncol(M), names(E)==colnames(M), 
-            length(E) > 0, nrow(M) > 1, !is.na(E), !is.na(Y))
+hitman <- function(E, M, Y, covariates=NULL){
+  stopifnot(is.numeric(E), is.numeric(M), is.numeric(Y), !is.na(E), !is.na(Y), length(E) > 0, nrow(M) > 1,
+            nrow(as.matrix(E))==ncol(M), length(Y)==ncol(M), names(Y)==colnames(M))
   
-  if (is.numeric(E)){
-    if (verbose) message("E treated as continuous numeric vector.")
-    batch <- NULL
-    if (stats::var(E, na.rm=TRUE)==0) stop("E treated as numeric, but has no variance.")
-    #ok if covariates is NULL
-    my.covar <- cbind(E, covariates)
+  if (ncol(as.matrix(E))==1){
+    stopifnot(colnames(M)==names(E))
   } else {
-    if (verbose) message("E treated as an unordered factor.")
-    ngrps <- length(unique(E))
-    if (ngrps==1) stop("E is not numeric, but has only one group.")
-    if (any(is.na(E))) stop("E is not numeric, but has an NA.")
-    #leave covariates
-    batch <- E
-    my.covar <- covariates
+    stopifnot(colnames(M)==rownames(E))
   }
   
-  #if mult grps, get an F-stat -> no ey.sign
-  ey.sign <- NA
-  if (is.numeric(E) || ngrps==2){
-    #Y treated as gene expression -> dependent variable
-    tt.ey <- limma_dep(object=Y, Y=E, covariates=covariates, prefix="EY")
-    if (tt.ey$EY.t != 0){
-      ey.sign <- sign(tt.ey$EY.t)
-      if (abs(tt.ey$EY.t) < 1){
-        warning("E and Y are weakly associated, so mediation may not be meaningful.")
-      }
-    } else {
-      #leave ey.sign as NA
-      warning("E and Y are not associated, so not accounting for direction of association.")
-    }
+  if (any(apply(X=as.matrix(E), MARGIN=2, FUN=stats::var, na.rm=TRUE) == 0)){
+    stop("E treated as numeric, but has one or more columns with no variance.")
+  }
+  #ok if covariates is NULL
+  my.covar <- cbind(E, covariates)
+  
+  #test EY; return ey.sign & weak assoc warning
+  #Y treated as gene expression -> dependent variable
+  tt.ey <- limma_dep(object=Y, Y=E, covariates=covariates, prefix="EY")
+  if (tt.ey$EY.p > 0.99){
+    stop("E and Y are not associated.")
+  }
+  if (tt.ey$EY.p > 0.1){
+    warning("E and Y are not associated, so mediation may not be meaningful.")
+  }
+  
+  if (ncol(as.matrix(E)) == 1){
+    ey.sign <- sign(tt.ey$EY.t)
+  } else {
+    #if mult grps, get an F-stat -> no ey.sign
+    ey.sign <- NA
   }
   
   #change order of columns so it's consistent with c("MY.p", "MY.slope")
   tt.em <- limma_dep(object=M, Y=E, covariates=covariates, prefix="EM")[,2:1]
-  tt.my <- limma_pcor(object=M, phenotype=Y, batch=batch, covariates=my.covar, prefix="MY")
+  tt.my <- limma_pcor(object=M, phenotype=Y, covariates=my.covar, prefix="MY")
   tt.my <- tt.my[,setdiff(colnames(tt.my), "MY.FDR")]
   ret <- cbind(tt.em[rownames(tt.my),], tt.my)
   

@@ -8,7 +8,6 @@
 #' @param phenotype Numeric vector of phenotypes of the samples. Should be same length as
 #'   \code{ncol(object)}. If the vector is named, names should match 
 #'   \code{colnames(object)}.
-#' @param batch Batch vector passed to \code{\link[limma]{removeBatchEffect}}, which coerces it to factor.
 #' @param covariates Numeric matrix with one or more covariates as columns passed to 
 #' \code{\link[limma]{removeBatchEffect}}.
 #' @param reorder.rows logical, should rows be reordered by p-value or be left in 
@@ -16,29 +15,25 @@
 #' @param prefix character string to add to beginning of column names.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
 #' @return Dataframe.
-#' @details \code{\link[limma]{removeBatchEffect}} treats \code{batch} differently form \code{covariates}, even if 
-#' \code{covariates=as.numeric(as.factor(batch))}.
 
-limma_pcor <- function(object, phenotype, batch=NULL, covariates=NULL, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
-  stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), !is.null(batch)|!is.null(covariates),
-            is.null(batch)|length(batch)==ncol(object), is.null(covariates)|is.numeric(covariates))
+limma_pcor <- function(object, phenotype, covariates, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
+  stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), is.numeric(covariates),
+            nrow(as.matrix(covariates))==ncol(object))
   
   #pheno residuals
   #data.frame(cbind()) can handle NULLs but not factors
   dat <- data.frame(cbind(phenotype, covariates))
-  if (!is.null(batch)){
-    dat <- data.frame(dat, batch)
-  }
+  
   pheno.fm <- stats::lm(phenotype ~ ., data=dat)
   pheno.res <- stats::residuals(pheno.fm)
   #names get corrupted
   names(pheno.res) <- names(phenotype)
   
   #object residuals
-  object.res <- limma::removeBatchEffect(x=object, batch=batch, covariates = covariates)
+  object.res <- limma::removeBatchEffect(x=object, covariates = covariates)
   
   #how many df to remove in limma?
-  reduce.df <- ifelse(test=is.null(covariates), yes=1, no=1+ncol(as.matrix(covariates)))
+  reduce.df <- ncol(as.matrix(covariates))
   
   lc <- limma_cor(object=object.res, phenotype=pheno.res, reduce.df=reduce.df, reorder.rows=reorder.rows, prefix=prefix, 
                   adjust.method=adjust.method)

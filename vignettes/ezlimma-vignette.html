@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-08-23" />
+<meta name="date" content="2018-12-13" />
 
 <title>ezlimma vignette</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-08-23</em></h4>
+<h4 class="date"><em>2018-12-13</em></h4>
 
 
 
@@ -98,10 +98,10 @@ M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><s
 </div>
 <div id="gene-level-analysis" class="section level2">
 <h2>Gene level analysis</h2>
-<p>Assume we want to test if genes are changed in First3, in Last3, or in Last3 - First3. We can do this in two lines of code,</p>
+<p>Assume we want to test if genes are changed in <code>First3</code>, in <code>Last3</code>, or in <code>Last3 - First3</code>. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
 res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
-<p>First3 tests if the mean expression of genes in these samples differs from zero, and Last3vsFirst3 tests difference between groups.</p>
+<p><code>First3</code> tests if the mean expression of genes in these samples differs from zero, and <code>Last3vsFirst3</code> tests difference between groups.</p>
 <p>This returns a data frame that looks like:</p>
 <table>
 <thead>
@@ -301,7 +301,7 @@ res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <s
 pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span><span class="dv">1</span></code></pre></div>
 <p>we can test association with,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1 &lt;-<span class="st"> </span><span class="kw">ezcor</span>(M, pheno.v, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</code></pre></div>
-<p>where <code>method</code> can be any of “pearson”, “kendall”, or “spearman”. This returns a data frame like,</p>
+<p>where <code>method</code> can be any of <code>&quot;pearson&quot;</code>, <code>&quot;kendall&quot;</code>, or <code>&quot;spearman&quot;</code>. This returns a data frame like,</p>
 <table>
 <thead>
 <tr class="header">
@@ -657,22 +657,25 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 </tr>
 </tbody>
 </table>
-<p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: “pearson” (the default), “spearman”, “kendall”, as before, or “limma”, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
-<p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (E) to group, the outcome (Y) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator. For <code>hitman</code> we make the exposure numeric, and set the names of the <code>phenoype</code> to those of <code>M</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno.v, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
-<p><code>hitman</code> returns a table with a combined (“comb”) p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in M, and the conditional association of the gene in M to Y given E.</p>
+<p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: <code>&quot;pearson&quot;</code> (the default), <code>&quot;spearman&quot;</code>, <code>&quot;kendall&quot;</code>, as before, or <code>&quot;limma&quot;</code>, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
+<p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (<code>E</code>) to group, the outcome (<code>Y</code>) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator. For <code>hitman</code> we transform the exposure to numeric, and set the names of the <code>phenoype</code> to those of <code>M</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grp.num &lt;-<span class="st"> </span><span class="kw">batch2design</span>(grp)
+res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp.num, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno.v, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
+<pre><code>## Warning in hitman(E = grp.num, M = M, Y = setNames(pheno.v, nm =
+## colnames(M))): E and Y are not associated, so mediation may not be
+## meaningful.</code></pre>
+<p><code>hitman</code> returns a table with a combined (“EMY”) p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in <code>M</code>, and the conditional association of the gene in <code>M</code> to <code>Y</code> given <code>E</code>.</p>
 <table>
 <thead>
 <tr class="header">
 <th></th>
 <th align="right">EMY.p</th>
 <th align="right">EMY.FDR</th>
-<th align="right">EM2.p</th>
-<th align="right">MY2.p</th>
-<th align="right">EM.t</th>
+<th align="right">EM_dir.p</th>
+<th align="right">MY_dir.p</th>
 <th align="right">EM.p</th>
+<th align="right">EM.t</th>
 <th align="right">MY.p</th>
-<th align="right">MY.FDR</th>
 <th align="right">MY.slope</th>
 </tr>
 </thead>
@@ -683,10 +686,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.477</td>
 <td align="right">0.00000</td>
 <td align="right">0.073800</td>
-<td align="right">-7.76</td>
 <td align="right">0.00000</td>
+<td align="right">7.76</td>
 <td align="right">0.073800</td>
-<td align="right">0.4920</td>
 <td align="right">-0.240</td>
 </tr>
 <tr class="even">
@@ -695,10 +697,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.477</td>
 <td align="right">0.11700</td>
 <td align="right">0.025400</td>
-<td align="right">1.57</td>
 <td align="right">0.11700</td>
+<td align="right">-1.57</td>
 <td align="right">0.025400</td>
-<td align="right">0.2660</td>
 <td align="right">0.301</td>
 </tr>
 <tr class="odd">
@@ -707,10 +708,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.477</td>
 <td align="right">0.06800</td>
 <td align="right">0.127000</td>
-<td align="right">-1.83</td>
 <td align="right">0.06800</td>
+<td align="right">1.83</td>
 <td align="right">0.127000</td>
-<td align="right">0.5600</td>
 <td align="right">-0.205</td>
 </tr>
 <tr class="even">
@@ -719,10 +719,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.477</td>
 <td align="right">0.00989</td>
 <td align="right">0.154000</td>
-<td align="right">-2.59</td>
 <td align="right">0.00989</td>
+<td align="right">2.59</td>
 <td align="right">0.154000</td>
-<td align="right">0.5600</td>
 <td align="right">-0.192</td>
 </tr>
 <tr class="odd">
@@ -731,10 +730,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.477</td>
 <td align="right">0.15400</td>
 <td align="right">0.015000</td>
-<td align="right">1.43</td>
 <td align="right">0.15400</td>
+<td align="right">-1.43</td>
 <td align="right">0.015000</td>
-<td align="right">0.2400</td>
 <td align="right">0.328</td>
 </tr>
 <tr class="even">
@@ -743,10 +741,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.635</td>
 <td align="right">0.19500</td>
 <td align="right">0.118000</td>
-<td align="right">1.30</td>
 <td align="right">0.19500</td>
+<td align="right">-1.30</td>
 <td align="right">0.118000</td>
-<td align="right">0.5600</td>
 <td align="right">0.210</td>
 </tr>
 <tr class="odd">
@@ -755,10 +752,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.820</td>
 <td align="right">0.12700</td>
 <td align="right">0.277000</td>
-<td align="right">-1.53</td>
 <td align="right">0.12700</td>
+<td align="right">1.53</td>
 <td align="right">0.277000</td>
-<td align="right">0.7410</td>
 <td align="right">-0.146</td>
 </tr>
 <tr class="even">
@@ -767,10 +763,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.820</td>
 <td align="right">0.27800</td>
 <td align="right">0.000864</td>
-<td align="right">-1.09</td>
 <td align="right">0.27800</td>
+<td align="right">1.09</td>
 <td align="right">0.000864</td>
-<td align="right">0.0864</td>
 <td align="right">-0.451</td>
 </tr>
 <tr class="odd">
@@ -779,10 +774,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.820</td>
 <td align="right">0.28400</td>
 <td align="right">0.239000</td>
-<td align="right">1.07</td>
 <td align="right">0.28400</td>
+<td align="right">-1.07</td>
 <td align="right">0.239000</td>
-<td align="right">0.7100</td>
 <td align="right">0.158</td>
 </tr>
 <tr class="even">
@@ -791,10 +785,9 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 <td align="right">0.820</td>
 <td align="right">0.12500</td>
 <td align="right">0.286000</td>
-<td align="right">1.54</td>
 <td align="right">0.12500</td>
+<td align="right">-1.54</td>
 <td align="right">0.286000</td>
-<td align="right">0.7410</td>
 <td align="right">0.143</td>
 </tr>
 </tbody>
@@ -939,7 +932,7 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.1.6 limma_3.36.1 
+## [1] ezlimma_0.2.0 limma_3.36.1 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.17    digest_0.6.15   rprojroot_1.3-2 backports_1.1.2

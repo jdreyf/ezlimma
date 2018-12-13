@@ -21,9 +21,11 @@ pheno2 <- pheno.v
 pheno2[1] <- NA
 covar <- rnorm(length(pheno.v))
 
+grp2 <- y <- batch2design(grp)
+
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
-eztt <- limma_contrasts(M, grp = grp, contrast.v = contr.v)
-lc <- limma_cor(M, phenotype = pheno.v)
+eztt <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v)
+lc <- limma_cor(object=M, phenotype = pheno.v)
 
 G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),

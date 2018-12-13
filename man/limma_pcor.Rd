@@ -4,8 +4,8 @@
 \alias{limma_pcor}
 \title{Test partial correlation of each row of an object to a phenotype vector}
 \usage{
-limma_pcor(object, phenotype, batch = NULL, covariates = NULL,
-  reorder.rows = TRUE, prefix = NULL, adjust.method = "BH")
+limma_pcor(object, phenotype, covariates, reorder.rows = TRUE,
+  prefix = NULL, adjust.method = "BH")
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -15,8 +15,6 @@ genes and columns to samples.}
 \item{phenotype}{Numeric vector of phenotypes of the samples. Should be same length as
 \code{ncol(object)}. If the vector is named, names should match 
 \code{colnames(object)}.}
-
-\item{batch}{Batch vector passed to \code{\link[limma]{removeBatchEffect}}, which coerces it to factor.}
 
 \item{covariates}{Numeric matrix with one or more covariates as columns passed to 
 \code{\link[limma]{removeBatchEffect}}.}
@@ -33,8 +31,4 @@ Dataframe.
 }
 \description{
 Test partial correlation of each row of an object to a phenotype vector given covariates.
-}
-\details{
-\code{\link[limma]{removeBatchEffect}} treats \code{batch} differently form \code{covariates}, even if 
-\code{covariates=as.numeric(as.factor(batch))}.
 }
