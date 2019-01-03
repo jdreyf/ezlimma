@@ -10,9 +10,14 @@ Install `ezlimma` from GitHub using `devtools` within R. You must install `devto
 source("http://bioconductor.org/biocLite.R")
 biocLite("limma") #if haven't already installed limma
 install.packages("devtools") #if haven't already installed devtools
-library("devtools")
-install_github("jdreyf/ezlimma")
+library(devtools)
+install_github(repo="jdreyf/ezlimma", build_vignettes = TRUE)
 ```
 
 ## Usage
-See the vignette for a tutorial.
+The vignette presents a tutorial. To see the vignette:
+```
+library(ezlimma)
+browseVignettes(package="ezlimma")
+```
+and click on HTML.
