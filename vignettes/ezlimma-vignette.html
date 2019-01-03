@@ -12,14 +12,14 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2018-12-13" />
+<meta name="date" content="2019-01-03" />
 
 <title>ezlimma vignette</title>
 
 
 
 <style type="text/css">code{white-space: pre;}</style>
-<style type="text/css">
+<style type="text/css" data-origin="pandoc">
 div.sourceCode { overflow-x: auto; }
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -55,7 +55,29 @@ code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
 code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
 code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
 code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
 </style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -70,13 +92,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2018-12-13</em></h4>
+<h4 class="date"><em>2019-01-03</em></h4>
 
 
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of limma’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, limma’s default is used.</p>
+<p>Welcome to <strong>ezlimma</strong>. This package is a wrapper for the commonly used <strong>limma</strong> package, which makes <strong>limma</strong> easier to use and offers some functionality that adds value to <strong>limma</strong>’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of <strong>limma</strong>’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, <strong>limma</strong>’s default is used.</p>
 </div>
 <div id="install-package" class="section level2">
 <h2>Install package</h2>
@@ -89,7 +111,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="simulate-data" class="section level2">
 <h2>Simulate data</h2>
-<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from limma <code>contrasts.fit</code>.</p>
+<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <strong>limma</strong> <code>contrasts.fit</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
 M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">100</span><span class="op">*</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="fl">0.3</span>), <span class="dt">nrow=</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">6</span>)
 <span class="kw">dimnames</span>(M) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(M)), <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(M)))
@@ -374,7 +396,7 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 </tr>
 </tbody>
 </table>
-<p>Similarly, we can test association using linear regression with limma, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
+<p>Similarly, we can test association using linear regression with <strong>limma</strong>, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno.v)</code></pre></div>
 <p>The output is,</p>
 <table>
@@ -795,7 +817,7 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 </div>
 <div id="gene-set-level-analysis" class="section level2">
 <h2>Gene set level analysis</h2>
-<p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with limma’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
+<p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with <strong>limma</strong>’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
 <p>Let’s make the gene set object,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy1&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)),
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy2&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>)),
@@ -935,10 +957,10 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 ## [1] ezlimma_0.2.0 limma_3.36.1 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.17    digest_0.6.15   rprojroot_1.3-2 backports_1.1.2
-##  [5] magrittr_1.5    evaluate_0.10.1 highr_0.6       stringi_1.1.7  
-##  [9] rmarkdown_1.9   statmod_1.4.30  tools_3.5.0     stringr_1.3.1  
-## [13] yaml_2.1.19     compiler_3.5.0  htmltools_0.3.6 knitr_1.20</code></pre>
+##  [1] compiler_3.5.0  magrittr_1.5    htmltools_0.3.6 tools_3.5.0    
+##  [5] yaml_2.1.19     Rcpp_0.12.17    stringi_1.1.7   rmarkdown_1.11 
+##  [9] highr_0.6       knitr_1.21      xfun_0.4        digest_0.6.15  
+## [13] stringr_1.3.1   statmod_1.4.30  evaluate_0.10.1</code></pre>
 </div>
 
 

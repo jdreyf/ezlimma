@@ -10,7 +10,7 @@ vignette: >
 ---
 
 ## Introduction
-Welcome to ezlimma. This package is a wrapper for the commonly used limma package, which makes limma easier to use and offers some functionality that adds value to limma's functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of limma's parameters, such as those in `lmFit`; when the parameters are not exposed, limma's default is used.
+Welcome to **ezlimma**. This package is a wrapper for the commonly used **limma** package, which makes **limma** easier to use and offers some functionality that adds value to **limma**'s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of **limma**'s parameters, such as those in `lmFit`; when the parameters are not exposed, **limma**'s default is used.
 
 ## Install package
 See README.md.
@@ -21,7 +21,7 @@ library(ezlimma)
 ```
 
 ## Simulate data
-To demonstrate the package on a dataset, I'll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from limma `contrasts.fit`.
+To demonstrate the package on a dataset, I'll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from **limma** `contrasts.fit`.
 ```{r sim}
 set.seed(42)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
@@ -59,7 +59,7 @@ where `method` can be any of `"pearson"`, `"kendall"`, or `"spearman"`. This ret
 knitr::kable(signif(res1[1:10,], 3))
 ```
 
-Similarly, we can test association using linear regression with limma, where the model is *gene expression = a + bx + error*, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,
+Similarly, we can test association using linear regression with **limma**, where the model is *gene expression = a + bx + error*, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,
 ```{r}
 res2 <- limma_cor(M, phenotype = pheno.v)
 ```
@@ -109,7 +109,7 @@ knitr::kable(signif(res.hit[1:10,], 3))
 ```
 
 ## Gene set level analysis
-At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with limma's function `roast`, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.
+At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with **limma**'s function `roast`, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.
 
 Let's make the gene set object,
 ```{r}
