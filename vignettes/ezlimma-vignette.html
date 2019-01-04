@@ -98,7 +98,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to <strong>ezlimma</strong>. This package is a wrapper for the commonly used <strong>limma</strong> package, which makes <strong>limma</strong> easier to use and offers some functionality that adds value to <strong>limma</strong>’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of <strong>limma</strong>’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, <strong>limma</strong>’s default is used.</p>
+<p>Welcome to <code>ezlimma</code>. This package is a wrapper for the commonly used <code>limma</code> package, which makes <code>limma</code> easier to use and offers some functionality that adds value to <code>limma</code>’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of <code>limma</code>’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, <code>limma</code>’s default is used.</p>
 </div>
 <div id="install-package" class="section level2">
 <h2>Install package</h2>
@@ -111,7 +111,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="simulate-data" class="section level2">
 <h2>Simulate data</h2>
-<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <strong>limma</strong> <code>contrasts.fit</code>.</p>
+<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <code>limma</code> <code>contrasts.fit</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
 M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">100</span><span class="op">*</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="fl">0.3</span>), <span class="dt">nrow=</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">6</span>)
 <span class="kw">dimnames</span>(M) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(M)), <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(M)))
@@ -396,7 +396,7 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 </tr>
 </tbody>
 </table>
-<p>Similarly, we can test association using linear regression with <strong>limma</strong>, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
+<p>Similarly, we can test association using linear regression with <code>limma</code>, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno.v)</code></pre></div>
 <p>The output is,</p>
 <table>
@@ -817,7 +817,7 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 </div>
 <div id="gene-set-level-analysis" class="section level2">
 <h2>Gene set level analysis</h2>
-<p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with <strong>limma</strong>’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
+<p>At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with <code>limma</code>’s function <code>roast</code>, which are implemented for multiple sets at a time with the functions <code>mroast</code> or its faster approximation <code>fry</code>. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.</p>
 <p>Let’s make the gene set object,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy1&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>)),
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy2&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>)),

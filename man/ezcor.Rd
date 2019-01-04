@@ -5,7 +5,8 @@
 \title{Test correlation of each row of an object to a phenotype vector}
 \usage{
 ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
-  prefix = NULL, adjust.method = "BH", alternative = "two.sided")
+  prefix = NULL, adjust.method = "BH", alternative = "two.sided",
+  check_names = FALSE)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -31,6 +32,8 @@ the same order as \code{object}?}
 \code{"two.sided"}, \code{"greater"}, or \code{"less"}. You can specify just
 the initial letter. \code{"greater"} corresponds to positive association, 
 \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.}
+
+\item{check_names}{Logical indicating if \code{names(phenotype)} must}
 }
 \value{
 Dataframe.

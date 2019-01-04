@@ -20,12 +20,16 @@
 #'   \code{"two.sided"}, \code{"greater"}, or \code{"less"}. You can specify just
 #'   the initial letter. \code{"greater"} corresponds to positive association, 
 #'   \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.
+#' @param check_names Logical indicating if \code{names(phenotype)} must 
 #' @return Dataframe.
 #' @export
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
-                  prefix=NULL, adjust.method='BH', alternative='two.sided'){
-  stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object))
+                  prefix=NULL, adjust.method='BH', alternative='two.sided', check_names=FALSE){
+  stopifnot(length(phenotype)==ncol(object))
+  if (check_names){
+    stopifnot(names(phenotype)==colnames(object))
+  }
   
   #res.tmp$estimate has cor, res.tmp$statistic has t-stat
   res.mat <- t(apply(X=object, MARGIN=1, FUN=function(v){ 
