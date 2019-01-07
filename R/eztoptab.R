@@ -18,7 +18,7 @@
 #sort by p
 #assume that if 'logFC' in cols, then want 'FC'
 #limma_contrasts tests one coef at a time
-eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH', prefix='', coef=NULL){
+eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH', prefix=NULL, coef=NULL){
   stopifnot(length(cols)>=1, cols %in% c('CI.L', 'CI.R', 'AveExpr',  't', 'F', 'P.Value', 'adj.P.Val', 'B', 'logFC'))
   
   if (!is.null(coef) && length(coef)>=2){
@@ -42,6 +42,6 @@ eztoptab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method
   } else {
     colnames(tt) <- sub('adj\\.P\\.Val', adjust.method, colnames(tt))
   } 
-  if (prefix!=''){ colnames(tt) <- paste(prefix, colnames(tt), sep='.') }
+  if (!is.null(prefix)){ colnames(tt) <- paste(prefix, colnames(tt), sep='.') }
   return(tt)
 }

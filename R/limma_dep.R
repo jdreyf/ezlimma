@@ -26,14 +26,14 @@ limma_dep <- function(object, Y, covariates=NULL, prefix=NULL){
     stop("Y treated as numeric, but has one or more columns with no variance.")
   }
 
-  dat <- cbind(Y, covariates)
+  #dat must be data.frame for model.matrix, but data.frame(Y, covariates) with covariates=NULL gives empty col
+  dat <- data.frame(cbind(Y, covariates))
   # include intercept in the design matrix
   design <- stats::model.matrix(~., data=dat)
   # exclude intercept in coef
-  # if ncol(Y) == 1, then coef = 2 and limmaF will return 't' instead of 'F'
-  coef <- 2:ncol(Y) 
-  tt <- limmaF(object, design = design, coef=coef, cols=c('F', 'P.Value'))
-  
-  if (!is.null(prefix)){ colnames(tt) <- paste(prefix, colnames(tt), sep='.') }
+  # if ncol(Y) == 1, then coef = 2
+  coef <- 1:ncol(as.matrix(Y)) + 1
+  #limmaF == limma_cor Y is vector, will return 't' instead of 'F'
+  tt <- limmaF(object=object, design = design, coef=coef, prefix=prefix)
   return(tt)
 }

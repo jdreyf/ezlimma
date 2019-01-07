@@ -5,7 +5,7 @@
 \title{Wrapper for limma topTable function}
 \usage{
 eztoptab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
-  adjust.method = "BH", prefix = "", coef = NULL)
+  adjust.method = "BH", prefix = NULL, coef = NULL)
 }
 \arguments{
 \item{fit}{should be an object of class \code{MArrayLM} as produced by 

@@ -4,7 +4,7 @@
 \alias{limmaF}
 \title{F-test of each row of object using design matrix}
 \usage{
-limmaF(object, design, coef = colnames(design), prefix = "",
+limmaF(object, design, coef = colnames(design), prefix = NULL,
   weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", reorder.rows = TRUE, cols = c("F", "P.Value"))
 }
