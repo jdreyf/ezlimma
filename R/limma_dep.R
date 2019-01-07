@@ -26,20 +26,13 @@ limma_dep <- function(object, Y, covariates=NULL, prefix=NULL){
     stop("Y treated as numeric, but has one or more columns with no variance.")
   }
 
-  if (ncol(as.matrix(Y)) == 1){
-    if (is.null(covariates)){
-      tt <- limma_cor(object=object, phenotype = Y, cols=c('t', 'P.Value'))
-    } else {
-      dat <- data.frame(Y, covariates)
-      design <- stats::model.matrix(~., data=dat)
-      #design includes an intercept, so coefficient of Y is tested
-      tt <- limma_cor(object = object, design = design, cols=c('t', 'P.Value'))
-    }
-  } else {
-    coef <- 1:ncol(Y)
-    design <- cbind(Y, covariates)
-    tt <- limmaF(object, design = design, coef=coef, cols=c('F', 'P.Value'))
-  }
+  dat <- cbind(Y, covariates)
+  # include intercept in the design matrix
+  design <- stats::model.matrix(~., data=dat)
+  # exclude intercept in coef
+  # if ncol(Y) == 1, then coef = 2 and limmaF will return 't' instead of 'F'
+  coef <- 2:ncol(Y) 
+  tt <- limmaF(object, design = design, coef=coef, cols=c('F', 'P.Value'))
   
   if (!is.null(prefix)){ colnames(tt) <- paste(prefix, colnames(tt), sep='.') }
   return(tt)
