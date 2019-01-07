@@ -7,9 +7,11 @@ test_that("bad Y", {
 })
 
 test_that("binary Y", {
-  ld <- limma_dep(object=M, Y=y)
+  ld <- limma_dep(object=M, Y=grp2)
   expect_equal(ld$p, eztt[rownames(ld), "Last3vsFirst3.p"])
-  ld2 <- limma_dep(object=M, Y=y, covar=covar)
+  
+  #test that results are diff if add covar
+  ld2 <- limma_dep(object=M, Y=grp2, covar=covar)
   expect_equal(mean(ld2$p == eztt[rownames(ld2), "Last3vsFirst3.p"]), 0)
 })
 
@@ -24,7 +26,7 @@ test_that("continuous Y", {
 
 test_that("matrix Y", {
   #compare to limmaF
-  y3 <- cbind(y, pheno.v)
+  y3 <- cbind(grp2, pheno.v)
   rownames(y3) <- colnames(M)
   ld3 <- limma_dep(object=M, Y=y3)
   expect_equal(colnames(ld3)[1], "F")
