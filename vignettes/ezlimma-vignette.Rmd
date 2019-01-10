@@ -12,16 +12,19 @@ vignette: >
 ## Introduction
 Welcome to `ezlimma`. This package is a wrapper for the commonly used `limma` package, which makes `limma` easier to use and offers some functionality that adds value to `limma`'s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of `limma`'s parameters, such as those in `lmFit`; when the parameters are not exposed, `limma`'s default is used.
 
-## Install package
+## Install & load package
 See README.md.
 
-## Load package
-```{r lib}
+```{r}
+library(limma)
 library(ezlimma)
 ```
 
 ## Simulate data
 To demonstrate the package on a dataset, I'll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from `limma` `contrasts.fit`.
+
+We treat this data as being already processed. For many datasets, there are zeroes or missing values that might need to be imputed; samples need to be normalized to make them comparable and amenable to statistical tests; absent genes need to be removed; sample outliers need to be assessed to examine whether some experimental variables or batch effects need to be accounted for, or the samples need to be removed or down-weighted; and trends between a gene's mean expression and its variance should be accounted for, especially in RNA-seq data, with `limma`'s `voom` function.
+
 ```{r sim}
 set.seed(42)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
