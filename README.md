@@ -17,6 +17,7 @@ install_github(repo="jdreyf/ezlimma", build_vignettes = TRUE)
 ## Usage
 The vignette presents a tutorial. To see the vignette:
 ```
+library(limma)
 library(ezlimma)
 browseVignettes(package="ezlimma")
 ```
