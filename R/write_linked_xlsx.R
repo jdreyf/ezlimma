@@ -12,6 +12,7 @@
 #' this Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-packag-doesnt-work}{thread}, 
 #' in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
 #' called directly by the user.
+#' @export
 
 # don't import xlsx, since don't want it to be installed with ezlimma
 write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
