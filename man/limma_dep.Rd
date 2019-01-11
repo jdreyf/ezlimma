@@ -19,6 +19,7 @@ limma_dep(object, Y, covariates = NULL, prefix = NULL)
 Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
 }
 \description{
-Test (conditional) dependence of \code{Y} with rows of \code{object} via \code{\link[ezlimma]{limmaF}} or 
-\code{\link[ezlimma]{limma_cor}}.
+Test (conditional) dependence of \code{Y} with rows of \code{object} via \code{\link[ezlimma]{limmaF}}. Let a row of
+\code{object} be \eqn{o}, then we test the coefficient(s) of \code{Y} in the model \eqn{o = 1 + Y + covariates}. All
+inputs should be numeric, unlike \code{\link[ezlimma]{limma_contrasts}}.
 }

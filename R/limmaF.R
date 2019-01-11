@@ -39,7 +39,7 @@
 #' lf <- limmaF(object=object, design=design, coef=colnames(design)[1:3])
 #' @export
 
-limmaF <- function(object, design, coef=colnames(design), prefix='', weights=NULL, trend=FALSE, block = NULL, 
+limmaF <- function(object, design, coef=colnames(design), prefix=NULL, weights=NULL, trend=FALSE, block = NULL, 
                    correlation = NULL, adjust.method='BH', reorder.rows=TRUE, cols=c('F', 'P.Value')){
   
   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object),
@@ -60,6 +60,6 @@ limmaF <- function(object, design, coef=colnames(design), prefix='', weights=NUL
   res.mat <- eztoptab(fit2, coef=coef, cols=cols, adjust.method=adjust.method)
   
   if (!reorder.rows){ res.mat <- res.mat[rownames(object),] }
-  if (prefix!=''){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
+  if (!is.null(prefix)){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep='.') }
   return(res.mat)
 }

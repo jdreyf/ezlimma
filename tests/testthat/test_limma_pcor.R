@@ -1,8 +1,8 @@
 context("ezpcor")
 
 test_that("batch --> covar", {
-  res0 <- limma_pcor(object=M, phenotype=pheno.v, covariates = y)
-  res1 <- limma_pcor(object=M, phenotype=pheno.v, covariates = as.numeric(y==1))
+  res0 <- limma_pcor(object=M, phenotype=pheno.v, covariates = grp2)
+  res1 <- limma_pcor(object=M, phenotype=pheno.v, covariates = as.numeric(grp2==1))
   #parametrization changes only AveExpr
   expect_equal(res0$p, res1$p)
   

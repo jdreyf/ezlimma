@@ -21,7 +21,7 @@ pheno2 <- pheno.v
 pheno2[1] <- NA
 covar <- rnorm(length(pheno.v))
 
-grp2 <- y <- batch2design(grp)
+grp2 <- batch2design(grp)
 
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
 eztt <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v)

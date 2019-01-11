@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2019-01-03" />
+<meta name="date" content="2019-01-10" />
 
 <title>ezlimma vignette</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2019-01-03</em></h4>
+<h4 class="date"><em>2019-01-10</em></h4>
 
 
 
@@ -100,18 +100,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Introduction</h2>
 <p>Welcome to <code>ezlimma</code>. This package is a wrapper for the commonly used <code>limma</code> package, which makes <code>limma</code> easier to use and offers some functionality that adds value to <code>limma</code>’s functions, such as mediation analysis and allowing for writing pathway results to Excel workbooks that link to the feature-level (e.g. gene-level) results. It exposes some of <code>limma</code>’s parameters, such as those in <code>lmFit</code>; when the parameters are not exposed, <code>limma</code>’s default is used.</p>
 </div>
-<div id="install-package" class="section level2">
-<h2>Install package</h2>
+<div id="install-load-package" class="section level2">
+<h2>Install &amp; load package</h2>
 <p>See README.md.</p>
-</div>
-<div id="load-package" class="section level2">
-<h2>Load package</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ezlimma)</code></pre></div>
-<pre><code>## Loading required package: limma</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(limma)
+<span class="kw">library</span>(ezlimma)</code></pre></div>
 </div>
 <div id="simulate-data" class="section level2">
 <h2>Simulate data</h2>
 <p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <code>limma</code> <code>contrasts.fit</code>.</p>
+<p>We treat this data as being already processed. For many datasets, there are zeroes or missing values that might need to be imputed; samples need to be normalized to make them comparable and amenable to statistical tests; absent genes need to be removed; sample outliers need to be assessed to examine whether some experimental variables or batch effects need to be accounted for, or the samples need to be removed or down-weighted; and trends between a gene’s mean expression and its variance should be accounted for, especially in RNA-seq data, with <code>limma</code>’s <code>voom</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
 M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">100</span><span class="op">*</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="fl">0.3</span>), <span class="dt">nrow=</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">6</span>)
 <span class="kw">dimnames</span>(M) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(M)), <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(M)))
@@ -954,7 +952,7 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.2.0 limma_3.36.1 
+## [1] ezlimma_0.2.1 limma_3.36.1 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] compiler_3.5.0  magrittr_1.5    htmltools_0.3.6 tools_3.5.0    

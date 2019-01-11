@@ -47,6 +47,7 @@ test_that("E nominal --> design", {
   expect_warning(hm <- hitman(E=grp.tmp, M=M, Y=pheno.v))
   expect_lt(mean(hm$EMY.p < 0.05), 0.2)
   
+  set.seed(0)
   covar.tmp <- rnorm(length(pheno.v))
   expect_warning(hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp))
   expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)

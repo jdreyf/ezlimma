@@ -5,7 +5,7 @@
 \title{Test correlation of each row of an object to each column of pheno.mat}
 \usage{
 multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = TRUE, prefix = "", adjust.method = "BH",
+  "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
   limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{

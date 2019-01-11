@@ -27,14 +27,14 @@
 #' @export
 
 multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendall', 'limma'),
-                     reorder.rows=TRUE, prefix='', adjust.method='BH', 
+                     reorder.rows=TRUE, prefix=NULL, adjust.method='BH', 
                      limma.cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
   method <- match.arg(method)
   if (is.null(dim(pheno.mat))) stop("pheno.mat needs to have rows and columns.")
   stopifnot(ncol(object)==nrow(pheno.mat), rownames(pheno.mat)==colnames(object))
   cor.mat <- NULL
   for (i in 1:ncol(pheno.mat)){
-    prefix.tmp <- ifelse(prefix!='', paste(prefix, colnames(pheno.mat)[i], sep='.'), colnames(pheno.mat)[i])
+    prefix.tmp <- ifelse(!is.null(prefix), paste(prefix, colnames(pheno.mat)[i], sep='.'), colnames(pheno.mat)[i])
     if (method=='limma'){
       cor.tmp <- data.matrix(limma_cor(object, pheno.mat[,i], reorder.rows=FALSE, prefix=prefix.tmp, cols=limma.cols))
     } else {
