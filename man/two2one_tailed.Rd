@@ -4,8 +4,8 @@
 \alias{two2one_tailed}
 \title{Convert 2-tailed into 1-tailed p-values}
 \usage{
-two2one_tailed(tab, stat.col = 1, p.col = 2, alternative = c("greater",
-  "less"))
+two2one_tailed(tab, stat.col = 1, p.col = 2,
+  alternative = c("greater", "less"))
 }
 \arguments{
 \item{tab}{table with statistics from \code{fry}.}

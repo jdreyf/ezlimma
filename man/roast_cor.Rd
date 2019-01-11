@@ -9,8 +9,8 @@ roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
-  min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided", "less",
-  "greater"), n.toptabs = Inf, nrot = 999, seed = 0)
+  min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided",
+  "less", "greater"), n.toptabs = Inf, nrot = 999, seed = 0)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 

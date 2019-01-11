@@ -5,12 +5,13 @@
 \title{Test contrasts of gene sets between groups using rotation testing with output
 to Excel}
 \usage{
-roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v, design = NULL,
-  fun = c("fry", "mroast"), set.statistic = "mean", name = NA,
-  weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
-  correlation = NULL, adjust.method = "BH", min.ngenes = 3,
-  max.ngenes = 1000, nrot = 999, alternative = c("two.sided", "less",
-  "greater"), n.toptabs = Inf, seed = 0)
+roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v,
+  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
+  name = NA, weights = NA, gene.weights = NULL, trend = FALSE,
+  block = NULL, correlation = NULL, adjust.method = "BH",
+  min.ngenes = 3, max.ngenes = 1000, nrot = 999,
+  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf,
+  seed = 0)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or

@@ -5,13 +5,15 @@ R package that streamlines & extends the popular R/Bioconductor package `limma`.
 [![Coverage Status](https://img.shields.io/codecov/c/github/jdreyf/ezlimma/master.svg)](https://codecov.io/github/jdreyf/ezlimma?branch=master)
 
 ## Install
-Install `ezlimma` from GitHub using `devtools` within R. You must install `devtools` if you haven't before. `ezlimma` depends on `limma` so you must also install this if you haven't before.
+Install `ezlimma` from GitHub using `remotes` within R. You must install `remotes` if you haven't before. `ezlimma` depends on `limma` so you must also install this if you haven't before.
 ```
+#if haven't already installed limma
 source("http://bioconductor.org/biocLite.R")
-biocLite("limma") #if haven't already installed limma
-install.packages("devtools") #if haven't already installed devtools
-library(devtools)
-install_github(repo="jdreyf/ezlimma", build_vignettes = TRUE)
+biocLite("limma")
+
+install.packages("remotes") #if haven't already installed remotes
+library(remotes)
+remotes::install_github(repo="jdreyf/ezlimma", build_opts = c("--no-resave-data", "--no-manual"))
 ```
 
 ## Usage
