@@ -12,11 +12,11 @@ Description: Functions for more easily using limma, such as to test multiple
 Depends:
 	limma (>= 3.34.8)
 Imports:
+	knitr,
 	statmod,
 	stats
 Suggests:
 	covr,
-    knitr,
 	rJava,
     rmarkdown,
     testthat,
