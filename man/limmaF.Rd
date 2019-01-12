@@ -6,7 +6,8 @@
 \usage{
 limmaF(object, design, coef = colnames(design), prefix = NULL,
   weights = NULL, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", reorder.rows = TRUE, cols = c("F", "P.Value"))
+  adjust.method = "BH", reorder.rows = TRUE, cols = c("F",
+  "P.Value"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 

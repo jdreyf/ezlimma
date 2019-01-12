@@ -10,7 +10,7 @@ batch2design <- function(batch){
   stopifnot(length(unique(batch)) > 1)
   
   batch <- as.factor(batch)
-  contrasts(batch) <- contr.sum(levels(batch))
-  batch <- model.matrix(~batch)[, -1, drop = FALSE]
+  stats::contrasts(batch) <- stats::contr.sum(levels(batch))
+  batch <- stats::model.matrix(~batch)[, -1, drop = FALSE]
   return(batch)
 }
