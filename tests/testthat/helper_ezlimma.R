@@ -1,5 +1,6 @@
-library(testthat)
 library(covr)
+library(limma) #for EList-class
+library(testthat)
 
 #example from limma::contrasts.fit
 set.seed(0)
