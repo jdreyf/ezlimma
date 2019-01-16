@@ -5,6 +5,8 @@ R package that streamlines & extends the popular R/Bioconductor package `limma`.
 [![Coverage Status](https://img.shields.io/codecov/c/github/jdreyf/ezlimma/master.svg)](https://codecov.io/github/jdreyf/ezlimma?branch=master)
 
 ## Install
+On Windows, you need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
+
 Install `ezlimma` from GitHub using `remotes` within R. You must install `remotes` if you haven't before. `ezlimma` depends on `limma` so you must also install this if you haven't before.
 ```
 #if haven't already installed limma
