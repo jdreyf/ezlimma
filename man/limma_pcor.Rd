@@ -16,7 +16,7 @@ genes and columns to samples.}
 \code{ncol(object)}. If the vector is named, names should match 
 \code{colnames(object)}.}
 
-\item{covariates}{Numeric matrix with one or more covariates as columns passed to 
+\item{covariates}{Numeric matrix or dataframe with one or more covariates as columns passed to 
 \code{\link[limma]{removeBatchEffect}}.}
 
 \item{reorder.rows}{logical, should rows be reordered by p-value or be left in 

@@ -27,8 +27,8 @@
 
 #can add covariates in future
 hitman <- function(E, M, Y, covariates=NULL){
-  stopifnot(is.numeric(E), is.numeric(M), is.numeric(Y), !is.na(E), !is.na(Y), length(E) > 0, nrow(M) > 1,
-            nrow(as.matrix(E))==ncol(M), length(Y)==ncol(M), names(Y)==colnames(M))
+  stopifnot(limma::isNumeric(E), limma::isNumeric(M), limma::isNumeric(Y), !is.na(E), !is.na(Y), length(E) > 0, 
+            nrow(M) > 1, nrow(as.matrix(E))==ncol(M), length(Y)==ncol(M), names(Y)==colnames(M))
   
   if (ncol(as.matrix(E))==1){
     stopifnot(colnames(M)==names(E))

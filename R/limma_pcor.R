@@ -8,7 +8,7 @@
 #' @param phenotype Numeric vector of phenotypes of the samples. Should be same length as
 #'   \code{ncol(object)}. If the vector is named, names should match 
 #'   \code{colnames(object)}.
-#' @param covariates Numeric matrix with one or more covariates as columns passed to 
+#' @param covariates Numeric matrix or dataframe with one or more covariates as columns passed to 
 #' \code{\link[limma]{removeBatchEffect}}.
 #' @param reorder.rows logical, should rows be reordered by p-value or be left in 
 #'   the same order as \code{object}?
@@ -17,7 +17,7 @@
 #' @return Dataframe.
 
 limma_pcor <- function(object, phenotype, covariates, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){
-  stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), is.numeric(covariates),
+  stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), limma::isNumeric(covariates),
             nrow(as.matrix(covariates))==ncol(object))
   
   #pheno residuals

@@ -57,6 +57,12 @@ test_that("E nominal --> design", {
   expect_error(hitman(E=rep(NA, length(pheno.v)-1), M=M, Y=pheno.v))
 })
 
+test_that("M df", {
+  mdf <- data.frame(M)
+  hm <- hitman(E=ee, M=mdf, Y=pheno.v)
+  expect_lt(mean(hm$EMY.p < 0.05), 0.1)
+})
+
 test_that("gene1", {
   hm <- hitman(E=grp2, M=M, Y=M[1,])
   expect_equal(rownames(hm)[1], "gene1")

@@ -13,7 +13,7 @@
 
 limma_dep <- function(object, Y, covariates=NULL, prefix=NULL){
   stopifnot(ncol(object)==nrow(as.matrix(Y)), !is.null(covariates)||all(nrow(covariates)==nrow(as.matrix(Y))),
-            is.numeric(Y))
+            limma::isNumeric(Y))
   
   p.col <- "p"
   
