@@ -21,7 +21,7 @@ library(ezlimma)
 ```
 
 ## Simulate data
-To demonstrate the package on a dataset, I'll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from `limma` `contrasts.fit`.
+To demonstrate the package on a dataset, I'll simulate log2 expression data with 100 genes and 6 samples in two groups with a continuous covariate. The covariate and the first gene will be associated with group. This is similar to the example data from `limma` `contrasts.fit`.
 
 We treat this data as being already processed. For many datasets, there are zeroes or missing values that might need to be imputed; samples need to be normalized to make them comparable and amenable to statistical tests; absent genes need to be removed; sample outliers need to be assessed to examine whether some experimental variables or batch effects need to be accounted for, or the samples need to be removed or down-weighted; and trends between a gene's mean expression and its variance should be accounted for, especially in RNA-seq data, with `limma`'s `voom` function.
 
@@ -29,15 +29,17 @@ We treat this data as being already processed. For many datasets, there are zero
 set.seed(42)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
 dimnames(M) <- list(paste0("gene", 1:nrow(M)), paste0("sample", 1:ncol(M)))
-grp <- rep(c("First3", "Last3"), each=3)
 M[1,1:3] <- M[1,1:3] + 2
+
+pheno <- data.frame(grp=rep(c("First3", "Last3"), each=3), yy=rnorm(ncol(M)))
+pheno$yy[1:3] <- pheno$yy[1:3]-2
 ```
 
 ## Gene level analysis
 Assume we want to test if genes are changed in `First3`, in `Last3`, or in `Last3 - First3`. We can do this in two lines of code,
 ```{r lc}
 contr.v <- c(First3="First3", Last3="Last3", Last3vsFirst3="Last3-First3")
-res0 <- limma_contrasts(M, grp=grp, contrast.v = contr.v)
+res0 <- limma_contrasts(M, grp=pheno$grp, contrast.v = contr.v)
 ```
 `First3` tests if the mean expression of genes in these samples differs from zero, and `Last3vsFirst3` tests difference between groups. 
 
@@ -46,15 +48,9 @@ This returns a data frame that looks like:
 knitr::kable(signif(res0[1:10,], 3))
 ```
 
-Similarly, we can test association to a phenotype variable. Let's say we have a phenotype vector, 
+We can test association to the continuous covariate with:
 ```{r}
-pheno.v <- rnorm(ncol(M))
-pheno.v[1:3] <- pheno.v[1:3]-1
-```
-
-we can test association with,
-```{r}
-res1 <- ezcor(M, pheno.v, method="pearson")
+res1 <- ezcor(M, pheno$yy, method="pearson")
 ```
 
 where `method` can be any of `"pearson"`, `"kendall"`, or `"spearman"`. This returns a data frame like,
@@ -62,9 +58,9 @@ where `method` can be any of `"pearson"`, `"kendall"`, or `"spearman"`. This ret
 knitr::kable(signif(res1[1:10,], 3))
 ```
 
-Similarly, we can test association using linear regression with `limma`, where the model is *gene expression = a + bx + error*, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,
+Similarly, we can test association using linear regression with `limma`, where the model is *gene expression = a + bx + error*, and we test coefficient 2, i.e. the null hypothesis that *b=0*. So it returns slopes rather than correlation coefficients. The code is,
 ```{r}
-res2 <- limma_cor(M, phenotype = pheno.v)
+res2 <- limma_cor(M, phenotype = pheno$yy)
 ```
 
 The output is,
@@ -72,10 +68,9 @@ The output is,
 knitr::kable(signif(res2[1:10,], 3))
 ```
 
-Because this is a regression, we can also adjust for covariates. We do this by creating our own design matrix instead of letting `limma_cor` create one from `phenotype`.
+Because this is a regression, we can test for association to `yy` while adjusting for `grp`. We do this by creating our own design matrix instead of letting `limma_cor` create one from `phenotype`.
 ```{r}
-covar <- rnorm(ncol(M))
-design <- model.matrix(~1+pheno.v+covar)
+design <- model.matrix(~1+yy+grp, data=pheno)
 res3 <- limma_cor(M, design = design)
 ```
 
@@ -86,7 +81,7 @@ knitr::kable(signif(res3[1:10,], 3))
 
 We can also test multiple phenotypes together. Say we had a matrix of phenotypes as
 ```{r}
-pheno.mat <- cbind(pheno1=pheno.v, pheno2=rnorm(ncol(M)))
+pheno.mat <- cbind(pheno1=pheno$yy, pheno2=rnorm(ncol(M)))
 ```
 
 then we could test both phenotypes together in one line, as
@@ -102,8 +97,8 @@ where the result is ordered by the combined p-value of the two associations per 
 
 We  can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (`hitman`). We set the exposure (`E`) to group, the outcome (`Y`) to `pheno.v`, and test each gene in `M` as a mediator. For `hitman` we transform the exposure to numeric, and set the names of the `phenoype` to those of `M`.  
 ```{r}
-grp.num <- batch2design(grp)
-res.hit <- hitman(E = grp.num, M = M, Y = setNames(pheno.v, nm=colnames(M)))
+grp.num <- batch2design(pheno$grp)
+res.hit <- hitman(E = grp.num, M = M, Y = setNames(pheno$yy, nm=colnames(M)))
 ```
 
 `hitman` returns a table with a combined ("EMY") p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in `M`, and the conditional association of the gene in `M` to `Y` given `E`.
@@ -122,7 +117,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
 ```
 This object would normally be read in using `read_gmt`. Then we can test each of these gene sets.
 ```{r}
-res5 <- roast_contrasts(object=M, G=G, stats.tab=res0, grp=grp, contrast.v = contr.v, fun="fry", name=NA)
+res5 <- roast_contrasts(object=M, G=G, stats.tab=res0, grp=pheno$grp, contrast.v = contr.v, fun="fry", name=NA)
 ```
 
 If we set `name` to a value other than `NA`, this would create a folder with one CSV per pathway, and an Excel file that looks like

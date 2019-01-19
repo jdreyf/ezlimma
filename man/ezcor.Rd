@@ -6,7 +6,7 @@
 \usage{
 ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
   prefix = NULL, adjust.method = "BH", alternative = "two.sided",
-  check_names = FALSE)
+  check_names = TRUE)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -33,7 +33,7 @@ the same order as \code{object}?}
 the initial letter. \code{"greater"} corresponds to positive association, 
 \code{"less"} to negative association. See \code{\link[stats]{cor.test}}.}
 
-\item{check_names}{Logical indicating if \code{names(phenotype)} must}
+\item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 }
 \value{
 Dataframe.

@@ -10,7 +10,8 @@ roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
   weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
   min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided",
-  "less", "greater"), n.toptabs = Inf, nrot = 999, seed = 0)
+  "less", "greater"), n.toptabs = Inf, nrot = 999,
+  check_names = TRUE, seed = 0)
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -74,6 +75,8 @@ corresponds to positive association, \code{"less"} to negative association.}
 Excel}
 
 \item{nrot}{number of rotations used to compute the p-values in \code{mroast}.}
+
+\item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}

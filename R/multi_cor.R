@@ -18,6 +18,7 @@
 #'   \code{object}?
 #' @param prefix character string to add to beginning of column names.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @param check_names Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.
 #' @param limma.cols if \code{method="limma"}, this specifies \code{cols} from 
 #'   \code{\link{limma_cor}}. Ignored without a warning if \code{method} not 
 #'   \code{"limma"}.
@@ -26,12 +27,17 @@
 #' @details  Each column of \code{pheno.mat} is tested independently.
 #' @export
 
-multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendall', 'limma'),
-                     reorder.rows=TRUE, prefix=NULL, adjust.method='BH', 
+multi_cor <- function(object, pheno.mat, method=c('pearson', 'spearman', 'kendall', 'limma'), reorder.rows=TRUE, 
+                      prefix=NULL, adjust.method='BH', check_names=TRUE,
                      limma.cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
   method <- match.arg(method)
+  
   if (is.null(dim(pheno.mat))) stop("pheno.mat needs to have rows and columns.")
-  stopifnot(ncol(object)==nrow(pheno.mat), rownames(pheno.mat)==colnames(object))
+  stopifnot(ncol(object)==nrow(pheno.mat))
+  if (check_names){
+    stopifnot(rownames(pheno.mat)==colnames(object))
+  }
+  
   cor.mat <- NULL
   for (i in 1:ncol(pheno.mat)){
     prefix.tmp <- ifelse(!is.null(prefix), paste(prefix, colnames(pheno.mat)[i], sep='.'), colnames(pheno.mat)[i])

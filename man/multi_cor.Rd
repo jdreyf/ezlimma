@@ -6,7 +6,8 @@
 \usage{
 multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
   "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
-  limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
+  check_names = TRUE, limma.cols = c("AveExpr", "P.Value", "adj.P.Val",
+  "logFC"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -28,6 +29,8 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 \item{prefix}{character string to add to beginning of column names.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
+
+\item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 
 \item{limma.cols}{if \code{method="limma"}, this specifies \code{cols} from 
 \code{\link{limma_cor}}. Ignored without a warning if \code{method} not 

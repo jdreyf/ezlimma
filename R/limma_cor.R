@@ -28,6 +28,7 @@
 #' @param reduce.df Number of degrees of freedom to subtract from residual. This may be necessary if
 #' \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
 #' \code{\link[limma]{lmFit}}.
+#' @param check_names Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.
 #' @param cols columns of \code{topTable} output the user would like in the 
 #'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
 #'  is specified, \code{FC} will also be given.
@@ -37,15 +38,17 @@
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
-limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, 
-                      trend=FALSE, adjust.method='BH', reorder.rows=TRUE, reduce.df=0,
+limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, adjust.method='BH', 
+                      reorder.rows=TRUE, reduce.df=0, check_names=TRUE,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
              reduce.df >= 0, is.null(phenotype)!=is.null(design))
   
   if (!is.null(phenotype)){
-    stopifnot(length(phenotype)==ncol(object), names(phenotype)==colnames(object), is.numeric(phenotype), 
-              !is.na(phenotype))
+    stopifnot(length(phenotype)==ncol(object), limma::isNumeric(phenotype), !is.na(phenotype))
+    if (check_names){
+      stopifnot(names(phenotype)==colnames(object))
+    }
     #if want to handle NAs in pheno, need to account for object, object$weights, and weights (as vector or matrix)
     design <- stats::model.matrix(~1+phenotype)
   } else {

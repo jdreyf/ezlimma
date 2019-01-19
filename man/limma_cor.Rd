@@ -6,8 +6,8 @@
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
   weights = NA, trend = FALSE, adjust.method = "BH",
-  reorder.rows = TRUE, reduce.df = 0, cols = c("AveExpr", "P.Value",
-  "adj.P.Val", "logFC"))
+  reorder.rows = TRUE, reduce.df = 0, check_names = TRUE,
+  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{A matrix-like data object containing log-ratios or 
@@ -43,6 +43,8 @@ variance? Default is that the prior variance is constant.}
 \item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if
 \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
 \code{\link[limma]{lmFit}}.}
+
+\item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 
 \item{cols}{columns of \code{topTable} output the user would like in the 
 result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
