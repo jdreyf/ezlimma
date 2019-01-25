@@ -57,8 +57,7 @@ If \code{logFC} is specified, \code{FC} will automatically also be given.}
 Data frame.
 }
 \description{
-Apply lmFit, contrasts.fit, & eBayes to one or more contrasts by passing each 
-object row, phenotype groups, and contrasts to only this function.
+Apply \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts.
 }
 \details{
 If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 

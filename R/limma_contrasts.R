@@ -1,7 +1,6 @@
 #' Apply lmFit, contrasts.fit, & eBayes to one or more contrasts
 #' 
-#' Apply lmFit, contrasts.fit, & eBayes to one or more contrasts by passing each 
-#' object row, phenotype groups, and contrasts to only this function.
+#' Apply \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts.
 #' 
 #' @param object A matrix-like data object containing log-ratios or 
 #'   log-expression values for a series of arrays, with rows corresponding to 
