@@ -10,31 +10,29 @@ limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
   cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values for a series of samples, with rows corresponding to 
-genes and columns to samples.}
+\item{object}{A matrix-like data object containing log-ratios or log-expression values for a series of samples, with 
+rows corresponding to genes and columns to samples.}
 
 \item{phenotype}{Vector of phenotypes of the samples. Should be same length as
 \code{ncol(object)}. If the vector is named, names should match 
 \code{colnames(object)}.}
 
-\item{design}{the design matrix of the experiment, with rows corresponding to 
-samples and columns to coefficients to be estimated. Can be used to provide 
-covariates.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
+be estimated. Can be used to provide covariates.}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{weights}{non-negative observation weights. Can be a numeric matrix of 
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of 
 individual weights, of same size as the object expression matrix, or a 
 numeric vector of array weights with length equal to \code{ncol} of the 
 expression matrix, or a numeric vector of gene weights with length equal to 
 \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
  (with length one) doesn't pass weights to \code{limma}.}
 
-\item{trend}{logical, should an intensity-trend be allowed for the prior 
+\item{trend}{Logical, should an intensity-trend be allowed for the prior 
 variance? Default is that the prior variance is constant.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing.}
 
 \item{coef}{Integer coefficient of the linear model to test; passed to \code{\link[ezlimma]{eztoptab}}.}
 
@@ -43,17 +41,16 @@ variance? Default is that the prior variance is constant.}
 \code{object}?}
 
 \item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if
-\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
+\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} returned by
 \code{\link[limma]{lmFit}}.}
 
 \item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 
-\item{cols}{columns of \code{topTable} output the user would like in the 
-result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-is specified, \code{FC} will also be given.}
+\item{cols}{Columns of \code{\link[limma]{topTable}} output the user would like in the result. Some column names
+are changed, such as \code{adj.P.Val} -->  \code{FDR} and \code{logFC} --> \code{slope}.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
 Test correlation of each row of object to phenotype. By default, it uses the model 
