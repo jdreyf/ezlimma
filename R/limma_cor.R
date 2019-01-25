@@ -1,7 +1,7 @@
 #' Test correlation of each row of object to phenotype using moderated variance
 #'
-#' Test correlation of each row of object to phenotype using 
-#' \code{design=model.matrix(~1+phenotype)}, testing 2nd coefficient.
+#' Test correlation of each row of object to phenotype. By default, it uses the model 
+#' \code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient.
 #'
 #' @param object A matrix-like data object containing log-ratios or 
 #'  log-expression values for a series of samples, with rows corresponding to 
@@ -22,6 +22,7 @@
 #' @param trend logical, should an intensity-trend be allowed for the prior 
 #'  variance? Default is that the prior variance is constant.
 #' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @param coef Integer coefficient of the linear model to test; passed to \code{\link[ezlimma]{eztoptab}}.
 #' @param reorder.rows logical, should rows be reordered by F-statistic from 
 #'  \code{\link[limma]{toptable}} or be left in the same order as 
 #'  \code{object}?
@@ -38,7 +39,7 @@
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @export
 
-limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, adjust.method='BH', 
+limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, adjust.method='BH', coef=2,
                       reorder.rows=TRUE, reduce.df=0, check_names=TRUE,
                       cols=c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC')){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
@@ -71,7 +72,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   }
   
   fit2 <- limma::eBayes(fit, trend=trend)
-  res.mat <- eztoptab(fit2, coef=2, cols=cols, adjust.method=adjust.method)
+  res.mat <- eztoptab(fit2, coef=coef, cols=cols, adjust.method=adjust.method)
   
   #change logFC to coeff and get rid of FC
   colnames(res.mat) <- gsub('logFC', 'slope', colnames(res.mat))

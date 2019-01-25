@@ -5,7 +5,7 @@
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
-  weights = NA, trend = FALSE, adjust.method = "BH",
+  weights = NA, trend = FALSE, adjust.method = "BH", coef = 2,
   reorder.rows = TRUE, reduce.df = 0, check_names = TRUE,
   cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
@@ -36,6 +36,8 @@ variance? Default is that the prior variance is constant.}
 
 \item{adjust.method}{method used to adjust the p-values for multiple testing.}
 
+\item{coef}{Integer coefficient of the linear model to test; passed to \code{\link[ezlimma]{eztoptab}}.}
+
 \item{reorder.rows}{logical, should rows be reordered by F-statistic from 
 \code{\link[limma]{toptable}} or be left in the same order as 
 \code{object}?}
@@ -54,8 +56,8 @@ is specified, \code{FC} will also be given.}
 Dataframe.
 }
 \description{
-Test correlation of each row of object to phenotype using 
-\code{design=model.matrix(~1+phenotype)}, testing 2nd coefficient.
+Test correlation of each row of object to phenotype. By default, it uses the model 
+\code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient.
 }
 \details{
 Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
