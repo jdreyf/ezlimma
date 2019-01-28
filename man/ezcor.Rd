@@ -9,34 +9,29 @@ ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
   check_names = TRUE)
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values, with rows corresponding to 
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
 genes and columns to samples.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as
-\code{ncol(object)}. If the vector is named, names should match 
-\code{colnames(object)}.}
+\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector is 
+named, names should match \code{colnames(object)}.}
 
-\item{method}{a character string indicating which correlation coefficient is
-to be used for the test. One of \code{"pearson"}, \code{"kendall"}, or
-\code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.}
+\item{method}{Character string indicating which correlation coefficient to be used for the test. One of 
+\code{"pearson"}, \code{"kendall"}, or \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.}
 
-\item{reorder.rows}{logical, should rows be reordered by p-value or be left in 
-the same order as \code{object}?}
+\item{reorder.rows}{Logical, should rows be reordered by p-value or be left in the same order as \code{object}?}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing.}
 
-\item{alternative}{indicates the alternative hypothesis and must be one of 
-\code{"two.sided"}, \code{"greater"}, or \code{"less"}. You can specify just
-the initial letter. \code{"greater"} corresponds to positive association, 
-\code{"less"} to negative association. See \code{\link[stats]{cor.test}}.}
+\item{alternative}{Alternative hypothesis, and must be one of\code{"two.sided"}, \code{"greater"}, or \code{"less"}. 
+You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
+negative association. See \code{\link[stats]{cor.test}}.}
 
-\item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
+\item{check_names}{Logical, should \code{names(phenotype)=rownames(object)} be checked.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
 Test correlation of each row of an object to a phenotype vector using one of 

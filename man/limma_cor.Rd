@@ -10,12 +10,11 @@ limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
   cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or log-expression values for a series of samples, with 
+\item{object}{Matrix-like data object containing log-ratios or log-expression values for a series of samples, with 
 rows corresponding to genes and columns to samples.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as
-\code{ncol(object)}. If the vector is named, names should match 
-\code{colnames(object)}.}
+\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector 
+is named, names should match \code{colnames(object)}.}
 
 \item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
 be estimated. Can be used to provide covariates.}
@@ -29,20 +28,19 @@ expression matrix, or a numeric vector of gene weights with length equal to
 \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
  (with length one) doesn't pass weights to \code{limma}.}
 
-\item{trend}{Logical, should an intensity-trend be allowed for the prior 
-variance? Default is that the prior variance is constant.}
+\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior 
+variance is constant.}
 
-\item{adjust.method}{Method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method to adjust p-values for multiple testing.}
 
 \item{coef}{Integer coefficient of the linear model to test; passed to \code{\link[ezlimma]{eztoptab}}.}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}?}
+\item{reorder.rows}{Logical, should rows be reordered by F-statistic from \code{\link[limma]{toptable}} or be 
+left in the same order as \code{object}?}
 
-\item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if
-\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} returned by
-\code{\link[limma]{lmFit}}.}
+\item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if 
+\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
+returned by \code{\link[limma]{lmFit}}.}
 
 \item{check_names}{Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.}
 

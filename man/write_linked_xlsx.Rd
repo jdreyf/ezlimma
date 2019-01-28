@@ -4,27 +4,23 @@
 \alias{write_linked_xlsx}
 \title{Write Excel XLSX file with links to CSVs}
 \usage{
-write_linked_xlsx(name, fun, res, index, stats.tab, n.toptabs)
+write_linked_xlsx(name, res, index, stats.tab, n.toptabs)
 }
 \arguments{
-\item{name}{a name for the folder and Excel file that get written.}
+\item{name}{A name for the folder and Excel file. If \code{NA}, a directory is not created and no file is written.}
 
-\item{fun}{function to use, either \code{fry} or \code{mroast}.}
+\item{res}{A table of pathway results.}
 
-\item{res}{result of \code{mroast} or \code{fry}.}
+\item{index}{Named list of Indices of pathways in G to write.}
 
-\item{index}{index of pathways in G}
+\item{stats.tab}{A table of feature (e.g. gene) statistics that the Excel file can link to.}
 
-\item{stats.tab}{a table of feature (e.g. gene) statistics that the Excel file can link to}
-
-\item{n.toptabs}{number of gene set toptables to write to CSV and link to from Excel.}
+\item{n.toptabs}{Number of pathway toptables to write to CSV and link to from Excel.}
+}
+\value{
+Invisibly, the data frame that's written to Excel.
 }
 \description{
-Write Excel XLSX file using package \code{xlsx} with links to CSVs.
-}
-\details{
-This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in
-this Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-packag-doesnt-work}{thread}, 
-in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
-called directly by the user.
+Create directory and write CSV files with stats from \code{stats.tab} per pathway, and write an Excel XLSX file 
+using package \code{writexl} that links to the CSVs.
 }

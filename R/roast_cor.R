@@ -1,4 +1,4 @@
-#' Test association of gene sets to phenotype using rotation testing with output
+# Test association of gene sets to phenotype using rotation testing with output
 #' to Excel
 #'
 #' Test association of gene sets to phenotype using rotation testing with
@@ -7,58 +7,50 @@
 #' Excel file. The Excel file links to CSV files, which contain statistics per
 #' gene set.
 #'
-#' @param object A matrix-like data object containing log-ratios or 
-#'  log-expression values for a series of arrays, with rows corresponding to 
-#'  genes and columns to samples.
-#' @param G a gene set list as returned from \link{read_gmt}.
-#' @param stats.tab a table of feature (e.g. gene) statistics that the Excel 
-#'  table can link to.
-#' @param name a name for the folder and Excel file that get written. Set to \code{NA} 
-#'  to avoid writing output.
-#' @param phenotype Vector of phenotypes of the samples. Should be same length as
-#'  \code{ncol(object)}. If the vector is named, names should match 
-#'  \code{colnames(object)}.
-#' @param design the design matrix of the experiment, with rows corresponding to 
-#'  arrays and columns to coefficients to be estimated. The first column should be the intercept, 
-#'  the second column corresponds to the phenotype, and other columns to covariates. See vignette.
-#' @param fun function to use, either \code{fry} or \code{mroast}.
-#' @param set.statistic summary set statistic. Possibilities are \code{"mean"},
-#'  \code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.
-#' @param weights non-negative precision weights passed to \code{lmFit}. Can be
-#'  a numeric matrix of individual weights, of same size as the object 
-#'  expression matrix, or a numeric vector of array weights with length equal to
-#'  \code{ncol} of the expression matrix, or a numeric vector of gene weights 
-#'  with length equal to \code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
-#'   (with length one) doesn't pass weights to \code{limma}.
-#' @param gene.weights numeric vector of directional (positive or negative) genewise weights. These represent
-#'  each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
-#'  vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.
-#' @param trend logical, should an intensity-trend be allowed for the prior 
-#'  variance? Default is that the prior variance is constant.
-#' @param block vector or factor specifying a blocking variable on the arrays. 
-#'  Has length equal to the number of arrays.
-#' @param correlation the inter-duplicate or inter-technical replicate 
-#'  correlation.
-#' @param prefix character string to add to beginning of column names.
-#' @param adjust.method method used to adjust the p-values for multiple testing.
-#' @param min.ngenes minimum number of genes needed in a gene set for testing.
-#' @param max.ngenes maximum number of genes needed in a gene set for testing.
-#' @param alternative indicates the alternative hypothesis and must be one of 
-#'  \code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"} 
-#'  corresponds to positive association, \code{"less"} to negative association.
-#' @param n.toptabs number of gene set toptables to write to CSV and link to from
-#'  Excel
-#' @param nrot number of rotations used to compute the p-values in \code{mroast}.
-#' @param check_names Logical indicating if \code{names(phenotype)=rownames(object)} should be checked.
+#' @param object Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to
+#' genes and columns to samples.
+#' @param G Gene set list as returned from \link{read_gmt}.
+#' @param stats.tab Table of feature (e.g. gene) statistics that the Excel table can link to.
+#' @param name Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
+#' @param phenotype Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector 
+#' is named, names should match \code{colnames(object)}.
+#' @param design Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
+#' be estimated. The first column should be the intercept.
+#' @param fun Function to use, either \code{fry} or \code{mroast}.
+#' @param set.statistic Summary set statistic. Possibilities are \code{"mean"}, \code{"floormean"}, \code{"mean50"}, 
+#' or \code{"msq"}. Only for \code{mroast}.
+#' @param weights Non-negative precision weights passed to \code{lmFit}. Can be a numeric matrix of individual weights, 
+#' of same size as the object expression matrix, or a numeric vector of array weights with length equal to \code{ncol} 
+#' of the expression matrix, or a numeric vector of gene weights with length equal to \code{nrow} of the expression 
+#' matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} (with length one) doesn't pass weights
+#'to \code{limma}.
+#' @param gene.weights Numeric vector of directional (positive or negative) genewise weights. These represent each gene's
+#' contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have length equal 
+#' to \code{nrow(object)}. Only for \code{mroast}.
+#' @param trend Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+#' is constant.
+#' @param block Vector or factor specifying a blocking variable on the samples. Has length equal to the number of Samples.
+#' @param correlation Inter-duplicate or inter-technical replicate correlation.
+#' @param prefix Character string to add to beginning of column names.
+#' @param adjust.method Method to adjust the p-values for multiple testing.
+#' @param min.ngenes Minimum number of genes needed in a gene set for testing.
+#' @param max.ngenes Maximum number of genes needed in a gene set for testing.
+#' @param alternative Alternative hypothesis, must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
+#' \code{"greater"} corresponds to positive association, \code{"less"} to negative association.
+#' @param n.toptabs Number of gene set toptables to write to CSV and link to from Excel
+#' @param nrot Number of rotations used to compute the p-values in \code{mroast}.
+#' @param check_names Logical. should \code{names(phenotype)=rownames(object)} be checked?
 #' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 #' simulations. Ignored if \code{fun="fry"}.
-#' @return data frame of gene set statistics.
+#' @return Data frame of gene set statistics.
+#' @details Pathway names are altered to be valid filenames in Windows and Linux. Numeric columns taken to 3 
+#' significant figures.
 #' @export
 
 roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
-                    fun=c("fry", "mroast"), set.statistic = 'mean',
+                    fun=c("fry", "mroast"), set.statistic = "mean",
                     weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
-                    correlation = NULL, prefix=NULL, adjust.method = 'BH', min.ngenes=3, max.ngenes=1000, 
+                    correlation = NULL, prefix=NULL, adjust.method = "BH", min.ngenes=3, max.ngenes=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999, check_names=TRUE, seed=0){
   
   stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
@@ -86,7 +78,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
       #model.matrix clips NAs in phenotype, so need to also remove from object, weights
       n.na <- sum(is.na(phenotype))
       if (n.na > 0){
-          warning(n.na, ' NAs in phenotype removed')
+          warning(n.na, " NAs in phenotype removed")
           pheno.nona <- phenotype[!is.na(phenotype)]
           #len > 1 excludes NA and NULL
           if(length(weights) > 1){
@@ -101,7 +93,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
           pheno.nona <- phenotype
       } #end if/else n.na > 0
       design <- stats::model.matrix(~1+pheno.nona) 
-      colnames(design) <- gsub('\\(|\\)', '', gsub('pheno.nona', '', colnames(design), fixed=TRUE))
+      colnames(design) <- gsub("\\(|\\)", "", gsub("pheno.nona", "", colnames(design), fixed=TRUE))
   } else {
     if (!is.null(phenotype)) warning("Phenotype is ignored, since design is given.")
   }
@@ -112,7 +104,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
       if (!is.null(object$weights)){
           #NULL has len = 0, given weights should have len > 1 -> only weights=NA has len 1
           if (length(weights) != 1){
-            warning('object$weights are being ignored') 
+            warning("object$weights are being ignored")
           } else {
               #weights = NA
               if (is.null(dimnames(object$weights))) dimnames(object$weights) <- dimnames(object)
@@ -152,18 +144,20 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   }
   colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   #add prefix to each column except 1st, which is NGenes
-  if (!is.null(prefix)) colnames(res)[-1] <- paste(prefix, colnames(res)[-1], sep = '.')
+  if (!is.null(prefix)) colnames(res)[-1] <- paste(prefix, colnames(res)[-1], sep = ".")
   #let combine_pvalues find pvalue columns
   res <- res[order(combine_pvalues(res)), ]
   
-  #change FDR to appropriate adjustment name if user doesn't use FDR
+  #change FDR to appropriate adjustment name if user doesn"t use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
+  res.xl <- df_signif(res, digits = 3)
   #write xlsx file with links
   if (!is.na(name)){
-    write_linked_xlsx(name=name, fun=fun, res=res, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
+    nm <- paste(name, fun, sep="_")
+    write_linked_xlsx(name=nm, res=res.xl, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
   }
   return(res)
 }#end fcn

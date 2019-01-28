@@ -1,55 +1,44 @@
 #' Write Excel XLSX file with links to CSVs
 #' 
-#' Write Excel XLSX file using package \code{xlsx} with links to CSVs. 
+#' Create directory and write CSV files with stats from \code{stats.tab} per pathway, and write an Excel XLSX file 
+#' using package \code{writexl} that links to the CSVs.
 #' 
-#' @param name a name for the folder and Excel file that get written.
-#' @param fun function to use, either \code{fry} or \code{mroast}.
-#' @param res result of \code{mroast} or \code{fry}.
-#' @param index index of pathways in G
-#' @param stats.tab a table of feature (e.g. gene) statistics that the Excel file can link to
-#' @param n.toptabs number of gene set toptables to write to CSV and link to from Excel.
-#' @details This function requires package \code{xlsx}. However, loading it may not work automatically, as explained in
-#' this Stack Overflow \href{https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-packag-doesnt-work}{thread}, 
-#' in which case you will get an error instructing you to call \code{library(xlsx)}. This function is not meant to be 
-#' called directly by the user.
-#' @export
+#' @param name A name for the folder and Excel file. If \code{NA}, a directory is not created and no file is written.
+#' @param res A table of pathway results.
+#' @param index Named list of Indices of pathways in G to write.
+#' @param stats.tab A table of feature (e.g. gene) statistics that the Excel file can link to.
+#' @param n.toptabs Number of pathway toptables to write to CSV and link to from Excel.
+#' @return Invisibly, the data frame that's written to Excel.
 
-# don't import xlsx, since don't want it to be installed with ezlimma
-write_linked_xlsx <- function(name, fun, res, index, stats.tab, n.toptabs){
-  #https://stackoverflow.com/questions/43738366/r-importing-xlsx-package-to-my-own-package-doesnt-work 
-  if (!requireNamespace("xlsx", quietly = TRUE)){
-    stop("Package 'xlsx' needed for this function to work. Please install it.", call. = FALSE)
+write_linked_xlsx <- function(name, res, index, stats.tab, n.toptabs){
+  stopifnot(!is.null(name), nrow(res) > 0, !is.null(names(index)), nrow(stats.tab) > 0, is.numeric(n.toptabs),
+            n.toptabs > 0)
+  if (!requireNamespace("writexl", quietly = TRUE)){
+    stop("Install 'writexl' package.", call. = FALSE)
   }
   
-  name <- paste(name, fun, sep="_")
-  dir.create(name)
-  dir.create(paste0(name, '/pathways'))
-  
   if (n.toptabs > nrow(res)) n.toptabs <- nrow(res)
-  
   pwys <- rownames(res)[1:n.toptabs]
   #don't allow invalid names in pwys, which are written as filenames
   pwys <- clean_filenames(pwys)
-  names(index) <- clean_filenames(names(index))
-  for(pwy in pwys){
-    stat <- stats.tab[index[[pwy]], ]
-    stat <- stat[order(combine_pvalues(stat)), ]
-    utils::write.csv(stat, paste0(name, '/pathways/', substr(pwy, 1, 150), '.csv'))
-  }
+  pwy.nms <- substr(pwys, 1, 150)
   
-  wb <- xlsx::createWorkbook()
-  sheet <- xlsx::createSheet(wb, sheetName = name)
-  #below throws "Error in .jfindClass(as.character(class)) : class not found" if xlsx not loaded & attached
-  try.xlsx <- try(xlsx::addDataFrame(x=df_signif(res, 3), sheet=sheet))
-  if (class(try.xlsx)=="try-error"){
-    stop("You need to load and attach 'xlsx' via 'library(xlsx)'.")
-  }
-  rows  <- xlsx::getRows(sheet)
-  cells <- xlsx::getCells(rows, 1)
+  urls <- paste0('pathways/', pwy.nms, '.csv')
+  xl_links <- writexl::xl_hyperlink(url=urls, name = )
+  xl <- data.frame(xl_links, res)
+  #1st col is rownames
+  colnames(xl)[1] <- ""
   
-  for(i in seq_along(pwys)){
-    xlsx::addHyperlink(cells[[paste0(i+1, '.1')]], paste0('pathways/', substr(pwys[i], 1, 150), '.csv'), 'FILE')
-  }
-  xlsx::saveWorkbook(wb, paste0(name, '/', name, '.xlsx'))
-  return(TRUE)
+  if (!is.na(name)){
+    dir.create(name)
+    dir.create(paste0(name, '/pathways'))
+    names(index) <- clean_filenames(names(index))
+    for(pwy in pwy.nms){
+      stat <- stats.tab[index[[pwy]], ]
+      stat <- stat[order(combine_pvalues(stat)), ]
+      utils::write.csv(stat, paste0(name, '/pathways/', pwy, '.csv'))
+    }
+    writexl::write_xlsx(x=xl, path = paste0(name, "/", name, ".xlsx"))
+  }#end if
+  return(invisible(xl))
 }

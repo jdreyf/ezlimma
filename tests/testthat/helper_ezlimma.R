@@ -32,7 +32,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 
-rcn.f <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
+rcn.f <- roast_contrasts(object=M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
 set.seed(0)
 rcn.m <- roast_contrasts(M, G=G, stats.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast")
 rcr.f <- roast_cor(M, G=G, stats.tab=eztt, pheno=pheno.v, fun="fry")
