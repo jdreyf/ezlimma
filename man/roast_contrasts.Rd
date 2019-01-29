@@ -8,7 +8,7 @@ roast_contrasts(object, G, feat.tab, grp = NULL, contrast.v,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   name = NA, weights = NA, gene.weights = NULL, trend = FALSE,
   block = NULL, correlation = NULL, adjust.method = "BH",
-  min.ngenes = 3, max.ngenes = 1000, nrot = 999,
+  min.nfeats = 3, max.nfeats = 1000, nrot = 999,
   alternative = c("two.sided", "less", "greater"), n.toptabs = Inf,
   seed = 0)
 }
@@ -53,9 +53,9 @@ is constant.}
 
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Only for \code{mroast}.}
 
-\item{min.ngenes}{Minimum number of genes needed in a gene set for testing.}
+\item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 
-\item{max.ngenes}{Maximum number of genes needed in a gene set for testing.}
+\item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 

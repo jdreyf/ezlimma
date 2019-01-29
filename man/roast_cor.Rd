@@ -54,10 +54,6 @@ is constant.}
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{min.ngenes}{Minimum number of genes needed in a gene set for testing.}
-
-\item{max.ngenes}{Maximum number of genes needed in a gene set for testing.}
-
 \item{alternative}{Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 \code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
 
