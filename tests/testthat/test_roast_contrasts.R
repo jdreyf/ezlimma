@@ -8,7 +8,8 @@ test_that("weights", {
   expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
   
   #gene weights have effect
-  expect_warning(rcn.fw <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", gene.weights=1:nrow(M)))
+  expect_warning(rcn.fw <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", 
+                                           gene.weights=1:nrow(M)))
   expect_equal(mean(rcn.f$First3.p==rcn.fw$First3.p), 1)
   rcn.mw <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", gene.weights=1:nrow(M))
   expect_equal(mean(rcn.m$First3.p==rcn.mw$First3.p), 0)
@@ -19,9 +20,11 @@ test_that("weights", {
   expect_equal(mean(rcn.m$First3.p==rcn.me$First3.p), 0)
   
   #suppress object$weights
-  expect_warning(rcn.fw <- roast_contrasts(el, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", weights=el$weights))
+  expect_warning(rcn.fw <- roast_contrasts(el, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", 
+                                           weights=el$weights))
   expect_equal(mean(rcn.fw$First3.p==rcn.fe$First3.p), 1)
-  expect_warning(rcn.mw <- roast_contrasts(el, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=el$weights))
+  expect_warning(rcn.mw <- roast_contrasts(el, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", 
+                                           weights=el$weights))
   expect_equal(mean(rcn.mw$First3.p==rcn.me$First3.p), 1)
 })
 
@@ -47,7 +50,8 @@ test_that("trend has effect", {
   expect_equal(mean(rc.res1$First3.p == rc.res1t$First3.p), 0)
   
   rc.res2 <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6)
-  rc.res2t <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6, trend = TRUE)
+  rc.res2t <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=1:6, 
+                              trend = TRUE)
   p.cols <- grep("\\.p", colnames(rc.res2))
   expect_equal(mean(rc.res2[,p.cols] == rc.res2t[,p.cols]), 0)
 })
