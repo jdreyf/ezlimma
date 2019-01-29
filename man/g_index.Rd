@@ -4,17 +4,17 @@
 \alias{g_index}
 \title{Create object with indices of genes per gene set}
 \usage{
-g_index(G, object, min.ngenes, max.ngenes)
+g_index(G, object, min.nfeats, max.nfeats)
 }
 \arguments{
-\item{G}{a gene set list as returned from \code{\link{read_gmt}}.}
+\item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
 features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{min.ngenes}{minimum number of genes needed in a gene set for testing.}
+\item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 
-\item{max.ngenes}{maximum number of genes needed in a gene set for testing.}
+\item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 }
 \value{
 Named list of indices of acceptable gene sets in \code{G}.

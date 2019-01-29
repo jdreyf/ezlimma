@@ -18,7 +18,7 @@
 roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = "mean",
                     weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
-                    correlation = NULL, prefix=NULL, adjust.method = "BH", min.ngenes=3, max.ngenes=1000, 
+                    correlation = NULL, prefix=NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999, check_names=TRUE, seed=0){
   
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
@@ -40,7 +40,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   if (fun=="mroast") set.seed(seed=seed)
   
   ##get G index
-  index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)
+  index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
   
   if (is.null(design)){
       #model.matrix clips NAs in phenotype, so need to also remove from object, weights

@@ -8,7 +8,7 @@ roast_cor(object, G, feat.tab, name = NA, phenotype = NULL,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
-  min.ngenes = 3, max.ngenes = 1000, alternative = c("two.sided",
+  min.nfeats = 3, max.nfeats = 1000, alternative = c("two.sided",
   "less", "greater"), n.toptabs = Inf, nrot = 999,
   check_names = TRUE, seed = 0)
 }
@@ -53,6 +53,10 @@ is constant.}
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
+
+\item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
+
+\item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{alternative}{Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 \code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
