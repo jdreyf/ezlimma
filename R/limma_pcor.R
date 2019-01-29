@@ -2,18 +2,9 @@
 #' 
 #' Test partial correlation of each row of an object to a phenotype vector given covariates.
 #' 
-#' @param object A matrix-like data object containing log-ratios or 
-#'   log-expression values, with rows corresponding to 
-#'   genes and columns to samples.
-#' @param phenotype Numeric vector of phenotypes of the samples. Should be same length as
-#'   \code{ncol(object)}. If the vector is named, names should match 
-#'   \code{colnames(object)}.
-#' @param covariates Numeric matrix or dataframe with one or more covariates as columns passed to 
-#' \code{\link[limma]{removeBatchEffect}}.
-#' @param reorder.rows logical, should rows be reordered by p-value or be left in 
-#'   the same order as \code{object}?
-#' @param prefix character string to add to beginning of column names.
-#' @param adjust.method method used to adjust the p-values for multiple testing.
+#' @inheritParams limma_contrasts
+#' @inheritParams limma_cor
+#' @inheritParams limma_dep
 #' @return Dataframe.
 
 limma_pcor <- function(object, phenotype, covariates, reorder.rows=TRUE, prefix=NULL, adjust.method='BH'){

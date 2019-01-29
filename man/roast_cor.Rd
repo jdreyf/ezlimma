@@ -4,7 +4,7 @@
 \alias{roast_cor}
 \title{to Excel}
 \usage{
-roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
+roast_cor(object, G, feat.tab, name = NA, phenotype = NULL,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
@@ -13,59 +13,59 @@ roast_cor(object, G, stats.tab, name = NA, phenotype = NULL,
   check_names = TRUE, seed = 0)
 }
 \arguments{
-\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to
-genes and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{G}{Gene set list as returned from \link{read_gmt}.}
+\item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{Table of feature (e.g. gene) statistics that the Excel table can link to.}
+\item{feat.tab}{Table of feature (e.g. gene) statistics that the Excel table can link to.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector 
-is named, names should match \code{colnames(object)}.}
+\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
 
-\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
-be estimated. The first column should be the intercept.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
+estimated.}
 
 \item{fun}{Function to use, either \code{fry} or \code{mroast}.}
 
-\item{set.statistic}{Summary set statistic. Possibilities are \code{"mean"}, \code{"floormean"}, \code{"mean50"}, 
-or \code{"msq"}. Only for \code{mroast}.}
+\item{set.statistic}{Summary set statistic. Possibilities are \code{"mean"}, \code{"floormean"}, \code{"mean50"}, or 
+\code{"msq"}. Only for \code{mroast}.}
 
-\item{weights}{Non-negative precision weights passed to \code{lmFit}. Can be a numeric matrix of individual weights, 
-of same size as the object expression matrix, or a numeric vector of array weights with length equal to \code{ncol} 
-of the expression matrix, or a numeric vector of gene weights with length equal to \code{nrow} of the expression 
-matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} (with length one) doesn't pass weights
-to \code{limma}.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
-\item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent each gene's
-contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have length equal 
-to \code{nrow(object)}. Only for \code{mroast}.}
+\item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent each 
+gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
+length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
 \item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
-\item{block}{Vector or factor specifying a blocking variable on the samples. Has length equal to the number of Samples.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
 \item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
 \item{prefix}{Character string to add to beginning of column names.}
 
-\item{adjust.method}{Method to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
 \item{min.ngenes}{Minimum number of genes needed in a gene set for testing.}
 
 \item{max.ngenes}{Maximum number of genes needed in a gene set for testing.}
 
-\item{alternative}{Alternative hypothesis, must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
+\item{alternative}{Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 \code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
 
-\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel}
+\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel.}
 
-\item{nrot}{Number of rotations used to compute the p-values in \code{mroast}.}
+\item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 
-\item{check_names}{Logical. should \code{names(phenotype)=rownames(object)} be checked?}
+\item{check_names}{Logical, should \code{names(phenotype)==rownames(object)} be checked.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}
@@ -81,6 +81,6 @@ Excel file. The Excel file links to CSV files, which contain statistics per
 gene set.
 }
 \details{
-Pathway names are altered to be valid filenames in Windows and Linux. Numeric columns taken to 3 
-significant figures.
+Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns 
+are rounded to 3 significant figures.
 }

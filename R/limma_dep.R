@@ -4,11 +4,12 @@
 #' \code{object} be \eqn{o}, then we test the coefficient(s) of \code{Y} in the model \eqn{o = 1 + Y + covariates}. All
 #' inputs should be numeric, unlike \code{\link[ezlimma]{limma_contrasts}}.
 #' 
-#' @param object A matrix-like data object with rows corresponding to features and columns to samples.
 #' @param Y A numeric vector or matrix.
-#' @param covariates A matrix-like data object with rows corresponding to samples and columns to covariates.
-#' @param prefix Character string to add to beginning of column names.
-#' @return Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
+#' @param covariates A numeric matrix-like data object with rows corresponding to samples and columns to covariates
+#' to be adjusted for.
+#' @inheritParams limma_contrasts
+#' @inheritParams limma_cor
+#' @return Data frame with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
 #' @export
 
 limma_dep <- function(object, Y, covariates=NULL, prefix=NULL){

@@ -4,12 +4,12 @@
 \alias{prop_changed}
 \title{Calculate proportion of changed features per pathway}
 \usage{
-prop_changed(feat.tab, index, stat.col = 1, p.col = 2)
+prop_changed(feat.tab, feat.lst, stat.col = 1, p.col = 2)
 }
 \arguments{
 \item{feat.tab}{Table of feature (e.g. gene) statistics.}
 
-\item{index}{List returned from \code{g_index}.}
+\item{feat.lst}{Named list, with each element containing names or indices of rows of \code{feat.tab}.}
 
 \item{stat.col}{Name or index of column with signed statistics.}
 

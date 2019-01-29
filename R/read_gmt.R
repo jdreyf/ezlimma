@@ -4,10 +4,9 @@
 #' the GMT are gene set names, the second are descriptions, third are genes.
 #' 
 #' @param file.gmt the name of the gmt file.
-#' @details There are many functions in R for reading GMT files; this one
-#'   was partially adapted from \code{gmt2list} in the \code{cogena} package.
-#' @return A list of gene sets. Each element has a gene set \code{name},
-#'   \code{description}, and \code{genes}.
+#' @details There are many functions in R for reading GMT files; this one was partially adapted from \code{gmt2list} 
+#' in the \code{cogena} package.
+#' @return A list of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
 #' @export
 
 read_gmt <- function(file.gmt){

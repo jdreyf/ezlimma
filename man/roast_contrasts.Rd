@@ -4,7 +4,7 @@
 \alias{roast_contrasts}
 \title{Test contrasts of gene sets between groups using rotation testing with output to Excel}
 \usage{
-roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v,
+roast_contrasts(object, G, feat.tab, grp = NULL, contrast.v,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   name = NA, weights = NA, gene.weights = NULL, trend = FALSE,
   block = NULL, correlation = NULL, adjust.method = "BH",
@@ -14,19 +14,19 @@ roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v,
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
-genes and columns to samples.}
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{Table of feature (e.g. gene) statistics that the Excel table can link to.}
+\item{feat.tab}{Table of feature (e.g. gene) statistics that the Excel table can link to.}
 
-\item{grp}{Vector of phenotype groups of the samples, which represent valid variable names in R. Should be same 
-length as \code{ncol(object)}. If the vector is named, names should match \code{colnames(object)}.}
+\item{grp}{Vector of sample groups. These must be valid variable names in R and the same length as 
+\code{ncol(object)}.}
 
-\item{contrast.v}{Named vector of contrasts for \code{\link[limma]{makeContrasts}}.}
+\item{contrast.v}{Named vector of contrasts, passed to \code{\link[limma]{makeContrasts}}.}
 
-\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
-be estimated.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
+estimated.}
 
 \item{fun}{Function to use, either \code{fry} or \code{mroast}.}
 
@@ -35,19 +35,19 @@ be estimated.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{weights}{Non-negative precision weights passed to \code{lmFit}. Can be a numeric matrix of individual weights 
-of same size as \code{object} or a numeric vector of array weights with length equal to \code{ncol(object)}, or a 
-numeric vector of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore 
-\code{object$weights}. \code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
 \item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent each 
 gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
 length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
-\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior 
-variance is constant.}
+\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+is constant.}
 
-\item{block}{Vector or factor specifying a blocking variable on the arrays. Has length equal to the number of samples.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
 \item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
@@ -76,6 +76,6 @@ returns a data frame with statistics per gene set, and writes this to an Excel f
 CSV files, which contain statistics per gene set. Some of the arguments only apply to \code{mroast}.
 }
 \details{
-Pathway names are altered to be valid filenames in Windows and Linux. Numeric columns taken to 3 
-significant figures.
+Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
+rounded to 3 significant figures.
 }

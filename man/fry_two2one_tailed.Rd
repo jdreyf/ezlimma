@@ -4,24 +4,21 @@
 \alias{fry_two2one_tailed}
 \title{Convert 2-tailed into 1-tailed p-values from fry}
 \usage{
-fry_two2one_tailed(tab, pv.col = "PValue", dir.col = "Direction",
+fry_two2one_tailed(tab, p.col = "PValue", dir.col = "Direction",
   direction = "Up")
 }
 \arguments{
-\item{tab}{table with statistics from \code{fry}.}
+\item{tab}{Table with statistics from \code{fry}.}
 
-\item{pv.col}{name or index of p-value column.}
+\item{p.col}{Name or index of p-value column.}
 
-\item{dir.col}{name or index of column giving direction gene set has changed.}
+\item{dir.col}{Name or index of column giving direction gene set has changed.}
 
-\item{direction}{direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
+\item{direction}{Direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
 }
 \value{
 p-values.
 }
 \description{
 Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{fry}.
-}
-\details{
-This function is not meant to be called directly by the user.
 }

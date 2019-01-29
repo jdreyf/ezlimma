@@ -4,26 +4,23 @@
 \alias{mroast_two2one_tailed}
 \title{Convert 2-tailed into 1-tailed p-values from mroast}
 \usage{
-mroast_two2one_tailed(tab, pv.col = "PValue", dir.col = "Direction",
+mroast_two2one_tailed(tab, p.col = "PValue", dir.col = "Direction",
   direction = "Up", nrot = 9999)
 }
 \arguments{
-\item{tab}{table with statistics from \code{mroast}.}
+\item{tab}{Table with statistics from \code{fry}.}
 
-\item{pv.col}{name or index of p-value column.}
+\item{p.col}{Name or index of p-value column.}
 
-\item{dir.col}{name or index of column giving direction gene set has changed.}
+\item{dir.col}{Name or index of column giving direction gene set has changed.}
 
-\item{direction}{direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
+\item{direction}{Direction of gene set change. Can be \code{"Up"} or \code{"Down"}.}
 
-\item{nrot}{number of rotations used to estimate the p-values for \code{mroast}.}
+\item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 }
 \value{
 Vector of p-values.
 }
 \description{
 Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{mroast}.
-}
-\details{
-This function is not meant to be called directly by the user.
 }

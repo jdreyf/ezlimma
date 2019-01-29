@@ -10,45 +10,40 @@ limmaF(object, design, coef = colnames(design), prefix = NULL,
   "P.Value"))
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values for a series of samples, with rows corresponding to 
-genes and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{design}{the design matrix of the experiment, with rows corresponding to 
-samples and columns to coefficients to be estimated. Can be used to provide 
-covariates.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
+estimated.}
 
-\item{coef}{Vector of coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.}
+\item{coef}{Column index or column name of the linear model to test, passed to \code{\link[ezlimma]{eztoptab}}.}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{weights}{non-negative observation weights. Can be a numeric matrix of 
-individual weights, of same size as the object expression matrix, or a 
-numeric vector of array weights with length equal to \code{ncol} of the 
-expression matrix, or a numeric vector of gene weights with length equal to 
-\code{nrow} of the expression matrix.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
-\item{trend}{logical, should an intensity-trend be allowed for the prior 
-variance? Default is that the prior variance is constant.}
+\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+is constant.}
 
-\item{block}{vector or factor specifying a blocking variable on the arrays. 
-Has length equal to the number of arrays.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
-\item{correlation}{the inter-duplicate or inter-technical replicate 
-correlation.}
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}?}
+\item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
-\item{cols}{columns of \code{topTable} output the user would like in the 
-result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-is specified, \code{FC} will also be given. \code{limma} doesn't return an F-statistic if \code{length(coef)==1}.}
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
+automatically also be given.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
 F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, 

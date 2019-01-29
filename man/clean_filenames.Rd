@@ -10,6 +10,6 @@ clean_filenames(nm)
 \item{nm}{Character string of names.}
 }
 \description{
-Alter names to be valid Uniform Resource Identifier (URIs) for rJava, valid filenames in both Linux and Windows, 
-and ensure they are unique. Improper characters are replaced with "_".
+Alter names to be valid filenames in both Linux and Windows, and ensure they are unique. Improper characters 
+are replaced with "_".
 }

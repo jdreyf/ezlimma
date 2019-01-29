@@ -4,23 +4,24 @@
 \alias{write_linked_xlsx}
 \title{Write Excel XLSX file with links to CSVs}
 \usage{
-write_linked_xlsx(name, res, index, stats.tab, n.toptabs)
+write_linked_xlsx(pwy.tab, feat.lst, feat.tab, name = NA,
+  n.toptabs = Inf)
 }
 \arguments{
-\item{name}{A name for the folder and Excel file. If \code{NA}, a directory is not created and no file is written.}
+\item{pwy.tab}{A table of pathway results.}
 
-\item{res}{A table of pathway results.}
+\item{feat.lst}{Named list, with each element containing names or indices of rows of \code{feat.tab}.}
 
-\item{index}{Named list of Indices of pathways in G to write.}
+\item{feat.tab}{Table of feature (e.g. gene) statistics.}
 
-\item{stats.tab}{A table of feature (e.g. gene) statistics that the Excel file can link to.}
+\item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{n.toptabs}{Number of pathway toptables to write to CSV and link to from Excel.}
+\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel.}
 }
 \value{
 Invisibly, the data frame that's written to Excel.
 }
 \description{
-Create directory and write CSV files with stats from \code{stats.tab} per pathway, and write an Excel XLSX file 
+Create directory and write CSV files with stats from \code{feat.tab} per pathway, and write an Excel XLSX file 
 using package \code{writexl} that links to the CSVs.
 }

@@ -2,18 +2,14 @@
 #'
 #' Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{mroast}.
 #'
-#' @param tab table with statistics from \code{mroast}.
-#' @param pv.col name or index of p-value column.
-#' @param dir.col name or index of column giving direction gene set has changed.
-#' @param direction direction of gene set change. Can be \code{"Up"} or \code{"Down"}.
-#' @param nrot number of rotations used to estimate the p-values for \code{mroast}.
+#' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
+#' @inheritParams fry_two2one_tailed
 #' @return Vector of p-values.
-#' @details This function is not meant to be called directly by the user.
 
-mroast_two2one_tailed <- function(tab, pv.col='PValue', dir.col='Direction', direction='Up',
+mroast_two2one_tailed <- function(tab, p.col='PValue', dir.col='Direction', direction='Up',
                                   nrot = 9999){
-  stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,pv.col]<=1, 
-            tab[,pv.col]>=0, min(tab[,pv.col]) >= 1/(nrot+1) )
+  stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,p.col]<=1, 
+            tab[,p.col]>=0, min(tab[,p.col]) >= 1/(nrot+1) )
   
   #pv=(b+1)/(nrot+1) where b = number of rotations giving a more extreme stat
   #if dir.col==direction, then by symmetry half of the previously extreme rotations 
@@ -22,7 +18,7 @@ mroast_two2one_tailed <- function(tab, pv.col='PValue', dir.col='Direction', dir
   #which is the equivalent of 1-p/2, so pv' = (nrot - b/2 + 1) / (nrot+1)
   #this is also consistent with 0.5<=pv'<=1
   
-  b_vec <- tab[,pv.col]*(nrot+1)-1
+  b_vec <- tab[,p.col]*(nrot+1)-1
   #initialize as if dir.col==direction
   new_pv <- stats::setNames((b_vec/2+1) / (nrot+1), nm=rownames(tab))
   if (any(tab[,dir.col]!=direction)){

@@ -9,20 +9,16 @@ g_index(G, object, min.ngenes, max.ngenes)
 \arguments{
 \item{G}{a gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{object}{A matrix-like data object containing log-ratios or
-log-expression values for a series of arrays, with rows corresponding to
-genes and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
 \item{min.ngenes}{minimum number of genes needed in a gene set for testing.}
 
 \item{max.ngenes}{maximum number of genes needed in a gene set for testing.}
 }
 \value{
-Index of acceptable gene sets in \code{G}.
+Named list of indices of acceptable gene sets in \code{G}.
 }
 \description{
 Create object with indices of genes per gene set.
-}
-\details{
-This function is not meant to be called directly by the user.
 }

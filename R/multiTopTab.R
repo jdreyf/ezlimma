@@ -1,20 +1,12 @@
 #' Combine one or more toptables extracted from linear model fit
 #' 
-#' Combine one or more toptables extracted from \code{fit}.
+#' Combine one or more toptables extracted from \code{fit} using \code{\link{eztoptab}}.
 #' 
-#' @param fit should be an object of class \code{MArrayLM} as produced by 
-#' \code{lmFit} and \code{eBayes}.
-#' @param cols columns of \code{topTable} output the user would like in the 
-#' output, although the names are changed. If \code{logFC} is specified, 
-#' \code{FC} will also be given.
-#' @param adjust.method method used to adjust the p-values for multiple testing.
-#' @details This function calls \code{\link{eztoptab}}. See also 
-#' \code{\link[limma]{toptable}} for more details on many of these, as this 
-#' fuction is a wrapper for that one.
-#' @return Dataframe
-#' @details This function is not meant to be called directly by the user.
+#' @inheritParams eztoptab
+#' @inheritParams limma_contrasts
+#' @seealso \code{\link{eztoptab}}.
+#' @return Data frame
 
-#not exported
 multiTopTab <- function(fit, cols=c('P.Value', 'adj.P.Val', 'logFC'), adjust.method='BH'){
   #remove spaces in names of contrasts to be valid R colnames
   contrasts <- gsub(' ', '', colnames(fit$contrasts))

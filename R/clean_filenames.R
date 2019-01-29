@@ -1,7 +1,7 @@
 #' Alter names to valid filenames
 #'
-#' Alter names to be valid Uniform Resource Identifier (URIs) for rJava, valid filenames in both Linux and Windows, 
-#' and ensure they are unique. Improper characters are replaced with "_".
+#' Alter names to be valid filenames in both Linux and Windows, and ensure they are unique. Improper characters 
+#' are replaced with "_".
 #'
 #' @param nm Character string of names.
 #' @export

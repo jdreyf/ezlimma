@@ -7,16 +7,18 @@
 limma_dep(object, Y, covariates = NULL, prefix = NULL)
 }
 \arguments{
-\item{object}{A matrix-like data object with rows corresponding to features and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
 \item{Y}{A numeric vector or matrix.}
 
-\item{covariates}{A matrix-like data object with rows corresponding to samples and columns to covariates.}
+\item{covariates}{A numeric matrix-like data object with rows corresponding to samples and columns to covariates
+to be adjusted for.}
 
 \item{prefix}{Character string to add to beginning of column names.}
 }
 \value{
-Dataframe with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
+Data frame with \code{t-statistic} or \code{F-statistic} and \code{p-value} per row of \code{object}.
 }
 \description{
 Test (conditional) dependence of \code{Y} with rows of \code{object} via \code{\link[ezlimma]{limmaF}}. Let a row of

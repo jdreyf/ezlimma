@@ -8,13 +8,13 @@ two2one_tailed(tab, stat.col = 1, p.col = 2,
   alternative = c("greater", "less"))
 }
 \arguments{
-\item{tab}{table with statistics from \code{fry}.}
+\item{tab}{Table with statistics from \code{fry}.}
 
-\item{stat.col}{name or index of column with signed statistics.}
+\item{stat.col}{Name or index of column with signed statistics.}
 
-\item{p.col}{name or index of p-value column.}
+\item{p.col}{Name or index of p-value column.}
 
-\item{alternative}{direction of change. Can be a vector. \code{"greater"} or \code{"less"}.}
+\item{alternative}{Vector of direction of change: either \code{"greater"} or \code{"less"}.}
 }
 \value{
 p-values.
@@ -22,7 +22,4 @@ p-values.
 \description{
 Convert 2-tailed into 1-tailed p-values from matrix. Alternative "greater" corresponds to positive association, 
 "less" to negative association.
-}
-\details{
-This function is not meant to be called directly by the user.
 }

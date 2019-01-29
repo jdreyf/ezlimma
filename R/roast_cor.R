@@ -7,53 +7,21 @@
 #' Excel file. The Excel file links to CSV files, which contain statistics per
 #' gene set.
 #'
-#' @param object Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to
-#' genes and columns to samples.
-#' @param G Gene set list as returned from \link{read_gmt}.
-#' @param stats.tab Table of feature (e.g. gene) statistics that the Excel table can link to.
-#' @param name Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
-#' @param phenotype Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector 
-#' is named, names should match \code{colnames(object)}.
-#' @param design Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to 
-#' be estimated. The first column should be the intercept.
-#' @param fun Function to use, either \code{fry} or \code{mroast}.
-#' @param set.statistic Summary set statistic. Possibilities are \code{"mean"}, \code{"floormean"}, \code{"mean50"}, 
-#' or \code{"msq"}. Only for \code{mroast}.
-#' @param weights Non-negative precision weights passed to \code{lmFit}. Can be a numeric matrix of individual weights, 
-#' of same size as the object expression matrix, or a numeric vector of array weights with length equal to \code{ncol} 
-#' of the expression matrix, or a numeric vector of gene weights with length equal to \code{nrow} of the expression 
-#' matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} (with length one) doesn't pass weights
-#'to \code{limma}.
-#' @param gene.weights Numeric vector of directional (positive or negative) genewise weights. These represent each gene's
-#' contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have length equal 
-#' to \code{nrow(object)}. Only for \code{mroast}.
-#' @param trend Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
-#' is constant.
-#' @param block Vector or factor specifying a blocking variable on the samples. Has length equal to the number of Samples.
-#' @param correlation Inter-duplicate or inter-technical replicate correlation.
-#' @param prefix Character string to add to beginning of column names.
-#' @param adjust.method Method to adjust the p-values for multiple testing.
-#' @param min.ngenes Minimum number of genes needed in a gene set for testing.
-#' @param max.ngenes Maximum number of genes needed in a gene set for testing.
-#' @param alternative Alternative hypothesis, must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
-#' \code{"greater"} corresponds to positive association, \code{"less"} to negative association.
-#' @param n.toptabs Number of gene set toptables to write to CSV and link to from Excel
-#' @param nrot Number of rotations used to compute the p-values in \code{mroast}.
-#' @param check_names Logical. should \code{names(phenotype)=rownames(object)} be checked?
-#' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
-#' simulations. Ignored if \code{fun="fry"}.
+#' @inheritParams limma_contrasts
+#' @inheritParams limma_cor
+#' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
-#' @details Pathway names are altered to be valid filenames in Windows and Linux. Numeric columns taken to 3 
-#' significant figures.
+#' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns 
+#' are rounded to 3 significant figures.
 #' @export
 
-roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = NULL, 
+roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = "mean",
                     weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, prefix=NULL, adjust.method = "BH", min.ngenes=3, max.ngenes=1000, 
                     alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, nrot=999, check_names=TRUE, seed=0){
   
-  stopifnot(rownames(object) %in% rownames(stats.tab), !is.null(design)|!is.null(phenotype),
+  stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
   #only mroast takes some arguments
   if (fun=="fry" && (set.statistic!="mean" || !is.null(gene.weights) || adjust.method!="BH")){
@@ -157,7 +125,7 @@ roast_cor <- function(object, G, stats.tab, name=NA, phenotype = NULL, design = 
   #write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
-    write_linked_xlsx(name=nm, res=res.xl, index=index, stats.tab=stats.tab, n.toptabs=n.toptabs)
+    write_linked_xlsx(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, n.toptabs=n.toptabs)
   }
   return(res)
 }#end fcn

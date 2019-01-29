@@ -3,33 +3,9 @@
 #' F-test of each row of object using design matrix for selected coefficients. If there's only one selected coefficient, 
 #' a t-test is applied.
 #' 
-#' @param object A matrix-like data object containing log-ratios or 
-#'  log-expression values for a series of samples, with rows corresponding to 
-#'  genes and columns to samples.
-#' @param design the design matrix of the experiment, with rows corresponding to 
-#'  samples and columns to coefficients to be estimated. Can be used to provide 
-#'  covariates.
-#' @param coef Vector of coefficients to include in F-test. These should be in \code{colnames(design)}. If your design matrix has an intercept, you likely want to exclude it.
-#' @param prefix character string to add to beginning of column names.
-#' @param weights non-negative observation weights. Can be a numeric matrix of 
-#'  individual weights, of same size as the object expression matrix, or a 
-#'  numeric vector of array weights with length equal to \code{ncol} of the 
-#'  expression matrix, or a numeric vector of gene weights with length equal to 
-#'  \code{nrow} of the expression matrix.
-#' @param trend logical, should an intensity-trend be allowed for the prior 
-#'  variance? Default is that the prior variance is constant.
-#' @param block vector or factor specifying a blocking variable on the arrays. 
-#'   Has length equal to the number of arrays.
-#' @param correlation the inter-duplicate or inter-technical replicate 
-#'   correlation.
-#' @param adjust.method method used to adjust the p-values for multiple testing.
-#' @param cols columns of \code{topTable} output the user would like in the 
-#'  result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-#'  is specified, \code{FC} will also be given. \code{limma} doesn't return an F-statistic if \code{length(coef)==1}.
-#' @param reorder.rows logical, should rows be reordered by F-statistic from 
-#'  \code{\link[limma]{toptable}} or be left in the same order as 
-#'  \code{object}?
-#' @return Dataframe.
+#' @inheritParams limma_contrasts
+#' @inheritParams limma_cor
+#' @return Data frame.
 #' @seealso \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
 #' @examples 
 #' object <- matrix(rnorm(60), nrow=10, ncol=6)

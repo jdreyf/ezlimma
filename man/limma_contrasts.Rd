@@ -2,7 +2,7 @@
 % Please edit documentation in R/limma_contrasts.R
 \name{limma_contrasts}
 \alias{limma_contrasts}
-\title{Apply lmFit, contrasts.fit, & eBayes to one or more contrasts}
+\title{Apply limma's lmFit, contrasts.fit, & eBayes to one or more contrasts and return a table}
 \usage{
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NA, trend = FALSE, block = NULL, correlation = NULL,
@@ -10,30 +10,32 @@ limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   cols = c("P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
-\item{object}{Matrix-like data object containing log-ratios or log-expression values for a series of samples, 
-with rows corresponding to genes and columns to samples. Must have non-duplicated, non-empty rownames.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{grp}{Vector of phenotype groups of the samples, which represent valid variable names in R. Should be 
-same length as \code{ncol(object)}. If the vector is named, names should match \code{colnames(object)}.}
+\item{grp}{Vector of sample groups. These must be valid variable names in R and the same length as 
+\code{ncol(object)}.}
 
-\item{contrast.v}{Named vector of contrasts for \code{\link[limma]{makeContrasts}}.}
+\item{contrast.v}{Named vector of contrasts, passed to \code{\link[limma]{makeContrasts}}.}
 
-\item{design}{Design matrix of the experiment, with rows corresponding to arrays and columns to coefficients to be 
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
 estimated.}
 
-\item{weights}{non-negative observation weights. Can be a numeric matrix of individual weights, of same size as the 
-object expression matrix, or a numeric vector of array weights with length equal to \code{ncol} of the expression 
-matrix, or a numeric vector of gene weights with length equal to\code{nrow} of the expression matrix. Set to 
-\code{NULL} to ignore \code{object$weights}. \code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
 \item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
-\item{block}{Vector or factor specifying a blocking variable on the arrays. Has length equal to the number of arrays.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
 \item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
-\item{adjust.method}{Method to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
 \item{add.means}{Logical indicating if (unweighted) group means per row should be added to the output.}
 
@@ -41,25 +43,26 @@ is constant.}
 rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 which is \code{treat.lfc=log2(1.1)}.}
 
-\item{cols}{Columns of \code{topTable} to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
-"adj.P.Val", "B"}. Once selected, the column names of the output may be different than \code{cols}. If \code{logFC} is
-specified, \code{FC} will automatically also be given.}
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
+automatically also be given.}
 }
 \value{
 Data frame.
 }
 \description{
-Apply \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts.
+Apply \code{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
+a table.
 }
 \details{
 If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
 \code{model.matrix(~0+grp)}. However, \code{grp} isn"t needed if \code{design} is provided & \code{add.means} 
-is \code{FALSE}. See further details in \code{\link[limma]{lmFit}}.
+is \code{FALSE}.
 }
 \references{
 McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
 Bioinformatics 25, 765-771.
 }
 \seealso{
-\code{\link[ezlimma]{limma_cor}}, \code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
+\code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{limma_cor}}.
 }

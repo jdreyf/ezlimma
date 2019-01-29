@@ -3,20 +3,15 @@
 #' Test correlation of each row of an object to a phenotype vector using one of 
 #' several correlation methods.
 #' 
-#' @param object Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
-#' genes and columns to samples.
-#' @param phenotype Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}. If the vector is 
-#' named, names should match \code{colnames(object)}.
 #' @param method Character string indicating which correlation coefficient to be used for the test. One of 
 #' \code{"pearson"}, \code{"kendall"}, or \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.
-#' @param reorder.rows Logical, should rows be reordered by p-value or be left in the same order as \code{object}?
-#' @param prefix Character string to add to beginning of column names.
-#' @param adjust.method Method used to adjust the p-values for multiple testing.
 #' @param alternative Alternative hypothesis, and must be one of\code{"two.sided"}, \code{"greater"}, or \code{"less"}. 
 #' You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
 #' negative association. See \code{\link[stats]{cor.test}}.
-#' @param check_names Logical, should \code{names(phenotype)=rownames(object)} be checked.
+#' @inheritParams limma_contrasts
+#' @inheritParams limma_cor
 #' @return Data frame.
+#' @seealso \code{\link[ezlimma]{limma_cor}}
 #' @export
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
