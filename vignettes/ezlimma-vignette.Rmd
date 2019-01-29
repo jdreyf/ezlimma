@@ -86,7 +86,7 @@ pheno.mat <- cbind(pheno1=pheno$yy, pheno2=rnorm(ncol(M)))
 
 then we could test both phenotypes together in one line, as
 ```{r}
-res4 <- multi_cor(M, pheno.mat = pheno.mat, reorder.rows = TRUE)
+res4 <- multi_cor(object=M, pheno.tab = pheno.mat, reorder.rows = TRUE)
 ```
 
 ```{r, echo=FALSE}
@@ -117,7 +117,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
 ```
 This object would normally be read in using `read_gmt`. Then we can test each of these gene sets.
 ```{r}
-res5 <- roast_contrasts(object=M, G=G, stats.tab=res0, grp=pheno$grp, contrast.v = contr.v, fun="fry", name=NA)
+res5 <- roast_contrasts(object=M, G=G, feat.tab=res0, grp=pheno$grp, contrast.v = contr.v, fun="fry", name=NA)
 ```
 
 If we set `name` to a value other than `NA`, this would create a folder with one CSV per pathway, and an Excel file that looks like
