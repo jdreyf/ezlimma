@@ -14,8 +14,8 @@
 #' gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
 #' length equal to \code{nrow(object)}. Only for \code{mroast}.
 #' @param adjust.method Method used to adjust the p-values for multiple testing. Only for \code{mroast}.
-#' @param min.ngenes Minimum number of genes needed in a gene set for testing.
-#' @param max.ngenes Maximum number of genes needed in a gene set for testing.
+#' @param min.nfeats Minimum number of features (e.g. genes) needed in a gene set for testing.
+#' @param max.nfeats Maximum number of features (e.g. genes) needed in a gene set for testing.
 #' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
 #' @param alternative Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 #' \code{"greater"} corresponds to positive association, \code{"less"} to negative association.
@@ -31,7 +31,7 @@
 #limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
                             set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
-                            correlation = NULL, adjust.method = "BH", min.ngenes=3, max.ngenes=1000, nrot=999,
+                            correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
                             alternative=c("two.sided", "less", "greater"), n.toptabs = Inf, seed=0){
 
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(grp),
@@ -50,7 +50,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   if (fun=="mroast") set.seed(seed=seed)
 
   ##get G index
-  index <- g_index(G=G, object=object, min.ngenes=min.ngenes, max.ngenes=max.ngenes)
+  index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
   if (is.null(design)){
       stopifnot(ncol(object) == length(grp), colnames(object) == names(grp))
