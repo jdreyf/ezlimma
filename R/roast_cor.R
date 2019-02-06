@@ -125,7 +125,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   #write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
-    write_linked_xlsx(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, n.toptabs=n.toptabs)
+    write_top_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, n.toptabs=n.toptabs)
   }
   return(res)
 }#end fcn

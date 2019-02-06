@@ -137,7 +137,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   #write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
-    write_linked_xlsx(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, n.toptabs=n.toptabs)
+    write_top_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, n.toptabs=n.toptabs)
   }#end if !is.na(name)
   return(res)
 }#end fcn
