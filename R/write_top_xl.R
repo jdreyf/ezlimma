@@ -9,8 +9,8 @@
 #' @return Invisibly, the data frame that's written to Excel.
 
 write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name=NA, n.toptabs=Inf){
-  stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(names(feat.lst)), nrow(feat.tab) > 0, is.numeric(n.toptabs),
-            n.toptabs > 0)
+  stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(feat.lst), !is.null(names(feat.lst)), nrow(feat.tab) > 0, 
+            is.numeric(n.toptabs), n.toptabs > 0)
   if (!requireNamespace("writexl", quietly = TRUE)){
     stop("Install 'writexl' package.", call. = FALSE)
   }
@@ -22,7 +22,7 @@ write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name=NA, n.toptabs=Inf){
   pwy.nms <- substr(pwys, 1, 150)
   
   urls <- paste0('pathways/', pwy.nms, '.csv')
-  xl_links <- writexl::xl_hyperlink(url=urls, name = )
+  xl_links <- writexl::xl_hyperlink(url=urls, name = pwy.nms)
   xl <- data.frame(xl_links, pwy.tab)
   #1st col is rownames
   colnames(xl)[1] <- ""
