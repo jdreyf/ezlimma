@@ -4,7 +4,7 @@
 \alias{write_top_xl}
 \title{Write Excel XLSX file with links to CSVs}
 \usage{
-write_top_xl(pwy.tab, feat.lst, feat.tab, name = NA, n.toptabs = Inf)
+write_top_xl(pwy.tab, feat.lst, feat.tab, name, n.toptabs = Inf)
 }
 \arguments{
 \item{pwy.tab}{A table of pathway results.}
