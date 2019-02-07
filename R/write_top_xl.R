@@ -15,28 +15,18 @@ write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name=NA, n.toptabs=Inf){
     stop("Install 'writexl' package.", call. = FALSE)
   }
   
-  if (n.toptabs > nrow(pwy.tab)) n.toptabs <- nrow(pwy.tab)
-  pwys <- rownames(pwy.tab)[1:n.toptabs]
-  #don't allow invalid names in pwys, which are written as filenames
-  pwys <- clean_filenames(pwys)
-  pwy.nms <- substr(pwys, 1, 150)
-  
-  urls <- paste0('pathways/', pwy.nms, '.csv')
-  xl_links <- writexl::xl_hyperlink(url=urls, name = pwy.nms)
-  xl <- data.frame(xl_links, pwy.tab)
-  #1st col is rownames
-  colnames(xl)[1] <- ""
+  tx <- top_xl(pwy.tab=pwy.tab, n.toptabs=n.toptabs)
   
   if (!is.na(name)){
     dir.create(name)
     dir.create(paste0(name, '/pathways'))
     names(feat.lst) <- clean_filenames(names(feat.lst))
-    for(pwy in pwy.nms){
+    for(pwy in tx$pwy.csv.nms){
       stat <- feat.tab[feat.lst[[pwy]], ]
       stat <- stat[order(combine_pvalues(stat)), ]
       utils::write.csv(stat, paste0(name, '/pathways/', pwy, '.csv'))
     }
-    writexl::write_xlsx(x=xl, path = paste0(name, "/", name, ".xlsx"))
+    writexl::write_xlsx(x=tx$xl, path = paste0(name, "/", name, ".xlsx"))
   }#end if
-  return(invisible(xl))
+  return(invisible(tx$xl))
 }
