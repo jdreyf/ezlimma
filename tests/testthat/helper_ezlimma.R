@@ -38,3 +38,6 @@ rcn.m <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, f
 rcr.f <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry")
 set.seed(0)
 rcr.m <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast")
+
+fl <- lapply(G, FUN=function(x) x$genes)
+names(fl) <- lapply(G, FUN=function(x) x$name)
