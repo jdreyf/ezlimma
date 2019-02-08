@@ -9,16 +9,19 @@
 #' @return Invisibly, the data frame that's written to Excel.
 
 write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name){
-  stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(feat.lst), !is.null(names(feat.lst)), nrow(feat.tab) > 0)
+  stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(feat.lst), !is.null(names(feat.lst)), nrow(feat.tab) > 0,
+            rownames(pwy.tab) %in% names(feat.lst))
   if (!requireNamespace("writexl", quietly = TRUE)){
     stop("Install 'writexl' package.", call. = FALSE)
   }
   
+  feat.lst <- feat.lst[rownames(pwy.tab)]
   tx <- top_xl(pwy.tab=pwy.tab)
+  names(feat.lst) <- rownames(tx)
   
   dir.create(name)
   dir.create(paste0(name, '/pathways'))
-  names(feat.lst) <- clean_filenames(names(feat.lst))
+  
   for(pwy in rownames(tx)){
     stat <- feat.tab[feat.lst[[pwy]], ]
     stat <- stat[order(combine_pvalues(stat)), ]

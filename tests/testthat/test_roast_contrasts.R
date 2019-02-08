@@ -75,3 +75,14 @@ test_that("proportion up & down", {
   #same behavior from fry & mroast
   expect_equal(rcn.f[,grep("^Prop", colnames(rcn.f))], rcn.m[,grep("^Prop", colnames(rcn.m))])
 })
+
+test_that("clean names & write", {
+  unlink("bad_names_fry", recursive = TRUE) #in case it already exists
+  
+  G[[1]]$name <-"^path.way_1"
+  G[[2]]$name <- "LPT2"
+  expect_error(rcn.f <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", 
+                                        name = "bad_names"), NA)
+  unlink("bad_names_fry", recursive = TRUE)
+})
+  

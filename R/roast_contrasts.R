@@ -94,9 +94,9 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
                                  set.statistic = set.statistic, nrot=nrot)
       }
       
-      #PropUp & PropDown don"t use feat.tab & threshold at z=sqrt(2) -> p=0.1
+      #PropUp & PropDown don't use feat.tab & threshold at z=sqrt(2) -> p=0.1
       res.tmp <- res.tmp[,setdiff(colnames(res.tmp), c("PropDown", "PropUp"))]
-    }
+    }#end roast
     #need to coerce "direction" from factor to char
     res.tmp$Direction <- as.character(res.tmp$Direction)
     
@@ -124,6 +124,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
         res <- cbind(res, res.tmp[rownames(res), -1])
     }
   }#end for i
+  
   #let combine_pvalues find pvalue columns
   res <- res[order(combine_pvalues(res)), ]
 
