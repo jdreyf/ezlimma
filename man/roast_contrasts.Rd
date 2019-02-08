@@ -9,8 +9,7 @@ roast_contrasts(object, G, feat.tab, grp = NULL, contrast.v,
   name = NA, weights = NA, gene.weights = NULL, trend = FALSE,
   block = NULL, correlation = NULL, adjust.method = "BH",
   min.nfeats = 3, max.nfeats = 1000, nrot = 999,
-  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf,
-  seed = 0)
+  alternative = c("two.sided", "less", "greater"), seed = 0)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -61,8 +60,6 @@ is constant.}
 
 \item{alternative}{Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 \code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
-
-\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}

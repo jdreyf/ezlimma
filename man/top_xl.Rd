@@ -4,17 +4,15 @@
 \alias{top_xl}
 \title{Make XL data frame for \code{writexl}}
 \usage{
-top_xl(pwy.tab, n.toptabs = Inf)
+top_xl(pwy.tab)
 }
 \arguments{
 \item{pwy.tab}{A table of pathway results.}
-
-\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel.}
 }
 \value{
-A list with 2 elements
+A data frame with xl links
 \describe{
-  \item{\code{xl}}{data frame with xl links}
+  \item{\code{xl}}{}
   \item{\code{pwy.csv.nms}}{vector of pathway names to write to csv files}
 }
 }

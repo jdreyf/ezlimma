@@ -4,7 +4,7 @@
 \alias{write_top_xl}
 \title{Write Excel XLSX file with links to CSVs}
 \usage{
-write_top_xl(pwy.tab, feat.lst, feat.tab, name, n.toptabs = Inf)
+write_top_xl(pwy.tab, feat.lst, feat.tab, name)
 }
 \arguments{
 \item{pwy.tab}{A table of pathway results.}
@@ -14,8 +14,6 @@ write_top_xl(pwy.tab, feat.lst, feat.tab, name, n.toptabs = Inf)
 \item{feat.tab}{Table of feature (e.g. gene) statistics.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
-
-\item{n.toptabs}{Number of gene set toptables to write to CSV and link to from Excel.}
 }
 \value{
 Invisibly, the data frame that's written to Excel.
