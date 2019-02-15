@@ -6,7 +6,7 @@
 \usage{
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NA, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", add.means = TRUE, treat.lfc = NULL,
+  adjust.method = "BH", add.means = !is.null(grp), treat.lfc = NULL,
   cols = c("P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{

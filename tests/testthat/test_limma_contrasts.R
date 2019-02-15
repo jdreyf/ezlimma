@@ -73,13 +73,12 @@ test_that("with treat matches topTable(treat(contrasts.fit(lmfit(M))))", {
   expect_equal(eztt.p[,1], toptab$P.Value)
 })
 
-
-test_that("error messages for duplicate or empty rownames",{
+test_that("error messages for duplicate or empty rownames", {
   M2 <- M
-  rownames(M2)[2]  <- 'gene1'
+  rownames(M2)[2]  <- "gene1"
   expect_error(limma_contrasts(M2, grp = grp, contrast.v = contr.v))
   
   M3 <- M
-  rownames(M3)[2] <- ''
+  rownames(M3)[2] <- ""
   expect_error(limma_contrasts(M3, grp = grp, contrast.v = contr.v))
 })

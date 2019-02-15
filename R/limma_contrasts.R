@@ -40,7 +40,7 @@
 #don't include parameters for robust fitting, since ppl unlikely to use
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA,
                             trend=FALSE, block=NULL, correlation=NULL, adjust.method="BH", 
-                            add.means=TRUE, treat.lfc=NULL, cols=c("P.Value", "adj.P.Val", "logFC")){
+                            add.means=!is.null(grp), treat.lfc=NULL, cols=c("P.Value", "adj.P.Val", "logFC")){
   
   stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
   if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))

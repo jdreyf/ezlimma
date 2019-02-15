@@ -33,3 +33,19 @@ test_that("weights", {
 test_that("throw error for NAs in pheno", {
   expect_error(limma_cor(M, pheno2, reorder.rows = FALSE))
 })
+
+test_that("matches limma_contrast grp-means parametrization", {
+  lc <- limma_cor(M, phenotype = design[,"Last3Arrays"])
+  expect_equal(lc$p, eztt[rownames(lc), "Last3vsFirst3.p"])
+})
+
+test_that("matches limma_contrast with covariate", {
+  des2 <- model.matrix(~0+grp+covar)
+  colnames(des2) <- gsub("grp", "", colnames(des2))
+  eztt2 <- limma_contrasts(object=M, design = des2, contrast.v = contr.v[3])
+  
+  des.lc <- model.matrix(~1+design[,"Last3Arrays"]+covar)
+  lc2 <- limma_cor(M, design = des.lc)
+  
+  expect_equal(lc2$p, eztt2[rownames(lc2), "Last3vsFirst3.p"])
+})
