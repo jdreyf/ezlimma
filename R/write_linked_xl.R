@@ -8,7 +8,7 @@
 #' @inheritParams roast_contrasts
 #' @return Invisibly, the data frame that's written to Excel.
 
-write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name){
+write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name){
   stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(feat.lst), !is.null(names(feat.lst)), nrow(feat.tab) > 0,
             rownames(pwy.tab) %in% names(feat.lst))
   if (!requireNamespace("writexl", quietly = TRUE)){
@@ -16,7 +16,7 @@ write_top_xl <- function(pwy.tab, feat.lst, feat.tab, name){
   }
   
   feat.lst <- feat.lst[rownames(pwy.tab)]
-  tx <- top_xl(pwy.tab=pwy.tab)
+  tx <- xl_pwys(pwy.tab=pwy.tab)
   names(feat.lst) <- rownames(tx)
   
   dir.create(name)

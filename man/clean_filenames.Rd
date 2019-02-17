@@ -11,5 +11,5 @@ clean_filenames(nm)
 }
 \description{
 Alter names to be valid filenames in both Linux and Windows, and ensure they are unique. Improper characters 
-are replaced with "_".
+are replaced with "_". Filenames are limited to 199 characters for Windows.
 }

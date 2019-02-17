@@ -71,6 +71,6 @@ test_that("warning for giving phenotype & design", {
 })
 
 test_that("prefixes added",{
-  res.rc <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6, prefix = 'abc')
-  expect_true(all(grepl(pattern = 'abc', x = colnames(res.rc)[-1])))
+  res.rc <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6, prefix = "abc")
+  expect_true(all(grepl(pattern = "abc", x = colnames(res.rc)[-1])))
 })
