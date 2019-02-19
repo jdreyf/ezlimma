@@ -7,14 +7,14 @@
 read_gmt(file.gmt)
 }
 \arguments{
-\item{file.gmt}{the name of the gmt file.}
+\item{file.gmt}{Name of the gmt file.}
 }
 \value{
 A list of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
 }
 \description{
 Read Gene Matrix Transposed (gmt) file and return a list. The first column of
-the GMT are gene set names, the second are descriptions, third are genes.
+the GMT are gene set names, the second are descriptions, then are genes.
 }
 \details{
 There are many functions in R for reading GMT files; this one was partially adapted from \code{gmt2list} 
