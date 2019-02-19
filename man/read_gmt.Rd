@@ -18,5 +18,5 @@ the GMT are gene set names, the second are descriptions, third are genes.
 }
 \details{
 There are many functions in R for reading GMT files; this one was partially adapted from \code{gmt2list} 
-in the \code{cogena} package.
+in the \pkg{cogena} package.
 }

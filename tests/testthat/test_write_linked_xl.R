@@ -1,9 +1,6 @@
 context("write linked xl")
 
 test_that("returned df & written out file", {
-
-  unlink("test_wlx", recursive = TRUE) #in case it already exists
-  
   wlx <- write_linked_xl(pwy.tab=rcn.f, feat.lst=fl, feat.tab=eztt, name="test_wlx")
   expect_equal(grep("=HYPERLINK(", wlx[,1], fixed = TRUE), 1:nrow(wlx))
   expect_equal(wlx[,-1], rcn.f)

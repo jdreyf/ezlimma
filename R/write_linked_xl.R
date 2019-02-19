@@ -19,6 +19,8 @@ write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name){
   tx <- xl_pwys(pwy.tab=pwy.tab)
   names(feat.lst) <- rownames(tx)
   
+  if (file.exists(name)) unlink(name, recursive = TRUE)
+  
   dir.create(name)
   dir.create(paste0(name, '/pathways'))
   
