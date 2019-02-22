@@ -1,6 +1,6 @@
 #' Apply limma's lmFit, contrasts.fit, & eBayes to one or more contrasts and return a table
 #' 
-#' Apply \code{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
+#' Apply \pkg{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
 #' a table.
 #' 
 #' @param object Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

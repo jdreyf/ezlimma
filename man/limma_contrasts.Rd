@@ -51,7 +51,7 @@ automatically also be given.}
 Data frame.
 }
 \description{
-Apply \code{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
+Apply \pkg{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
 a table.
 }
 \details{
