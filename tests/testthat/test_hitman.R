@@ -73,7 +73,7 @@ test_that("gene1", {
 })
 
 test_that("NAs", {
-  expect_error(hitman(E=grp, M=M, Y=pheno2))
+  expect_error(hitman(E=grp2, M=M, Y=pheno2))
   
   grp2[1] <- NA
   expect_error(hitman(E=grp2, M=M, Y=pheno.v))
