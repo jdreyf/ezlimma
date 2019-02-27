@@ -34,5 +34,8 @@ test_that("covars", {
   mc <- multi_cor(object=M, pheno.tab = design[,"Last3Arrays", drop=FALSE], method = "limma", covariates = covar.mat)
   expect_equal(mc, lc)
   
+  covar.df <- data.frame(covar, rnorm(length(covar)))
+  expect_error(multi_cor(object=M, pheno.tab = design[,"Last3Arrays", drop=FALSE], method = "limma", covariates = covar.df))
+  
   expect_warning(multi_cor(object=M, pheno.tab = design[,"Last3Arrays", drop=FALSE], covariates = covar))
 })
