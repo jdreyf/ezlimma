@@ -16,7 +16,7 @@ features (e.g. genes) and columns to samples. Must have rownames that are non-du
 \item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
 estimated.}
 
-\item{coef}{Column index or column name of the linear model to test, passed to \code{\link[ezlimma]{eztoptab}}.}
+\item{coef}{Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.}
 
 \item{prefix}{Character string to add to beginning of column names.}
 

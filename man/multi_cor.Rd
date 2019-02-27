@@ -6,8 +6,8 @@
 \usage{
 multi_cor(object, pheno.tab, method = c("pearson", "spearman", "kendall",
   "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
-  check_names = TRUE, limma.cols = c("AveExpr", "P.Value", "adj.P.Val",
-  "logFC"))
+  covariates = NULL, check_names = TRUE, limma.cols = c("AveExpr",
+  "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -15,7 +15,7 @@ features (e.g. genes) and columns to samples. Must have rownames that are non-du
 
 \item{pheno.tab}{Matrix-like data object with columns as sample phenotypes, with \code{nrow(pheno.tab)==ncol(object)}.}
 
-\item{method}{a character string indicating which association is to be used 
+\item{method}{Character string indicating which association is to be used 
 for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
 from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}.}
 
@@ -27,9 +27,12 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{check_names}{Logical indicating if \code{names(pheno.tab)=rownames(object)} should be checked.}
+\item{covariates}{If \code{method="limma"}, numeric vector or matrix of covariates to include in 
+\code{\link{limma_cor}} \code{design} matrix.}
 
-\item{limma.cols}{if \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.}
+\item{check_names}{Logical; should \code{names(pheno.tab)=rownames(object)} be checked?}
+
+\item{limma.cols}{If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.}
 }
 \value{
 Data frame with several statistical columns corresponding to each phenotype and one row per feature.

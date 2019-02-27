@@ -32,7 +32,7 @@ is constant.}
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{coef}{Column index or column name of the linear model to test, passed to \code{\link[ezlimma]{eztoptab}}.}
+\item{coef}{Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.}
 
 \item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
