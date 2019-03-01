@@ -62,7 +62,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 
 \item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 
-\item{check_names}{Logical, should \code{names(phenotype)==rownames(object)} be checked.}
+\item{check_names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}

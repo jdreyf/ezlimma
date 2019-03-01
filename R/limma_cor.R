@@ -7,10 +7,10 @@
 #' @param prefix Character string to add to beginning of column names.
 #' @param coef Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.
 #' @param reorder.rows Logical, should rows be reordered by p-value?
-#' @param reduce.df Number of degrees of freedom to subtract from residual. This may be necessary if 
+#' @param reduce.df Number degrees of freedom to subtract from residual. This may be necessary if 
 #' \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
 #' returned by \code{\link[limma]{lmFit}}.
-#' @param check_names Logical, should \code{names(phenotype)==rownames(object)} be checked.
+#' @param check_names Logical; should \code{names(phenotype)==rownames(object)} be checked?
 #' @inheritParams limma_contrasts
 #' @return Data frame.
 #' @details Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 

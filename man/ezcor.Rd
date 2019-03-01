@@ -29,7 +29,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
 negative association. See \code{\link[stats]{cor.test}}.}
 
-\item{check_names}{Logical, should \code{names(phenotype)==rownames(object)} be checked.}
+\item{check_names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 }
 \value{
 Data frame.

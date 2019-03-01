@@ -36,11 +36,11 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 
 \item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
-\item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if 
+\item{reduce.df}{Number degrees of freedom to subtract from residual. This may be necessary if 
 \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
 returned by \code{\link[limma]{lmFit}}.}
 
-\item{check_names}{Logical, should \code{names(phenotype)==rownames(object)} be checked.}
+\item{check_names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
