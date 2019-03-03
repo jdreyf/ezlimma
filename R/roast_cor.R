@@ -19,7 +19,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
                     fun=c("fry", "mroast"), set.statistic = "mean",
                     weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, prefix=NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, 
-                    alternative=c("two.sided", "less", "greater"), nrot=999, check_names=TRUE, seed=0){
+                    alternative=c("two.sided", "less", "greater"), nrot=999, check.names=TRUE, seed=0){
   
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
@@ -30,7 +30,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), limma::isNumeric(phenotype))
-    if (check_names){
+    if (check.names){
       stopifnot(names(phenotype)==colnames(object))
     }
   }

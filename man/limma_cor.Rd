@@ -5,9 +5,10 @@
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
-  weights = NA, trend = FALSE, adjust.method = "BH", coef = 2,
-  reorder.rows = TRUE, reduce.df = 0, check_names = TRUE,
-  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
+  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
+  adjust.method = "BH", coef = 2, reorder.rows = TRUE,
+  reduce.df = 0, check.names = TRUE, cols = c("AveExpr", "P.Value",
+  "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -28,6 +29,10 @@ weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \c
 \item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
+
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
+
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
@@ -40,7 +45,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
 returned by \code{\link[limma]{lmFit}}.}
 
-\item{check_names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
+\item{check.names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 

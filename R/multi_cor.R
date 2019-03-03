@@ -8,7 +8,7 @@
 #' @param method Character string indicating which association is to be used 
 #'   for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
 #'   from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}.
-#' @param check_names Logical; should \code{names(pheno.tab)=rownames(object)} be checked?
+#' @param check.names Logical; should \code{names(pheno.tab)=rownames(object)} be checked?
 #' @param limma.cols If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.
 #' @param covariates If \code{method="limma"}, numeric vector or matrix of covariates to include in 
 #' \code{\link{limma_cor}} \code{design} matrix.
@@ -19,12 +19,12 @@
 #' @export
 
 multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendall", "limma"), reorder.rows=TRUE, 
-                      prefix=NULL, adjust.method="BH", covariates=NULL, check_names=TRUE,
+                      prefix=NULL, adjust.method="BH", covariates=NULL, check.names=TRUE,
                      limma.cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
   method <- match.arg(method)
   if (is.null(dim(pheno.tab))) stop("pheno.tab needs to have rows and columns.")
   stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || is.numeric(covariates))
-  if (check_names){
+  if (check.names){
     stopifnot(rownames(pheno.tab)==colnames(object))
   }
   

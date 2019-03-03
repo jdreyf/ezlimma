@@ -10,7 +10,7 @@
 #' @param reduce.df Number degrees of freedom to subtract from residual. This may be necessary if 
 #' \code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
 #' returned by \code{\link[limma]{lmFit}}.
-#' @param check_names Logical; should \code{names(phenotype)==rownames(object)} be checked?
+#' @param check.names Logical; should \code{names(phenotype)==rownames(object)} be checked?
 #' @inheritParams limma_contrasts
 #' @return Data frame.
 #' @details Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
@@ -18,15 +18,15 @@
 #' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{ezcor}}
 #' @export
 
-limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, adjust.method="BH", coef=2,
-                      reorder.rows=TRUE, reduce.df=0, check_names=TRUE,
+limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, block=NULL, correlation=NULL,
+                      adjust.method="BH", coef=2, reorder.rows=TRUE, reduce.df=0, check.names=TRUE,
                       cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
    stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
              reduce.df >= 0, is.null(phenotype)!=is.null(design))
   
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), limma::isNumeric(phenotype), !is.na(phenotype))
-    if (check_names){
+    if (check.names){
       stopifnot(names(phenotype)==colnames(object))
     }
     #if want to handle NAs in pheno, need to account for object, object$weights, and weights (as vector or matrix)
@@ -38,9 +38,9 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   
   if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
-    fit <- limma::lmFit(object, design, weights=weights)
+    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation, weights=weights)
   } else {
-    fit <- limma::lmFit(object, design)
+    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation)
   }
   
   if (reduce.df > 0){

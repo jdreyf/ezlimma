@@ -6,7 +6,7 @@
 \usage{
 multi_cor(object, pheno.tab, method = c("pearson", "spearman", "kendall",
   "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
-  covariates = NULL, check_names = TRUE, limma.cols = c("AveExpr",
+  covariates = NULL, check.names = TRUE, limma.cols = c("AveExpr",
   "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
@@ -30,7 +30,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 \item{covariates}{If \code{method="limma"}, numeric vector or matrix of covariates to include in 
 \code{\link{limma_cor}} \code{design} matrix.}
 
-\item{check_names}{Logical; should \code{names(pheno.tab)=rownames(object)} be checked?}
+\item{check.names}{Logical; should \code{names(pheno.tab)=rownames(object)} be checked?}
 
 \item{limma.cols}{If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.}
 }

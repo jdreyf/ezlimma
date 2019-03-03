@@ -15,9 +15,9 @@
 #' @export
 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
-                  prefix=NULL, adjust.method="BH", alternative="two.sided", check_names=TRUE){
+                  prefix=NULL, adjust.method="BH", alternative="two.sided", check.names=TRUE){
   stopifnot(length(phenotype)==ncol(object))
-  if (check_names){
+  if (check.names){
     stopifnot(names(phenotype)==colnames(object))
   }
   

@@ -6,7 +6,7 @@
 \usage{
 ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
   prefix = NULL, adjust.method = "BH", alternative = "two.sided",
-  check_names = TRUE)
+  check.names = TRUE)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -29,7 +29,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
 negative association. See \code{\link[stats]{cor.test}}.}
 
-\item{check_names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
+\item{check.names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 }
 \value{
 Data frame.

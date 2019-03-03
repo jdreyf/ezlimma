@@ -43,7 +43,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
                             add.means=!is.null(grp), treat.lfc=NULL, cols=c("P.Value", "adj.P.Val", "logFC")){
   
   stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
-  if (is.null(design)|add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
+  if (is.null(design) || add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
   if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
   if (any(rownames(object)=="")) stop("object cannot have an empty rowname ''.")
 
@@ -58,9 +58,9 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   #length(NULL)=0; other weights should have length > 1
   if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
-    fit <- limma::lmFit(object, design, block = block, correlation = correlation, weights=weights)
+    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation, weights=weights)
   } else {
-    fit <- limma::lmFit(object, design, block = block, correlation = correlation)
+    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation)
   }
   
   contr.mat <- limma::makeContrasts(contrasts=contrast.v, levels=design)
