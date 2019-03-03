@@ -5,9 +5,10 @@
 \title{Test correlation of each row of an object to each column of pheno.tab}
 \usage{
 multi_cor(object, pheno.tab, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
-  covariates = NULL, check.names = TRUE, limma.cols = c("AveExpr",
-  "P.Value", "adj.P.Val", "logFC"))
+  "limma"), reorder.rows = TRUE, prefix = NULL, block = NULL,
+  correlation = NULL, adjust.method = "BH", covariates = NULL,
+  check.names = TRUE, limma.cols = c("AveExpr", "P.Value", "adj.P.Val",
+  "logFC"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -23,6 +24,10 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 
 \item{prefix}{Character string to add to beginning of column names.}
 
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
+
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
+
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
@@ -30,7 +35,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 \item{covariates}{If \code{method="limma"}, numeric vector or matrix of covariates to include in 
 \code{\link{limma_cor}} \code{design} matrix.}
 
-\item{check.names}{Logical; should \code{names(pheno.tab)=rownames(object)} be checked?}
+\item{check.names}{Logical; should \code{rownames(pheno.tab)=colnames(object)} be checked?}
 
 \item{limma.cols}{If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.}
 }
@@ -43,5 +48,6 @@ one of Pearson's, Kendall's, or Spearman's correlation methods, or limma
 regression in \code{\link{limma_cor}}.
 }
 \details{
-Each column of \code{pheno.tab} is tested independently.
+Each column of \code{pheno.tab} is tested independently. Arguments \code{covariates}, \code{block}, and
+\code{correlation} only apply if \code{method="limma"}.
 }
