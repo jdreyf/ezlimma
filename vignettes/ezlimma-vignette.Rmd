@@ -107,7 +107,7 @@ knitr::kable(signif(res.hit[1:10,], 3))
 ```
 
 ## Gene set level analysis
-At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with `limma`'s function `roast`, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.
+At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with `limma`'s `roast` functions, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.
 
 Let's make the gene set object,
 ```{r}
@@ -115,6 +115,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
           list(name="pwy2", description=NA, genes=paste0("gene", 11:20)),
           list(name="pwy3", description=NA, genes=paste0("gene", 21:30)))
 ```
+
 This object would normally be read in using `read_gmt`. Then we can test each of these gene sets.
 ```{r}
 res5 <- roast_contrasts(object=M, G=G, feat.tab=res0, grp=pheno$grp, contrast.v = contr.v, fun="fry", name=NA)
@@ -125,10 +126,10 @@ If we set `name` to a value other than `NA`, this would create a folder with one
 knitr::kable(res5)
 ```
 
-except the first column would have links to the CSVs in the folder. Similarly, we can use `roast_cor`.
+except the first column would have links to the CSVs in the folder. Similarly, we can use `roast_cor`. We can read these Excel files back into R with `read_linked_xl`.
 
 ## System info
 Here is the information on the system on which this document was compiled:
 ```{r si}
-sessionInfo()
+devtools::session_info()
 ```

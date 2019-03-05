@@ -7,7 +7,7 @@
 read_gmt(file.gmt)
 }
 \arguments{
-\item{file.gmt}{Name of the gmt file.}
+\item{file.gmt}{Name of GMT file.}
 }
 \value{
 A list of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.

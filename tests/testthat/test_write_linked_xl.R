@@ -8,6 +8,9 @@ test_that("returned df & written out file", {
   expect_true(file.exists("test_wlx/test_wlx.xlsx"))
   expect_true(file.exists("test_wlx/pathways/pwy1.csv"))
   
+  expect_silent(wlxr <- read_linked_xl(file="test_wlx/test_wlx.xlsx"))
+  expect_equal(rcn.f, wlxr)
+  
   rf <- rcn.f
   rownames(rf)[2] <- paste0(rownames(rf)[2], ".")
   fl2 <- fl
@@ -15,6 +18,9 @@ test_that("returned df & written out file", {
   wlx1 <- write_linked_xl(pwy.tab=rf, feat.lst=fl2, feat.tab=eztt, name="test_wlx")
   expect_equal(grep("_", wlx1[,1]), 2)
   expect_true(file.exists("test_wlx/pathways/pwy2_.csv"))
+  
+  expect_silent(wlxr <- read_linked_xl(file="test_wlx/test_wlx.xlsx"))
+  expect_equal(rf, wlxr)
 })
 
 teardown({
