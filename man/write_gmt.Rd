@@ -12,7 +12,7 @@ write_gmt(gmt.lst, file.gmt)
 \item{file.gmt}{Name of the GMT file to write to. \code{.gmt} is appended.}
 }
 \value{
-Invisibly, \code{TRUE}.
+Invisibly, \code{gmt.lst}.
 }
 \description{
 Write Gene Matrix Transposed (gmt) file from a list. The first column of

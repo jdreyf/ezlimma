@@ -5,9 +5,10 @@
 #' 
 #' @param gmt.lst List of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
 #' @param file.gmt Name of the GMT file to write to. \code{.gmt} is appended.
-#' @return Invisibly, \code{TRUE}.
+#' @return Invisibly, \code{gmt.lst}.
 #' @details This function was adapted from \code{gmtlist2file} in the \pkg{cogena} package.
 
+# returns data input, as per https://style.tidyverse.org/functions.html#return
 write_gmt <- function(gmt.lst, file.gmt){
   stopifnot(length(gmt.lst) > 0, is.list(gmt.lst))
   
@@ -16,5 +17,5 @@ write_gmt <- function(gmt.lst, file.gmt){
         sep = "\t")
     cat("\n", append=TRUE, file=file.gmt)
   }
-  return(invisible(TRUE))
+  return(invisible(gmt.lst))
 }
