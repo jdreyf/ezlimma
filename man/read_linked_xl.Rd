@@ -4,10 +4,10 @@
 \alias{read_linked_xl}
 \title{Read Excel XLSX file with links to CSVs}
 \usage{
-read_linked_xl(file.xlsx)
+read_linked_xl(file.path)
 }
 \arguments{
-\item{file.xlsx}{Path of XLSX file.}
+\item{file.path}{Path to the XLSX file.}
 }
 \value{
 Data frame.

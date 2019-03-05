@@ -8,7 +8,7 @@ test_that("returned df & written out file", {
   expect_true(file.exists("test_wlx/test_wlx.xlsx"))
   expect_true(file.exists("test_wlx/pathways/pwy1.csv"))
   
-  expect_silent(wlxr <- read_linked_xl(file="test_wlx/test_wlx.xlsx"))
+  expect_silent(wlxr <- read_linked_xl("test_wlx/test_wlx.xlsx"))
   expect_equal(rcn.f, wlxr)
   
   rf <- rcn.f
@@ -19,7 +19,7 @@ test_that("returned df & written out file", {
   expect_equal(grep("_", wlx1[,1]), 2)
   expect_true(file.exists("test_wlx/pathways/pwy2_.csv"))
   
-  expect_silent(wlxr <- read_linked_xl(file="test_wlx/test_wlx.xlsx"))
+  expect_silent(wlxr <- read_linked_xl("test_wlx/test_wlx.xlsx"))
   expect_equal(rf, wlxr)
 })
 
