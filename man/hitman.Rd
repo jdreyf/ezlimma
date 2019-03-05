@@ -7,8 +7,7 @@
 hitman(E, M, Y, covariates = NULL)
 }
 \arguments{
-\item{E}{A numeric vector or matrix of exposures. Can be a design matrix returned by 
-\code{\link[stats]{model.matrix}} or \code{\link[ezlimma]{batch2design}}.}
+\item{E}{A numeric vector of exposures.}
 
 \item{M}{A numeric matrix-like data object with one row per feature and one column per sample of mediators.
 Must have more than one feature.}

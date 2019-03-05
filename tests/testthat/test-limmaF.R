@@ -19,6 +19,14 @@ test_that("limmaF", {
   expect_equal(mean(lf2$p==lf4$wts.p), 0)
 })
 
-test_that("warning message fires when weights are missing in object, and object is not a matrix",{
+test_that("warning message fires when weights are missing in object, and object is not a matrix", {
   expect_warning(limmaF(object = el, design = design, weights = el$weights))
+})
+
+test_that("object is a vector, as in hitman", {
+  lf <- limmaF(object=M[1,], design=des2[,1:2], coef=colnames(des2)[2])
+  lf2 <- limmaF(object=M[1,], design=des2[,1:2], coef=2)
+  expect_equal(lf, lf2)
+  
+  tt <- t.test(M[1, des2[,2]==0], M[1, des2[,2]==1])
 })

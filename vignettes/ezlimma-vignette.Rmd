@@ -129,7 +129,6 @@ knitr::kable(res5)
 except the first column would have links to the CSVs in the folder. Similarly, we can use `roast_cor`. We can read these Excel files back into R with `read_linked_xl`.
 
 ## System info
-Here is the information on the system on which this document was compiled:
 ```{r si}
 devtools::session_info()
 ```

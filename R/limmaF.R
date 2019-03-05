@@ -16,7 +16,7 @@
 #' @export
 
 limmaF <- function(object, design, coef=colnames(design), prefix=NULL, weights=NULL, trend=FALSE, block = NULL, 
-                   correlation = NULL, adjust.method='BH', reorder.rows=TRUE, cols=c('F', 'P.Value')){
+                   correlation = NULL, adjust.method="BH", reorder.rows=TRUE, cols=c("F", "P.Value")){
   
   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object),
             coef %in% colnames(design) | coef %in% 1:ncol(design))
@@ -24,10 +24,10 @@ limmaF <- function(object, design, coef=colnames(design), prefix=NULL, weights=N
   if (length(coef)==1 && "F" %in% cols) cols <- sub("^F$", "t", cols)
   
   int <- grep("intercept", coef, ignore.case = TRUE, value = TRUE)
-  if (length(int)>0) message("You included the column ", int, " in 'coefs', which you may want to exclude.")
+  if (length(int)>0){ message("You included the column ", int, " in 'coefs', which you may want to exclude.") }
   
   if (!missing(weights)){
-    if (!is.matrix(object) && !is.null(object$weights)){ warning('object$weights are being ignored') }
+    if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
     fit <- limma::lmFit(object, design=design, block = block, correlation = correlation, weights=weights)
   } else {
     fit <- limma::lmFit(object, design=design, block = block, correlation = correlation)

@@ -41,15 +41,15 @@ test_that("E binary", {
 })
 
 test_that("E nominal --> design", {
-  grp.tmp <- batch2design(rep(letters[1:3], each=2))
+  grp.tmp <- batch2design(rep(letters[1:2], each=3))
   rownames(grp.tmp) <- colnames(M)
   
-  expect_warning(hm <- hitman(E=grp.tmp, M=M, Y=pheno.v))
+  hm <- hitman(E=grp.tmp, M=M, Y=pheno.v)
   expect_lt(mean(hm$EMY.p < 0.05), 0.2)
   
   set.seed(0)
   covar.tmp <- rnorm(length(pheno.v))
-  expect_warning(hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp))
+  hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp)
   expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
   
   expect_error(hitman(E=rep("a", length(pheno.v)), M=M, Y=pheno.v))
