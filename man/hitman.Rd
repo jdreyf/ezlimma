@@ -26,18 +26,16 @@ Data frame with columns
 \item{EMY.FDR}{Overall FDR for mediation}
 \item{EM_dir.p}{p-value for E-->M accounting for direction of mediation}
 \item{MY_dir.p}{p-value for M-->Y accounting for direction of mediation}
+\item{EM.t}{t-statistic for E-->M, not accounting for direction}
 \item{EM.p}{p-value for E-->M, not accounting for direction}
-\item{EM.t or EM.F}{F-statistic or t-statistic for E-->M, not accounting for direction}
+\item{MY.t}{t-statistic for M-->Y, not accounting for direction}
 \item{MY.p}{p-value for M-->Y, not accounting for direction}
-\item{MY.slope}{slope of regression for M-->Y, not accounting for direction}
 }
-and annotation.
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
 \code{Y}.
 }
 \details{
-If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match. \code{E} and \code{Y}
-cannot have \code{NA}s.
+\code{E} and \code{Y} cannot have \code{NA}s.
 }
