@@ -5,7 +5,8 @@
 \title{Test partial correlation of each row of an object to a phenotype vector}
 \usage{
 limma_pcor(object, phenotype, covariates, reorder.rows = TRUE,
-  prefix = NULL, adjust.method = "BH", cols = c("t", "P.Value"))
+  prefix = NULL, adjust.method = "BH", check.names = TRUE,
+  cols = c("t", "P.Value"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -23,6 +24,8 @@ to be adjusted for.}
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
+
+\item{check.names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 

@@ -50,7 +50,8 @@ hitman <- function(E, M, Y, covariates=NULL, check.names=TRUE){
   design <- stats::model.matrix(~., data=data.frame(my.covar))
   tt.em <- limma_cor(object=M, design=design, coef=2, prefix="EM", cols=c("t", "P.Value"))
   
-  tt.my <- limma_pcor(object=M, phenotype=Y, covariates=my.covar, prefix="MY", cols=c("t", "P.Value"))
+  # don't need to recheck names
+  tt.my <- limma_pcor(object=M, phenotype=Y, covariates=my.covar, prefix="MY", check.names=FALSE, cols=c("t", "P.Value"))
   tt.my <- tt.my[,setdiff(colnames(tt.my), "MY.FDR")]
   ret <- cbind(tt.em[rownames(tt.my),], tt.my)
   
