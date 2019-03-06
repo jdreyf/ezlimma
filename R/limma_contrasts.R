@@ -25,6 +25,8 @@
 #' @param treat.lfc Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
 #' rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 #' which is \code{treat.lfc=log2(1.1)}.
+#' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
+#' and \code{add.means} is \code{FALSE}.
 #' @param cols Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 #' "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
 #' automatically also be given.
@@ -37,13 +39,15 @@
 #' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{limma_cor}}.
 #' @export
 
-#don't include parameters for robust fitting, since ppl unlikely to use
-limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA,
-                            trend=FALSE, block=NULL, correlation=NULL, adjust.method="BH", 
-                            add.means=!is.null(grp), treat.lfc=NULL, cols=c("P.Value", "adj.P.Val", "logFC")){
-  
+# don't include parameters for robust fitting, since ppl unlikely to use
+limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA, trend=FALSE, block=NULL, 
+                            correlation=NULL, adjust.method="BH", add.means=!is.null(grp), treat.lfc=NULL, 
+                            check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
   stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
-  if (is.null(design) || add.means) stopifnot(ncol(object)==length(grp), colnames(object)==names(grp))
+  if (is.null(design) || add.means){
+    stopifnot(ncol(object)==length(grp))
+    if (check.names){ stopifnot(colnames(object)==names(grp)) }
+  }
   if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
   if (any(rownames(object)=="")) stop("object cannot have an empty rowname ''.")
 
@@ -52,10 +56,10 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
     colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
   }
   
-  #can't set weights=NULL in lmFit when using voom, since lmFit only assigns
-  #weights "if (missing(weights) && !is.null(y$weights))"
-  #can't make this into separate function, since then !missing(weights)
-  #length(NULL)=0; other weights should have length > 1
+  # can't set weights=NULL in lmFit when using voom, since lmFit only assigns
+  # weights "if (missing(weights) && !is.null(y$weights))"
+  # can't make this into separate function, since then !missing(weights)
+  # length(NULL)=0; other weights should have length > 1
   if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
     fit <- limma::lmFit(object, design=design, block = block, correlation = correlation, weights=weights)
@@ -70,7 +74,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   } else {
     fit2 <- limma::treat(fit2, lfc=treat.lfc, trend=trend)
   }
-  #limma ignores names of contrast.v when it's given as vector
+  # limma ignores names of contrast.v when it's given as vector
   if (!is.null(names(contrast.v))){
     stopifnot(colnames(fit2$contrasts)==contrast.v)
     colnames(fit2$contrasts) <- names(contrast.v)
@@ -78,7 +82,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   
   mtt <- multiTopTab(fit2, cols=cols, adjust.method=adjust.method)
   
-  #cbind grp means
+  # cbind grp means
   if (add.means){
     grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
     colnames(grp.means) <- paste(colnames(grp.means), "avg", sep=".")

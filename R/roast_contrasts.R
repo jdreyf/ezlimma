@@ -19,6 +19,7 @@
 #' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
 #' @param alternative Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 #' \code{"greater"} corresponds to positive association, \code{"less"} to negative association.
+#' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}.
 #' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 #' simulations. Ignored if \code{fun="fry"}.
 #' @inheritParams limma_contrasts
@@ -31,16 +32,12 @@
 roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
                             set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
                             correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
-                            alternative=c("two.sided", "less", "greater"), seed=0){
-  stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(grp),
-            is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
+                            alternative=c("two.sided", "less", "greater"), check.names=TRUE, seed=0){
+  stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
+            is.null(gene.weights) || length(gene.weights)==nrow(object), ncol(object) > 1)
   # only mroast takes some arguments
   if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
     warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
-  }
-  
-  if (!is.null(grp)){
-    stopifnot(length(grp)==ncol(object), names(grp)==colnames(object))
   }
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
@@ -51,9 +48,10 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
   if (is.null(design)){
-      stopifnot(ncol(object) == length(grp), colnames(object) == names(grp))
+      stopifnot(ncol(object) == length(grp))
       design <- stats::model.matrix(~0+grp)
       colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
+      if (check.names){ stopifnot(colnames(object) == names(grp)) }
   }
 
   contr.mat <- limma::makeContrasts(contrasts = contrast.v, levels = design)

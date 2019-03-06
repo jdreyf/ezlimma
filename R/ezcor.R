@@ -8,12 +8,13 @@
 #' @param alternative Alternative hypothesis, and must be one of\code{"two.sided"}, \code{"greater"}, or \code{"less"}. 
 #' You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
 #' negative association. See \code{\link[stats]{cor.test}}.
-#' @inheritParams limma_contrasts
 #' @inheritParams limma_cor
+#' @inheritParams limma_contrasts
 #' @return Data frame.
 #' @seealso \code{\link[ezlimma]{limma_cor}}
 #' @export
 
+# limma_cor params > limma_contrasts params 
 ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE, 
                   prefix=NULL, adjust.method="BH", alternative="two.sided", check.names=TRUE){
   stopifnot(length(phenotype)==ncol(object))

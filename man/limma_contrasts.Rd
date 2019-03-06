@@ -7,7 +7,7 @@
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NA, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", add.means = !is.null(grp), treat.lfc = NULL,
-  cols = c("P.Value", "adj.P.Val", "logFC"))
+  check.names = TRUE, cols = c("P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -42,6 +42,9 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 \item{treat.lfc}{Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
 rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 which is \code{treat.lfc=log2(1.1)}.}
+
+\item{check.names}{Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
+and \code{add.means} is \code{FALSE}.}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
