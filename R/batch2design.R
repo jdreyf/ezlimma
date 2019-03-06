@@ -4,7 +4,9 @@
 #' 
 #' @param batch Vector that is a factor or can be coerced to one.
 #' @return Numeric matrix.
+#' @export
 
+# used by PANTS in helper
 batch2design <- function(batch){
   stopifnot(length(unique(batch)) > 1)
   batch <- as.factor(batch)
