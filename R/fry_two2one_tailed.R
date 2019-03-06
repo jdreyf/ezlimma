@@ -8,7 +8,7 @@
 #' @param direction Direction of gene set change. Can be \code{"Up"} or \code{"Down"}.
 #' @return p-values.
 
-fry_two2one_tailed <- function(tab, p.col='PValue', dir.col='Direction', direction='Up'){
+fry_two2one_tailed <- function(tab, p.col="PValue", dir.col="Direction", direction="Up"){
   stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,p.col]<=1, tab[,p.col]>=0)
   
   new_pv <- stats::setNames(tab[, p.col]/2, nm=rownames(tab))

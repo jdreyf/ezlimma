@@ -21,12 +21,12 @@ ezcor <- function(object, phenotype, method="pearson", reorder.rows=TRUE,
     stopifnot(names(phenotype)==colnames(object))
   }
   
-  #res.tmp$estimate has cor, res.tmp$statistic has t-stat
+  # res.tmp$estimate has cor, res.tmp$statistic has t-stat
   res.mat <- t(apply(X=object, MARGIN=1, FUN=function(v){ 
     res.tmp <- stats::cor.test(v, phenotype, method=method, alternative=alternative)
     return(c(res.tmp$estimate, p=res.tmp$p.value))
   }))
-  #adjust p-vals and name column by adjustment
+  # adjust p-vals and name column by adjustment
   q <- stats::p.adjust(p=res.mat[,"p"], method=adjust.method)
   res.mat <- cbind(res.mat, adj.P.Val=q)
   if (adjust.method %in% c("BH", "fdr")){

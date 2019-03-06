@@ -14,12 +14,11 @@
 #'  combine_pvalues(tab)
 #' @export
 
-#don't export
 combine_pvalues <- function(tab, p.cols=NULL){
   stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(p.cols) || !is.null(colnames(tab)))
-  #if p.cols not given, grep for them at end of column names
+  # if p.cols not given, grep for them at end of column names
   if (is.null(p.cols)){
-    p.cols <- grep(pattern=paste0('(\\.|^)', '(p|pval)', '$'), colnames(tab), ignore.case=TRUE)
+    p.cols <- grep(pattern=paste0("(\\.|^)", "(p|pval)", "$"), colnames(tab), ignore.case=TRUE)
   }
   stopifnot(length(p.cols)>0)
   comb.p <- apply(as.matrix(tab[,p.cols]), MARGIN=1, FUN=function(p){ 

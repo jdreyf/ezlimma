@@ -6,7 +6,7 @@
 #' @param file.path Path to the GMT file.
 #' @details There are many functions in R for reading GMT files; this one was partially adapted from \code{gmt2list} 
 #' in the \pkg{cogena} package.
-#' @return A list of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
+#' @return List of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
 #' @export
 
 read_gmt <- function(file.path){

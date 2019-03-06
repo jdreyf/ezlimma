@@ -14,15 +14,14 @@ xl_pwys <- function(pwy.tab){
   stopifnot(nrow(pwy.tab) > 0, ncol(pwy.tab) > 0)
 
   pwys <- rownames(pwy.tab)
-  #don't allow invalid names in pwys, which are written as filenames
+  # don't allow invalid names in pwys, which are written as filenames
   pwys.clean <- clean_filenames(pwys)
   
   urls <- paste0("pathways/", pwys.clean, ".csv")
   xl_links <- writexl::xl_hyperlink(url=urls, name = pwys)
   xl <- data.frame(xl_links, pwy.tab, stringsAsFactors = FALSE)
   rownames(xl) <- pwys.clean
-  #1st col is rownames
+  # 1st col is rownames
   colnames(xl)[1] <- ""
-  
   return(xl)
 }

@@ -51,6 +51,6 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
     cor.mat <- cbind(cor.mat, cor.tmp)
   }
   if (reorder.rows){ cor.mat <- cor.mat[order(combine_pvalues(cor.mat)),] }
-  #return data frame, for consistency with limma_*
+  # return data frame, for consistency with limma_*
   return(data.frame(cor.mat))
 }

@@ -10,7 +10,7 @@ read_gmt(file.path)
 \item{file.path}{Path to the GMT file.}
 }
 \value{
-A list of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
+List of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
 }
 \description{
 Read Gene Matrix Transposed (gmt) file and return a list. The first column of

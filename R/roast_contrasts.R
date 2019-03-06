@@ -27,19 +27,18 @@
 #' rounded to 3 significant figures.
 #' @export
 
-#limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
+# limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
                             set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
                             correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
                             alternative=c("two.sided", "less", "greater"), seed=0){
-
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(grp),
             is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
-  #only mroast takes some arguments
+  # only mroast takes some arguments
   if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
     warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
   }
-
+  
   if (!is.null(grp)){
     stopifnot(length(grp)==ncol(object), names(grp)==colnames(object))
   }
@@ -48,7 +47,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   
   if (fun=="mroast") set.seed(seed=seed)
 
-  ##get G index
+  # # get G index
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
   if (is.null(design)){
@@ -59,7 +58,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
 
   contr.mat <- limma::makeContrasts(contrasts = contrast.v, levels = design)
   
-  #deal with weights
+  # deal with weights
   if (!is.matrix(object)){
       if (!is.null(object$weights)){
           if (length(weights) != 1){
@@ -69,10 +68,10 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
               weights <- object$weights
           }
       }
-  }#end if(!is.matrix(object))
+  }# end if(!is.matrix(object))
 
-  ##run fry or mroast for each contrast
-  #block & correlation from lmFit, trend from eBayes
+  # # run fry or mroast for each contrast
+  # block & correlation from lmFit, trend from eBayes
   for (i in seq_along(contrast.v)){
     if (fun=="fry"){
       if (length(weights) == 1 && is.na(weights)){
@@ -94,13 +93,13 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
                                  set.statistic = set.statistic, nrot=nrot)
       }
       
-      #PropUp & PropDown don't use feat.tab & threshold at z=sqrt(2) -> p=0.1
+      # PropUp & PropDown don't use feat.tab & threshold at z=sqrt(2) -> p=0.1
       res.tmp <- res.tmp[,setdiff(colnames(res.tmp), c("PropDown", "PropUp"))]
-    }#end roast
-    #need to coerce "direction" from factor to char
+    }# end roast
+    # need to coerce "direction" from factor to char
     res.tmp$Direction <- as.character(res.tmp$Direction)
     
-    #add propup & propdown from feat.tab if same contr
+    # add propup & propdown from feat.tab if same contr
     contr.nm <- names(contrast.v)[i]
     contr.cols <- paste(contr.nm, c("logFC", "p"), sep=".")
     if (all(contr.cols %in% colnames(feat.tab))){
@@ -108,36 +107,36 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
       res.tmp <- data.frame(res.tmp[,1:2], prop.diff[rownames(res.tmp),], res.tmp[,-(1:2)])
     }
     
-    #if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
+    # if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
     if (alternative!="two.sided"){
       res.tmp <- roast_one_tailed(roast.res=res.tmp, fun=fun, alternative=alternative, 
                                   nrot=nrot, adjust.method=adjust.method)
-    }#end if one.tailed
+    }# end if one.tailed
     colnames(res.tmp) <- gsub("PValue", "p", 
                               gsub("FDR.Mixed", "Mixed.FDR", 
                                    gsub("PValue.Mixed", "Mixed.p", colnames(res.tmp))))
-    #add contrast names to each column except 1st, which is NGenes
+    # add contrast names to each column except 1st, which is NGenes
     colnames(res.tmp)[-1] <- paste(names(contrast.v[i]), colnames(res.tmp)[-1], sep = ".")
     if (i == 1){
         res <- res.tmp
     } else {
         res <- cbind(res, res.tmp[rownames(res), -1])
     }
-  }#end for i
+  }# end for i
   
-  #let combine_pvalues find pvalue columns
+  # let combine_pvalues find pvalue columns
   res <- res[order(combine_pvalues(res)), ]
 
-  #change FDR to appropriate adjustment name if user doesn"t use FDR
+  # change FDR to appropriate adjustment name if user doesn"t use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
   res.xl <- df_signif(res, digits = 3)
-  #write xlsx file with links
+  # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
     write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm)
-  }#end if !is.na(name)
+  }# end if !is.na(name)
   return(res)
-}#end fcn
+}
