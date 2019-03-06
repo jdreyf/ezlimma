@@ -31,7 +31,7 @@ M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
 dimnames(M) <- list(paste0("gene", 1:nrow(M)), paste0("sample", 1:ncol(M)))
 M[1,1:3] <- M[1,1:3] + 2
 
-pheno <- data.frame(grp=rep(c("First3", "Last3"), each=3), yy=rnorm(ncol(M)))
+pheno <- data.frame(grp=rep(c("First3", "Last3"), each=3), yy=rnorm(ncol(M)), stringsAsFactors = FALSE)
 pheno$yy[1:3] <- pheno$yy[1:3]-2
 ```
 
@@ -97,7 +97,7 @@ where the result is ordered by the combined p-value of the two associations per 
 
 We  can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (`hitman`). We set the exposure (`E`) to group, the outcome (`Y`) to `pheno.v`, and test each gene in `M` as a mediator. For `hitman` we transform the exposure to numeric, and set the names of the `phenoype` to those of `M`.  
 ```{r}
-grp.num <- batch2design(pheno$grp)
+grp.num <- as.numeric(pheno$grp == "Last3")
 res.hit <- hitman(E = grp.num, M = M, Y = setNames(pheno$yy, nm=colnames(M)))
 ```
 

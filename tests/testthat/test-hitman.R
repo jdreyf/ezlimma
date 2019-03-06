@@ -1,11 +1,12 @@
 context("hitman")
 
-#create associated phenotype, to avoid hitman warning about weak assoc
+# create associated phenotype, to avoid hitman warning about weak assoc
 set.seed(0)
 pheno.v <- setNames(rnorm(ncol(M)), nm=colnames(M))
 pheno.v[1:3] <- pheno.v[1:3]-3
 ee <- pheno.v + rnorm(length(pheno.v), sd=0.1)
-grp2 <- batch2design(grp)
+grp2 <- batch2design(grp)[,1]
+names(grp2) <- colnames(M)
 covar.tmp <- rnorm(length(pheno.v))
 
 test_that("E numeric", {
@@ -36,20 +37,20 @@ test_that("E binary", {
   expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
   
   y <- rep(1:3, times=2)
-  limma_dep(object=y, Y=grp2, prefix="EY")
   expect_error(hm4 <- hitman(E=grp2, M=M, Y=rep(1:3, times=2)))
 })
 
 test_that("E nominal --> design", {
-  grp.tmp <- batch2design(rep(letters[1:2], each=3))
-  rownames(grp.tmp) <- colnames(M)
+  grp.tmp <- batch2design(rep(letters[1:2], each=3))[,1]
+  names(grp.tmp) <- colnames(M)
   
   hm <- hitman(E=grp.tmp, M=M, Y=pheno.v)
   expect_lt(mean(hm$EMY.p < 0.05), 0.2)
   
   set.seed(0)
   covar.tmp <- rnorm(length(pheno.v))
-  hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp)
+  # warning: essentially perfect fit: summary may be unreliable
+  expect_warning(hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp))
   expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
   
   expect_error(hitman(E=rep("a", length(pheno.v)), M=M, Y=pheno.v))

@@ -4,7 +4,7 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covariates = NULL)
+hitman(E, M, Y, covariates = NULL, check.names = TRUE)
 }
 \arguments{
 \item{E}{A numeric vector of exposures.}
@@ -14,7 +14,10 @@ Must have more than one feature.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
-\item{covariates}{Numeric vector or matrix of covariates.}
+\item{covariates}{Numeric matrix-like object with rows corresponding to samples and columns to covariates
+to be adjusted for.}
+
+\item{check.names}{Logical; should \code{names(E)==colnames(M) & colnames(M)==names(Y)} be checked?}
 }
 \value{
 Data frame with columns
@@ -37,7 +40,4 @@ High-throughput mediation analysis to test if rows of \code{M} mediate the effec
 \details{
 If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match. \code{E} and \code{Y}
 cannot have \code{NA}s.
-
-If \code{E} is a matrix, the direction of E-->Y is not evaluated, which reduces power and may inflate the false
-positive rate. It is preferable to test a column of \code{E} with other columns as covariates.
 }

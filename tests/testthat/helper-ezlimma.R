@@ -2,7 +2,7 @@ library(covr)
 library(limma) #for EList-class
 library(testthat)
 
-#example from limma::contrasts.fit
+# example from limma::contrasts.fit
 set.seed(0)
 M <- matrix(rnorm(100*6, sd=0.3), nrow=100, ncol=6)
 dimnames(M) <- list(paste0("gene", 1:nrow(M)), paste0("sample", 1:ncol(M)))

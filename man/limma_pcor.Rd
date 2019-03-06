@@ -5,7 +5,7 @@
 \title{Test partial correlation of each row of an object to a phenotype vector}
 \usage{
 limma_pcor(object, phenotype, covariates, reorder.rows = TRUE,
-  prefix = NULL, adjust.method = "BH")
+  prefix = NULL, adjust.method = "BH", cols = c("t", "P.Value"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -13,7 +13,7 @@ features (e.g. genes) and columns to samples. Must have rownames that are non-du
 
 \item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
 
-\item{covariates}{A numeric matrix-like data object with rows corresponding to samples and columns to covariates
+\item{covariates}{Numeric matrix-like object with rows corresponding to samples and columns to covariates
 to be adjusted for.}
 
 \item{reorder.rows}{Logical, should rows be reordered by p-value?}
@@ -23,9 +23,13 @@ to be adjusted for.}
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
+
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
+automatically also be given.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
 Test partial correlation of each row of an object to a phenotype vector given covariates.
