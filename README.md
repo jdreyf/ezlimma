@@ -11,8 +11,9 @@ On Windows, you need to install [Rtools](https://cran.r-project.org/bin/windows/
 Install `ezlimma` from GitHub using `remotes` within R. You must install `remotes` if you haven't before. `ezlimma` depends on `limma` so you must also install this if you haven't before.
 ```
 #if haven't already installed limma
-source("http://bioconductor.org/biocLite.R")
-biocLite("limma")
+install.packages("BiocManager", repos="https://cloud.r-project.org") #if haven't already installed BiocManager
+library(BiocManager)
+BiocManager::install("limma")
 
 install.packages("remotes") #if haven't already installed remotes
 library(remotes)
