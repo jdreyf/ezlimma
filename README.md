@@ -8,14 +8,13 @@ R package that streamlines & extends the popular R/Bioconductor package `limma`.
 ## Install
 On Windows, you need to install [Rtools](https://cran.r-project.org/bin/windows/Rtools/).
 
-Install `ezlimma` from GitHub using `remotes` within R. You must install `remotes` if you haven't before. `ezlimma` depends on `limma` so you must also install this if you haven't before.
+Install `ezlimma` from GitHub using `remotes` within R. You must install `remotes`, e.g. with `install.packages("remotes",  repos="https://cloud.r-project.org")`, if you haven't before. `ezlimma` depends on `limma` so you must also install this using instruction below if you haven't before.
 ```
 #if haven't already installed limma
 install.packages("BiocManager", repos="https://cloud.r-project.org") #if haven't already installed BiocManager
 library(BiocManager)
 BiocManager::install("limma")
 
-install.packages("remotes") #if haven't already installed remotes
 library(remotes)
 remotes::install_github(repo="jdreyf/ezlimma", build_opts = c("--no-resave-data", "--no-manual"))
 ```
@@ -25,6 +24,7 @@ The vignette presents a tutorial. To see the vignette:
 ```
 library(limma)
 library(ezlimma)
+library(rmarkdown)
 browseVignettes(package="ezlimma")
 ```
 and click on HTML.
