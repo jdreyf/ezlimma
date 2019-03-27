@@ -15,15 +15,15 @@ limma_pcor <- function(object, phenotype, covariates, reorder.rows=TRUE, prefix=
   # pheno residuals
   # data.frame(cbind()) can handle NULLs but not factors
   dat <- data.frame(cbind(phenotype, covariates))
-  pheno.fm <- stats::lm(phenotype ~ ., data=dat)
+  # phenotype isn't used in RHS
+  pheno.fm <- stats::lm(formula=phenotype ~ ., data=dat)
   pheno.res <- stats::residuals(pheno.fm)
   # names get corrupted
   names(pheno.res) <- names(phenotype)
-
-  # object residuals
-  object.res <- limma::removeBatchEffect(x=object, covariates = covariates)
   
-  # how many df to remove in limma?
+  # object residuals; removed as per supplemental text
+  object.res <- limma::removeBatchEffect(x=object, covariates = covariates)
+  # how many df to remove in limma_cor?
   reduce.df <- ncol(as.matrix(covariates))
   lc <- limma_cor(object=object.res, phenotype=pheno.res, reduce.df=reduce.df, reorder.rows=reorder.rows, prefix=prefix, 
                   adjust.method=adjust.method, cols=cols)

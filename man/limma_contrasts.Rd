@@ -7,7 +7,8 @@
 limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
   weights = NA, trend = FALSE, block = NULL, correlation = NULL,
   adjust.method = "BH", add.means = !is.null(grp), treat.lfc = NULL,
-  check.names = TRUE, cols = c("P.Value", "adj.P.Val", "logFC"))
+  moderated = TRUE, check.names = TRUE, cols = c("P.Value",
+  "adj.P.Val", "logFC"))
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -43,10 +44,13 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 which is \code{treat.lfc=log2(1.1)}.}
 
+\item{moderated}{Logical; should \code{\link[limma]{eBayes}} be used? Otherwise an unmoderated version for 
+\pkg{limma} to produce ordinary least squares statistics is used.}
+
 \item{check.names}{Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 and \code{add.means} is \code{FALSE}.}
 
-\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
 automatically also be given.}
 }
@@ -55,12 +59,14 @@ Data frame.
 }
 \description{
 Apply \pkg{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
-a table.
+a table. See examples in vignette.
 }
 \details{
 If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
-\code{model.matrix(~0+grp)}. However, \code{grp} isn"t needed if \code{design} is provided & \code{add.means} 
+\code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
 is \code{FALSE}.
+
+When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.
 }
 \references{
 McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 

@@ -34,7 +34,7 @@ test_that("E binary", {
   expect_equal(hm$EMY.p, hm2$EMY.p)
   
   expect_warning(hm3 <- hitman(E=grp2, M=M, Y=pheno.v, covariates=covar.tmp))
-  expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
+  expect_lte(mean(hm$EMY.p == hm3[rownames(hm), "EMY.p"]), 0.01)
   
   y <- rep(1:3, times=2)
   expect_error(hm4 <- hitman(E=grp2, M=M, Y=rep(1:3, times=2)))
@@ -51,7 +51,7 @@ test_that("E nominal --> design", {
   covar.tmp <- rnorm(length(pheno.v))
   # warning: essentially perfect fit: summary may be unreliable
   expect_warning(hm3 <- hitman(E=grp.tmp, M=M, Y=pheno.v, covariates=covar.tmp))
-  expect_lte(mean(hm$EMY.p==hm3[rownames(hm), "EMY.p"]), 0.01)
+  expect_lte(mean(hm$EMY.p == hm3[rownames(hm), "EMY.p"]), 0.01)
   
   expect_error(hitman(E=rep("a", length(pheno.v)), M=M, Y=pheno.v))
   expect_error(hitman(E=c(rep("a", length(pheno.v)-1), NA), M=M, Y=pheno.v))

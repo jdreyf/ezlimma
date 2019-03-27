@@ -10,7 +10,7 @@ eztoptab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
 \arguments{
 \item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}
 
-\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
 automatically also be given.}
 

@@ -45,7 +45,7 @@ Data frame with several statistical columns corresponding to each phenotype and 
 \description{
 Test correlation of each row of an object to each column of \code{pheno.tab} using 
 one of Pearson's, Kendall's, or Spearman's correlation methods, or limma 
-regression in \code{\link{limma_cor}}.
+regression in \code{\link{limma_cor}}. See examples in vignette.
 }
 \details{
 Each column of \code{pheno.tab} is tested independently. Arguments \code{covariates}, \code{block}, and

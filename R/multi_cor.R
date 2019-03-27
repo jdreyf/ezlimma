@@ -2,7 +2,7 @@
 #' 
 #' Test correlation of each row of an object to each column of \code{pheno.tab} using 
 #' one of Pearson's, Kendall's, or Spearman's correlation methods, or limma 
-#' regression in \code{\link{limma_cor}}.
+#' regression in \code{\link{limma_cor}}. See examples in vignette.
 #' 
 #' @param pheno.tab Matrix-like data object with columns as sample phenotypes, with \code{nrow(pheno.tab)==ncol(object)}.
 #' @param method Character string indicating which association is to be used 

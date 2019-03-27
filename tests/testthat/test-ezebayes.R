@@ -13,7 +13,7 @@ test_that("ezebayes", {
   fit2.ez <- ezebayes(fit = fit, moderated = FALSE)
   
   # warning when !moderated & trend
-  expect_warning(ezebayes(fit = fit, moderated = FALSE, trend = TRUE))
+  expect_error(ezebayes(fit = fit, moderated = FALSE, trend = TRUE))
   
   # get correct components
   expect_true("t" %in% names(fit2.ez))
@@ -33,4 +33,5 @@ test_that("ezebayes", {
   # only test two-group comparison, since limma looks at all samples to cal var
   g1.t <- t.test(x=M["gene1", grp=="Last3"], y=M["gene1", grp=="First3"], var.equal = TRUE)
   expect_equal(setNames(fit2.ez$t["gene1", 3], nm="t"), g1.t$statistic)
+  expect_equal(fit2.ez$p.value["gene1", 3], g1.t$p.value)
 })

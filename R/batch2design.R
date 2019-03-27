@@ -1,6 +1,7 @@
 #' Transform factor vector into design matrix
 #' 
 #' Transform factor vector into design matrix, based on code from \code{\link[limma]{removeBatchEffect}}.
+#' See examples in vignette.
 #' 
 #' @param batch Vector that is a factor or can be coerced to one.
 #' @return Numeric matrix.

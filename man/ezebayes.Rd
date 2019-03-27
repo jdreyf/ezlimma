@@ -10,8 +10,8 @@ ezebayes(fit, moderated = TRUE, trend = FALSE)
 \item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} alone (without 
 \code{\link[limma]{eBayes}}).}
 
-\item{moderated}{Logical; should \code{\link[limma]{eBayes}} be used (otherwise an unmoderated version for \pkg{limma} to 
-produce ordinary least squares statistics is used)?}
+\item{moderated}{Logical; should \code{\link[limma]{eBayes}} be used? Otherwise an unmoderated version for 
+\pkg{limma} to produce ordinary least squares statistics is used.}
 
 \item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}

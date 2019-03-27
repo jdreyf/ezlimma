@@ -55,3 +55,26 @@ test_that("matches limma_contrast with covariate", {
   
   expect_equal(lc3$p, eztt3[rownames(lc3), "Last3vsFirst3.p"])
 })
+
+test_that("!moderated", {
+  expect_error(limma_cor(object=M, phenotype = pheno.v, trend=TRUE, moderated = FALSE))
+  lc2 <- limma_cor(object=M, phenotype = pheno.v, moderated = FALSE,
+                   cols=c("logFC", "t", "P.Value", "adj.P.Val"))
+  g1.t <- cor.test(x=M["gene1", ], y=pheno.v)
+  expect_equal(lc2["gene1", "t"], unname(g1.t$statistic))
+  expect_equal(lc2["gene1", "p"], g1.t$p.value)
+  
+  # with covariates
+  des.lc <- model.matrix(~1+pheno.v+covar)
+  lc <- limma_cor(M[1,], design = des.lc)
+  lc2 <- limma_cor(object=M[1,], design = des.lc, moderated = FALSE)
+  lc3 <- limma_cor(object=M, design = des.lc, moderated = FALSE)
+  expect_equal(lc$p, lc2$p)
+  expect_equal(lc$p, lc3["gene1", "p"])
+  
+  # independent of which of M or Y is on LHS
+  # so can use limma_cor without concern for which var to put on LHS!
+  des.lc2 <- model.matrix(~1+M[1,]+covar)
+  lc4 <- limma_cor(object=pheno.v, design = des.lc2, moderated = FALSE)
+  expect_equal(lc2$p, lc4$p)
+})

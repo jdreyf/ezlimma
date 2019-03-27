@@ -2,7 +2,8 @@
 #'
 #' Test contrasts of gene sets using \code{\link[limma]{roast}} with functions \code{mroast} or \code{fry}. It 
 #' returns a data frame with statistics per gene set, and writes this to an Excel file. The Excel file links to 
-#' CSV files, which contain statistics per gene set. Some of the arguments only apply to \code{mroast}.
+#' CSV files, which contain statistics per gene set. Some of the arguments only apply to \code{mroast}. See 
+#' examples in vignette.
 #' 
 #' @param G Gene set list as returned from \code{\link{read_gmt}}.
 #' @param feat.tab Table of feature (e.g. gene) statistics that the Excel table can link to.

@@ -5,8 +5,6 @@
 #' 
 #' @param fit Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} alone (without 
 #' \code{\link[limma]{eBayes}}).
-#' @param moderated Logical; should \code{\link[limma]{eBayes}} be used (otherwise an unmoderated version for \pkg{limma} to 
-#' produce ordinary least squares statistics is used)?
 #' @inheritParams limma_contrasts
 #' @return Object of \code{\link[limma]{MArrayLM-class}}.
 #' @details \code{trend} is only applicable if \code{moderated} is \code{TRUE}.
@@ -16,7 +14,7 @@ ezebayes <- function(fit, moderated=TRUE, trend=FALSE){
   if (moderated){
     fit <- limma::eBayes(fit, trend=trend)
   } else {
-    if (trend) warning("'trend' is ignored when 'moderated' is FALSE.")
+    if (trend) stop("'trend' must be FALSE when 'moderated' is FALSE.")
     # coefficients <- fit$coefficients
     # stdev.unscaled <- fit$stdev.unscaled
     # sigma <- fit$sigma
@@ -32,9 +30,9 @@ ezebayes <- function(fit, moderated=TRUE, trend=FALSE){
     # fit2$t <- fit2$coef/fit2$stdev.unscaled/fit2$sigma
     # fit2$p.value <- 2 * pt(-abs(fit2$t), df = fit2$df.residual)
     fit$t <- fit$coefficients / fit$stdev.unscaled / fit$sigma
-    fit$p.value <- 2 * pt(-abs(fit$t), df = fit$df.residual)
+    fit$p.value <- 2 * stats::pt(-abs(fit$t), df = fit$df.residual)
 
-    if (!is.null(fit$design) && is.fullrank(fit$design)){
+    if (!is.null(fit$design) && limma::is.fullrank(fit$design)){
       F.stat <- limma::classifyTestsF(fit, fstat.only = TRUE)
       fit$F <- as.vector(F.stat)
       df1 <- attr(F.stat, "df1")

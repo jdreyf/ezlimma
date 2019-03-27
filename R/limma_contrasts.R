@@ -1,7 +1,7 @@
 #' Apply limma's lmFit, contrasts.fit, & eBayes to one or more contrasts and return a table
 #' 
 #' Apply \pkg{limma}'s \code{lmFit}, \code{contrasts.fit}, & \code{eBayes} to one or more contrasts, and return
-#' a table.
+#' a table. See examples in vignette.
 #' 
 #' @param object Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
 #' features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.
@@ -25,15 +25,19 @@
 #' @param treat.lfc Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
 #' rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 #' which is \code{treat.lfc=log2(1.1)}.
+#' @param moderated Logical; should \code{\link[limma]{eBayes}} be used? Otherwise an unmoderated version for 
+#' \pkg{limma} to produce ordinary least squares statistics is used.
 #' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 #' and \code{add.means} is \code{FALSE}.
-#' @param cols Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
+#' @param cols Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
 #' "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
 #' automatically also be given.
 #' @return Data frame.
 #' @details If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
-#' \code{model.matrix(~0+grp)}. However, \code{grp} isn"t needed if \code{design} is provided & \code{add.means} 
-#' is \code{FALSE}. 
+#' \code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
+#' is \code{FALSE}.
+#' 
+#' When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.  
 #' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
 #' Bioinformatics 25, 765-771.
 #' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{limma_cor}}.
@@ -42,8 +46,10 @@
 # don't include parameters for robust fitting, since ppl unlikely to use
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA, trend=FALSE, block=NULL, 
                             correlation=NULL, adjust.method="BH", add.means=!is.null(grp), treat.lfc=NULL, 
-                            check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
-  stopifnot(is.null(treat.lfc) || length(contrast.v)==1)
+                            moderated=TRUE, check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
+  stopifnot(is.na(weights) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
+            length(weights)==ncol(object), is.null(treat.lfc) || length(contrast.v)==1, moderated || !trend)
+  if (is.vector(object)) stop("'object' must be a matrix-like object; you can coerce it to one with 'as.matrix()'")
   if (is.null(design) || add.means){
     stopifnot(ncol(object)==length(grp))
     if (check.names){ stopifnot(colnames(object)==names(grp)) }
@@ -69,11 +75,15 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   
   contr.mat <- limma::makeContrasts(contrasts=contrast.v, levels=design)
   fit2 <- limma::contrasts.fit(fit, contr.mat)
+  
   if (is.null(treat.lfc)){
-    fit2 <- limma::eBayes(fit2, trend=trend)
+    if (trend && !moderated) stop("'trend' must be FALSE when 'moderated' is FALSE.")
+    fit2 <- ezebayes(fit2, moderated = moderated, trend=trend)
   } else {
+    if (!moderated) stop("'treat.lfc' must be NULL when 'moderated' is FALSE.")
     fit2 <- limma::treat(fit2, lfc=treat.lfc, trend=trend)
   }
+  
   # limma ignores names of contrast.v when it's given as vector
   if (!is.null(names(contrast.v))){
     stopifnot(colnames(fit2$contrasts)==contrast.v)
@@ -84,9 +94,14 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   
   # cbind grp means
   if (add.means){
-    grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
+    if (nrow(object) > 1){
+      grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
+    } else {
+      grp.means <- data.matrix(t(tapply(object[1,], INDEX=grp, FUN=mean, na.rm=TRUE)))
+      rownames(grp.means) <- rownames(mtt)
+    }
     colnames(grp.means) <- paste(colnames(grp.means), "avg", sep=".")
-    mtt <- cbind(grp.means[rownames(mtt),], mtt)
+    mtt <- cbind(grp.means[rownames(mtt),,drop=FALSE], mtt)
   }
   return(mtt)
 }

@@ -82,3 +82,26 @@ test_that("error messages for duplicate or empty rownames", {
   rownames(M3)[2] <- ""
   expect_error(limma_contrasts(M3, grp = grp, contrast.v = contr.v))
 })
+
+test_that("only one feature", {
+  expect_error(limma_contrasts(object=M[1,], grp = grp, contrast.v = contr.v, add.means = FALSE))
+  expect_silent(res <- limma_contrasts(object=M[1,,drop=FALSE], grp = grp, contrast.v = contr.v, add.means = FALSE))
+  expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
+  expect_silent(res <- limma_contrasts(object=M[1,,drop=FALSE], grp = grp, contrast.v = contr.v))
+  expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
+  expect_silent(res <- limma_contrasts(object=data.matrix(t(M[1,])), grp = grp, contrast.v = contr.v))
+  expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
+})
+
+test_that("!moderated", {
+  expect_error(limma_contrasts(M, grp = grp, contrast.v = contr.v, trend=TRUE, moderated = FALSE))
+  expect_error(limma_contrasts(M, grp = grp, contrast.v = contr.v, treat.lfc = 2, moderated = FALSE))
+  
+  eztt2 <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v, moderated = FALSE,
+                           cols=c("logFC", "t", "P.Value", "adj.P.Val"))
+  g1.t <- t.test(x=M["gene1", grp=="Last3"], y=M["gene1", grp=="First3"], var.equal = TRUE)
+  expect_equal(setNames(eztt2["gene1", "Last3vsFirst3.t"], nm="t"), g1.t$statistic)
+  expect_equal(eztt2["gene1", "Last3vsFirst3.p"], g1.t$p.value)
+  expect_equal(eztt2["gene1", "Last3vsFirst3.logFC"], 
+               unname(g1.t$estimate["mean of x"]-g1.t$estimate["mean of y"]))
+})

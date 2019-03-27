@@ -1,7 +1,7 @@
 #' Test correlation of each row of object to phenotype using moderated variance
 #'
 #' Test correlation of each row of object to phenotype. By default, it uses the model 
-#' \code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient.
+#' \code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient. See examples in vignette.
 #'
 #' @param phenotype Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.
 #' @param prefix Character string to add to beginning of column names.
@@ -13,17 +13,20 @@
 #' @param check.names Logical; should \code{names(phenotype)==rownames(object)} be checked?
 #' @inheritParams limma_contrasts
 #' @return Data frame.
-#' @details Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
-#' is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details in \code{\link[limma]{lmFit}}.
+#' @details Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and 
+#' \code{phenotype} is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details 
+#' in \code{\link[limma]{lmFit}}.
+#' 
+#' When \code{moderated} is FALSE, an error is generated if \code{trend} is TRUE.
 #' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{ezcor}}
 #' @export
 
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, block=NULL, correlation=NULL,
-                      adjust.method="BH", coef=2, reorder.rows=TRUE, reduce.df=0, check.names=TRUE,
+                      adjust.method="BH", coef=2, reorder.rows=TRUE, moderated=TRUE, reduce.df=0, check.names=TRUE,
                       cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
-   stopifnot(dim(weights)==dim(object)|length(weights)==nrow(object)|length(weights)==ncol(object), is.numeric(reduce.df), 
-             reduce.df >= 0, is.null(phenotype)!=is.null(design))
-  
+   stopifnot(is.na(weights) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
+             length(weights)==ncol(object), is.numeric(reduce.df), reduce.df >= 0, is.null(phenotype)!=is.null(design), 
+             moderated || !trend)
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), limma::isNumeric(phenotype), !is.na(phenotype))
     if (check.names){
@@ -50,7 +53,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
     fit$df.residual <- fit$df.residual - reduce.df
   }
   
-  fit2 <- limma::eBayes(fit, trend=trend)
+  fit2 <- ezebayes(fit, moderated=moderated, trend=trend)
   res.mat <- eztoptab(fit2, coef=coef, cols=cols, adjust.method=adjust.method)
   
   #change logFC to slope and get rid of FC

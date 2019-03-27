@@ -1,7 +1,7 @@
 #' Test correlation of each row of an object to a phenotype vector
 #' 
 #' Test correlation of each row of an object to a phenotype vector using one of 
-#' several correlation methods.
+#' several correlation methods. See examples in vignette.
 #' 
 #' @param method Character string indicating which correlation coefficient to be used for the test. One of 
 #' \code{"pearson"}, \code{"kendall"}, or \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.

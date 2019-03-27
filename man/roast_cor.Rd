@@ -73,12 +73,15 @@ Data frame of gene set statistics.
 }
 \description{
 Test association of gene sets to phenotype using rotation testing with
-\code{\link[limma]{roast}} using \code{limma} functions \code{mroast} or \code{fry}.
+\code{\link[limma]{roast}} using \pkg{limma} functions \code{mroast} or \code{fry}.
 It returns a data frame with statistics per gene set, and writes this to an
 Excel file. The Excel file links to CSV files, which contain statistics per
-gene set.
+gene set. See example in vignette of \code{\link[ezlimma]{roast_contrasts}}.
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns 
 are rounded to 3 significant figures.
+}
+\seealso{
+\code{\link[ezlimma]{roast_contrasts}}.
 }

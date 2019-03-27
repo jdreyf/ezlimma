@@ -36,7 +36,7 @@ Data frame.
 }
 \description{
 Test correlation of each row of an object to a phenotype vector using one of 
-several correlation methods.
+several correlation methods. See examples in vignette.
 }
 \seealso{
 \code{\link[ezlimma]{limma_cor}}
