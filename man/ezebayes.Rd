@@ -4,7 +4,7 @@
 \alias{ezebayes}
 \title{Wrapper for limma's eBayes function that also allows for computing OLS statistics}
 \usage{
-ezebayes(fit, moderated = TRUE, trend = TRUE)
+ezebayes(fit, moderated = TRUE, trend = FALSE)
 }
 \arguments{
 \item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} alone (without 

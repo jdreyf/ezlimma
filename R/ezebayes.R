@@ -11,11 +11,12 @@
 #' @return Object of \code{\link[limma]{MArrayLM-class}}.
 #' @details \code{trend} is only applicable if \code{moderated} is \code{TRUE}.
 
-ezebayes <- function(fit, moderated=TRUE, trend=TRUE){
+ezebayes <- function(fit, moderated=TRUE, trend=FALSE){
   stopifnot(is.logical(moderated), is.logical(trend))
   if (moderated){
     fit <- limma::eBayes(fit, trend=trend)
   } else {
+    if (trend) warning("'trend' is ignored when 'moderated' is FALSE.")
     # coefficients <- fit$coefficients
     # stdev.unscaled <- fit$stdev.unscaled
     # sigma <- fit$sigma
@@ -30,7 +31,7 @@ ezebayes <- function(fit, moderated=TRUE, trend=TRUE){
     # https://support.bioconductor.org/p/113833/ with Gordon Smyth: 
     # fit2$t <- fit2$coef/fit2$stdev.unscaled/fit2$sigma
     # fit2$p.value <- 2 * pt(-abs(fit2$t), df = fit2$df.residual)
-    fit$t <- fit$coefficients/fit$stdev.unscaled/fit$sigma
+    fit$t <- fit$coefficients / fit$stdev.unscaled / fit$sigma
     fit$p.value <- 2 * pt(-abs(fit$t), df = fit$df.residual)
 
     if (!is.null(fit$design) && is.fullrank(fit$design)){
