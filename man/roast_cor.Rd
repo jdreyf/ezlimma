@@ -40,7 +40,7 @@ weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \c
 gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
 length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
-\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+\item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
 \item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}

@@ -8,7 +8,7 @@ multiTopTab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
   adjust.method = "BH")
 }
 \arguments{
-\item{fit}{An object of class \code{MArrayLM} as produced by \code{lmFit} and \code{eBayes}.}
+\item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 

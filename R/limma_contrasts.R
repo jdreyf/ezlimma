@@ -14,7 +14,7 @@
 #' \code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
 #' weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
 #' \code{weights=NA} (with length one) doesn't pass weights to \code{limma}.
-#' @param trend Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+#' @param trend Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 #' is constant.
 #' @param block Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.
 #' @param correlation Inter-duplicate or inter-technical replicate correlation.

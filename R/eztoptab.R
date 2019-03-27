@@ -1,13 +1,14 @@
 #' Wrapper for limma topTable function
 #' 
-#' Wrapper for \code{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
+#' Wrapper for \pkg{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
 #' 
-#' @param fit An object of class \code{MArrayLM} as produced by \code{lmFit} and \code{eBayes}.
+#' @param fit Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.
 #' @param coef Column index or column name specifying which coefficient or contrast of the linear model to test. 
 #' If \code{length(coef)>1}, an F-test will be performed, and \code{logFC} & \code{FC} will not be returned.
 #' @inheritParams limma_contrasts
 #' @inheritParams limma_cor
 #' @return Data frame.
+#' @seealso \code{\link[limma]{topTable}}.
 
 # sort by p
 # assume that if "logFC" in cols, then want "FC"

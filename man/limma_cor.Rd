@@ -26,7 +26,7 @@ estimated.}
 weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
 \code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
-\item{trend}{Logical, should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+\item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
 \item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}

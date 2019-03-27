@@ -8,7 +8,7 @@ eztoptab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
   adjust.method = "BH", prefix = NULL, coef = NULL)
 }
 \arguments{
-\item{fit}{An object of class \code{MArrayLM} as produced by \code{lmFit} and \code{eBayes}.}
+\item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value", 
 "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
@@ -27,5 +27,8 @@ If \code{length(coef)>1}, an F-test will be performed, and \code{logFC} & \code{
 Data frame.
 }
 \description{
-Wrapper for \code{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
+Wrapper for \pkg{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
+}
+\seealso{
+\code{\link[limma]{topTable}}.
 }
