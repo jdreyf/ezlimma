@@ -1,5 +1,6 @@
 library(covr)
 library(limma) #for EList-class
+library(ppcor)
 library(testthat)
 
 # example from limma::contrasts.fit

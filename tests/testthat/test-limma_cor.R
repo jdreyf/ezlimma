@@ -77,4 +77,10 @@ test_that("!moderated", {
   des.lc2 <- model.matrix(~1+M[1,]+covar)
   lc4 <- limma_cor(object=pheno.v, design = des.lc2, moderated = FALSE)
   expect_equal(lc2$p, lc4$p)
+  
+  # matches ppcor
+  pc <- ppcor::pcor.test(x=pheno.v, y=M[1,], z=covar)
+  pc2 <- ppcor::pcor.test(y=pheno.v, x=M[1,], z=covar)
+  expect_equal(pc$p.value, pc2$p.value)
+  expect_equal(lc4[1, "p"], pc$p.value)
 })
