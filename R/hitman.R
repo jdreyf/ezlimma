@@ -7,8 +7,8 @@
 #' @param M A numeric matrix-like data object with one row per feature and one column per sample of mediators.
 #' Must have more than one feature.
 #' @param Y A numeric vector of \code{length(E)} of outcomes.
-#' @param covariates Numeric matrix-like object with rows corresponding to samples and columns to covariates
-#' to be adjusted for.
+#' @param covariates Numeric vector with one element per sample or matrix-like object with rows corresponding 
+#' to samples and columns to covariates to be adjusted for.
 #' @param check.names Logical; should \code{names(E)==colnames(M) & colnames(M)==names(Y)} be checked?
 #' @return Data frame with columns
 #' \describe{
