@@ -37,7 +37,7 @@ test_that("E binary", {
   expect_lte(mean(hm$EMY.p == hm3[rownames(hm), "EMY.p"]), 0.01)
   
   y <- rep(1:3, times=2)
-  expect_error(hm4 <- hitman(E=grp2, M=M, Y=rep(1:3, times=2)))
+  expect_warning(hm4 <- hitman(E=grp2, M=M, Y=rep(1:3, times=2)))
 })
 
 test_that("E nominal --> design", {

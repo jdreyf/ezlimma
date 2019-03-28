@@ -40,7 +40,7 @@ test_that("E binary", {
   expect_true(hm["gene1", "EMY.p"] != hm3[1, "EMY.p"])
   
   y <- rep(1:3, times=2)
-  expect_error(hm4 <- lotman(E=grp2, M=M, Y=rep(1:3, times=2)))
+  expect_warning(hm4 <- lotman(E=grp2, M=M, Y=rep(1:3, times=2)))
 })
 
 test_that("E nominal --> design", {

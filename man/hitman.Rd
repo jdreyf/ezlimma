@@ -14,8 +14,8 @@ Must have more than one feature.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
-\item{covariates}{Numeric matrix-like object with rows corresponding to samples and columns to covariates
-to be adjusted for.}
+\item{covariates}{Numeric vector with one element per sample or matrix-like object with rows corresponding 
+to samples and columns to covariates to be adjusted for.}
 
 \item{check.names}{Logical; should \code{names(E)==colnames(M) & colnames(M)==names(Y)} be checked?}
 }

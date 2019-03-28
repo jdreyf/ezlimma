@@ -37,9 +37,6 @@ hitman <- function(E, M, Y, covariates=NULL, check.names=TRUE){
   # test EY; return ey.sign & weak assoc warning
   fm.ey <- stats::lm(Y ~ ., data=data.frame(Y, my.covar))
   tt.ey <- c(EY.t=summary(fm.ey)$coefficients["E", "t value"], EY.p=summary(fm.ey)$coefficients["E", "Pr(>|t|)"])
-  if (tt.ey["EY.p"] > 0.99){
-    stop("E and Y are not associated.")
-  }
   if (tt.ey["EY.p"] > 0.1){
     warning("E and Y are not associated, so mediation may not be meaningful.")
   }

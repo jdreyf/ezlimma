@@ -14,8 +14,8 @@ features (e.g. genes) and columns to samples. Must have rownames that are non-du
 
 \item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
 
-\item{covariates}{Numeric matrix-like object with rows corresponding to samples and columns to covariates
-to be adjusted for.}
+\item{covariates}{Numeric vector with one element per sample or matrix-like object with rows corresponding 
+to samples and columns to covariates to be adjusted for.}
 
 \item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
