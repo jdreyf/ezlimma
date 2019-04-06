@@ -4,20 +4,32 @@
 \alias{combine_pvalues}
 \title{Combine p-values of a feature over multiple p-value columns of an object}
 \usage{
-combine_pvalues(tab, p.cols = NULL)
+combine_pvalues(tab, p.cols = "p|PValue",
+  stat.cols = "logFC|slope|r|Direction", only.p = TRUE,
+  alternative = c("two.sided", "greater", "less", "Up", "Down"))
 }
 \arguments{
-\item{tab}{Matrix-like object with statistical columns, including some containing p-values. Must have 
-\code{nrow(tab)>1} & \code{ncol(tab)>1}.}
+\item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{p.cols}{Column names or column indices with p-values. If \code{NULL}, the function searches for
-columns that end with \code{.p} or \code{.pval}.}
+\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of p-value columns.}
+
+\item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
+statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
+\code{alternative} is \code{"two.sided"}.}
+
+\item{only.p}{Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.}
+
+\item{alternative}{Vector of direction of change: \code{"two.sided"}, \code{"greater"} or \code{"less"}. Also 
+permitted are \code{"Up"} or \code{"Down"}, in which case the \code{stat.cols} must include elements \code{"Up"}
+or \code{"Down"}.}
 }
 \value{
 Vector of p-values.
 }
 \description{
-Combine p-values of a feature over multiple p-value columns of an object.
+Combine p-values of a feature over multiple p-value columns of an object. If \code{alternative!="two.sided"},
+uses the direction of \code{stat.cols} to transform \code{p.cols} into one-sided p-values; this assumes that
+these p-values were originally calculated from two-sided tests, as is done in \pkg{limma}.
 }
 \details{
 Z-transform method is used to combine p-values across rows, equivalently to using unweighted 

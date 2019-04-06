@@ -22,5 +22,6 @@ mroast_two2one_tailed(tab, p.col = "PValue", dir.col = "Direction",
 Vector of p-values.
 }
 \description{
-Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{mroast}.
+Convert 2-tailed into 1-tailed p-values from \pkg{limma} function \code{mroast}, accounting for number of 
+permutations.
 }

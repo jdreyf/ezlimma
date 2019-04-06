@@ -1,6 +1,7 @@
 #' Convert 2-tailed into 1-tailed p-values from mroast
 #'
-#' Convert 2-tailed into 1-tailed p-values from \code{limma} function \code{mroast}.
+#' Convert 2-tailed into 1-tailed p-values from \pkg{limma} function \code{mroast}, accounting for number of 
+#' permutations.
 #'
 #' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
 #' @inheritParams fry_two2one_tailed

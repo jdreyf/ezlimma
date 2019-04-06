@@ -1,11 +1,18 @@
 #' Combine p-values of a feature over multiple p-value columns of an object
 #' 
-#' Combine p-values of a feature over multiple p-value columns of an object.
+#' Combine p-values of a feature over multiple p-value columns of an object. If \code{alternative!="two.sided"},
+#' uses the direction of \code{stat.cols} to transform \code{p.cols} into one-sided p-values; this assumes that
+#' these p-values were originally calculated from two-sided tests, as is done in \pkg{limma}.
 #' 
-#' @param tab Matrix-like object with statistical columns, including some containing p-values. Must have 
-#' \code{nrow(tab)>1} & \code{ncol(tab)>1}.
-#' @param p.cols Column names or column indices with p-values. If \code{NULL}, the function searches for
-#' columns that end with \code{.p} or \code{.pval}.
+#' @param tab Matrix-like object with statistical columns, some containing p-values.
+#' @param p.cols Indices or \code{\link{regexp}} with column names or column names suffix of p-value columns.
+#' @param stat.cols Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
+#' statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
+#' \code{alternative} is \code{"two.sided"}.
+#' @param only.p Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.
+#' @param alternative Vector of direction of change: \code{"two.sided"}, \code{"greater"} or \code{"less"}. Also 
+#' permitted are \code{"Up"} or \code{"Down"}, in which case the \code{stat.cols} must include elements \code{"Up"}
+#' or \code{"Down"}.
 #' @details Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
 #' \code{method="z.transform"} in \code{survcomp::combine.test}.
 #' @return Vector of p-values.
@@ -14,18 +21,35 @@
 #'  combine_pvalues(tab)
 #' @export
 
-combine_pvalues <- function(tab, p.cols=NULL){
-  stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(p.cols) || !is.null(colnames(tab)))
-  # if p.cols not given, grep for them at end of column names
-  if (is.null(p.cols)){
-    p.cols <- grep(pattern=paste0("(\\.|^)", "(p|pval)", "$"), colnames(tab), ignore.case=TRUE)
+combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|r|Direction", only.p=TRUE,
+                            alternative=c("two.sided", "greater", "less", "Up", "Down")){
+  stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(colnames(tab)))
+  alternative <- match.arg(alternative)
+  p.colnms <- grep_cols(tab, p.cols=p.cols)
+  tab.p <- data.matrix(tab[, p.colnms])
+  if (any(rowSums(is.na(tab.p)) == 1)) stop("Rows of p-value columns must not be all NA.")
+  
+  if (alternative != "two.sided"){
+    stat.colnms <- grep_cols(tab, stat.cols=stat.cols)
+    if (length(stat.colnms) != length(p.colnms)) stop("Lengths of p columns and stat columns must match.")
+    for (col.ind in seq_along(length(p.colnms))){
+      tab.p[, col.ind] <- two2one_tailed(tab, stat.col=stat.colnms[col.ind], p.col=p.colnms[col.ind], 
+                                         alternative=alternative)
+    }
+    if (any(rowSums(is.na(tab.p)) == 1)){
+      stop("Rows of p-value columns, after accounting for stats, must not be all NA.")
+    }
   }
-  stopifnot(length(p.cols)>0)
-  comb.p <- apply(as.matrix(tab[,p.cols]), MARGIN=1, FUN=function(p){ 
-    p.nona <- p[!is.na(p)]
-    z <- stats::qnorm(p.nona, lower.tail = FALSE)
-    cp <- stats::pnorm(sum(z)/sqrt(length(p.nona)), lower.tail = FALSE)
-    return(cp)
+  tab.z <- apply(tab.p, MARGIN=2, qnorm, lower.tail = FALSE)
+  # account for NAs
+  combz.v <- apply(tab.z, MARGIN=1, FUN=function(zv){
+    zv.nona <- zv[!is.na(zv)]
+    sum(zv)/sqrt(length(zv))
   })
-  return(comb.p)
+  combp.v <- stats::pnorm(combz.v, lower.tail = FALSE)
+  if (!only.p){
+    return(cbind(z=combz.v, p=combp.v, FDR=p.adjust(combp.v, method = "BH")))
+  } else {
+    return(combp.v)
+  }
 }

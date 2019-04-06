@@ -11,9 +11,9 @@ prop_changed(feat.tab, feat.lst, stat.col = 1, p.col = 2)
 
 \item{feat.lst}{Named list, with each element containing names or indices of rows of \code{feat.tab}.}
 
-\item{stat.col}{Name or index of column with signed statistics.}
+\item{stat.col}{Column name or column index with signed statistics.}
 
-\item{p.col}{Name or index of p-value column.}
+\item{p.col}{Column name or column indix with p-values.}
 }
 \description{
 Calculate proportion of features up & down at p=0.05 per pathway.

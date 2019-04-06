@@ -12,8 +12,8 @@ fry_two2one_tailed <- function(tab, p.col="PValue", dir.col="Direction", directi
   stopifnot(c(tab[,dir.col], direction) %in% c("Up", "Down"), tab[,p.col]<=1, tab[,p.col]>=0)
   
   new_pv <- stats::setNames(tab[, p.col]/2, nm=rownames(tab))
-  if (any(tab[,dir.col]!=direction)){
-    opp.ind <- which(tab[,dir.col]!=direction)
+  if (any(tab[, dir.col]!=direction)){
+    opp.ind <- which(tab[, dir.col]!=direction)
     new_pv[opp.ind] <- 1 - new_pv[opp.ind]
   }
   return(new_pv)

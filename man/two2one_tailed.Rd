@@ -4,22 +4,23 @@
 \alias{two2one_tailed}
 \title{Convert 2-tailed into 1-tailed p-values}
 \usage{
-two2one_tailed(tab, stat.col = 1, p.col = 2,
-  alternative = c("greater", "less"))
+two2one_tailed(tab, stat.col = "logFC|slope|r|Direction",
+  p.col = "p|PValue", alternative = c("greater", "less", "Up", "Down"))
 }
 \arguments{
-\item{tab}{Table with statistics from \code{fry}.}
+\item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{stat.col}{Name or index of column with signed statistics.}
+\item{stat.col}{Index or \code{\link{regexp}} with column name  or column name suffix with numeric signed statistics
+or with \code{"Up", "Down"} values.}
 
-\item{p.col}{Name or index of p-value column.}
+\item{p.col}{Index or \code{\link{regexp}} with column name suffix or full column names of p-value columns.}
 
-\item{alternative}{Vector of direction of change: either \code{"greater"} or \code{"less"}.}
+\item{alternative}{Vector of direction of change: either \code{"greater"} or \code{"less"}. Also permitted are
+\code{"Up"} or \code{"Down"}, in which case the \code{stat.col} must include elements \code{"Up"} or \code{"Down"}.}
 }
 \value{
 p-values.
 }
 \description{
-Convert 2-tailed into 1-tailed p-values from matrix. Alternative "greater" corresponds to positive association, 
-"less" to negative association.
+Convert 2-tailed into 1-tailed p-values from a matrix-like object.
 }

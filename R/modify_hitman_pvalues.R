@@ -1,6 +1,6 @@
-#' Modify p-values of hitman
+#' Modify p-values of hitman or lotman
 #' 
-#' Modify p-values of hitman based on sidedness of tests.
+#' Modify p-values of hitman or lotman based on sidedness of both tests.
 #' 
 #' @param tab Numeric matrix. Must have "EM" and "MY" stat and ".p" columns.
 #' @param overall.sign Sign of overall effect from exposure to outcome, one of 1 or -1.
@@ -23,7 +23,7 @@ modify_hitman_pvalues <- function(tab, overall.sign, stat.cols=c("EM.t", "MY.t")
       p1.pv <- apply(X=tab.ss[p1.larger.rows, c(stat.cols[1], p.cols[1])], MARGIN=1, FUN=function(v){
         # want to flip alternative to enlarge p-value
         alt.tmp <- ifelse (v[1] > 0, "less", "greater")
-        two2one_tailed(tab=t(as.matrix(v)), alternative=alt.tmp)
+        two2one_tailed(tab=t(as.matrix(v)), stat.col=1, p.col=2, alternative=alt.tmp)
       })
       # replace
       tab[wrong.sign, p.cols[1]][p1.larger.rows] <- p1.pv
@@ -33,7 +33,7 @@ modify_hitman_pvalues <- function(tab, overall.sign, stat.cols=c("EM.t", "MY.t")
       p2.pv <- apply(X=tab.ss[p2.larger.rows, c(stat.cols[2], p.cols[2])], MARGIN=1, FUN=function(v){
         # want to flip alternative to enlarge p-value
         alt.tmp <- ifelse (v[1] > 0, "less", "greater")
-        two2one_tailed(tab=t(as.matrix(v)), alternative=alt.tmp)
+        two2one_tailed(tab=t(as.matrix(v)), stat.col=1, p.col=2, alternative=alt.tmp)
       })
       tab[wrong.sign, p.cols[2]][p2.larger.rows] <- p2.pv
     }

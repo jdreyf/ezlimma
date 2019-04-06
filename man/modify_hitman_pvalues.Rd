@@ -2,7 +2,7 @@
 % Please edit documentation in R/modify_hitman_pvalues.R
 \name{modify_hitman_pvalues}
 \alias{modify_hitman_pvalues}
-\title{Modify p-values of hitman}
+\title{Modify p-values of hitman or lotman}
 \usage{
 modify_hitman_pvalues(tab, overall.sign, stat.cols = c("EM.t", "MY.t"),
   p.cols = c("EM.p", "MY.p"))
@@ -20,5 +20,5 @@ modify_hitman_pvalues(tab, overall.sign, stat.cols = c("EM.t", "MY.t"),
 Matrix with p-value columns modified.
 }
 \description{
-Modify p-values of hitman based on sidedness of tests.
+Modify p-values of hitman or lotman based on sidedness of both tests.
 }
