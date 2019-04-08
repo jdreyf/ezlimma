@@ -15,15 +15,16 @@ grep_cols <- function(tab, p.cols=NULL, stat.cols=NULL){
     } else {
       colnms <- grep(pattern=paste0("(\\.|^)(", p.cols, ")$"), colnames(tab), ignore.case=TRUE, value = TRUE)
     }
-    if (length(colnms) == 0) stop("Cannot find p cols: ", p.cols, ".")
+    if (length(colnms) == 0) stop("Cannot find p cols: '", p.cols, "'.", call. = FALSE)
     if (any(tab[, colnms] < 0 | tab[, colnms] > 1)) stop("p-values must be 0 <= p <= 1.")
+    if (any(rowSums(as.matrix(is.na(tab[, colnms]))) == 1)) stop("Rows of p-value columns must not be all NA.")
   } else {
     if (is.numeric(stat.cols)){
       colnms <- colnames(tab)[stat.cols]
     } else {
       colnms <- grep(pattern=paste0("(\\.|^)(", stat.cols, ")$"), colnames(tab), ignore.case=TRUE, value = TRUE)
     }
-    if (length(colnms) == 0) stop("Cannot find stat cols: ", stat.cols, ".")
+    if (length(colnms) == 0) stop("Cannot find stat cols: '", stat.cols, "'.", call. = FALSE)
   }
   colnms
 }

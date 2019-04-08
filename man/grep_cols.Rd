@@ -9,7 +9,7 @@ grep_cols(tab, p.cols = NULL, stat.cols = NULL)
 \arguments{
 \item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of p-value columns.}
+\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
 
 \item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
 statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 

@@ -23,22 +23,3 @@ test_that("clean filenames", {
   expect_equal(res, c('_', '__', 'sulfate_sulfite_met', 'hi__', 'hellohello', "hello_world_",
                                'CON_', 'coM2_', 'con_', 'CON__', 'CON___'))
 })
-
-test_that("combine_pvals & grep_cols", {
-  tab <- matrix(cbind(p=(1:10)/10, fdr=(1:10)/10), ncol=2, dimnames=list(letters[1:10], c("p", "fdr")))
-  tab2 <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)
-  #ensure grep for pv.cols not confused by "pheno.cor"
-  tab3 <- data.frame(pheno.cor=(-2:2)/3, pheno.p=(1:5)/5)
-  
-  # comb_pv
-  cp <- as.numeric(c('1', '0.626422003782904', '0.593346207732144', '0.581518654612405', '0.578313236039981', 
-                     '0.581518654612405', '0.593346207732144', '0.626422003782904', '1'))
-  expect_equal(names(combine_pvalues(tab)), rownames(tab))
-  expect_equal(combine_pvalues(tab2), cp)
-  expect_equal(combine_pvalues(tab3), tab3[,2])
-  #NULL = 0 rows
-  expect_error(combine_pvalues(NULL))
-  
-  #grep_cols
-  expect_equal(grep_cols(tab3, p.cols = "p|PVal"), "pheno.p")
-})

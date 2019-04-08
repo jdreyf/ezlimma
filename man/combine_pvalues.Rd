@@ -5,13 +5,13 @@
 \title{Combine p-values of a feature over multiple p-value columns of an object}
 \usage{
 combine_pvalues(tab, p.cols = "p|PValue",
-  stat.cols = "logFC|slope|r|Direction", only.p = TRUE,
+  stat.cols = "logFC|slope|cor|Direction", only.p = TRUE,
   alternative = c("two.sided", "greater", "less", "Up", "Down"))
 }
 \arguments{
 \item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of p-value columns.}
+\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
 
 \item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
 statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
@@ -19,9 +19,8 @@ statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}
 
 \item{only.p}{Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.}
 
-\item{alternative}{Vector of direction of change: \code{"two.sided"}, \code{"greater"} or \code{"less"}. Also 
-permitted are \code{"Up"} or \code{"Down"}, in which case the \code{stat.cols} must include elements \code{"Up"}
-or \code{"Down"}.}
+\item{alternative}{Direction of change: \code{"two.sided"}; \code{"greater"} or \code{"less"}, or their synonyms
+\code{"Up"} or \code{"Down"}.}
 }
 \value{
 Vector of p-values.
