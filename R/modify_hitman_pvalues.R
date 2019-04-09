@@ -23,7 +23,7 @@ modify_hitman_pvalues <- function(tab, overall.sign, stat.cols=c("EM.t", "MY.t")
       p1.pv <- apply(X=tab.ss[p1.larger.rows, c(stat.cols[1], p.cols[1])], MARGIN=1, FUN=function(v){
         # want to flip alternative to enlarge p-value
         alt.tmp <- ifelse (v[1] > 0, "less", "greater")
-        two2one_tailed(tab=t(as.matrix(v)), stat.col=1, p.col=2, alternative=alt.tmp)
+        two2one_tailed(tab=t(as.matrix(v)), stat.cols=1, p.cols=2, alternative=alt.tmp)
       })
       # replace
       tab[wrong.sign, p.cols[1]][p1.larger.rows] <- p1.pv
@@ -33,7 +33,7 @@ modify_hitman_pvalues <- function(tab, overall.sign, stat.cols=c("EM.t", "MY.t")
       p2.pv <- apply(X=tab.ss[p2.larger.rows, c(stat.cols[2], p.cols[2])], MARGIN=1, FUN=function(v){
         # want to flip alternative to enlarge p-value
         alt.tmp <- ifelse (v[1] > 0, "less", "greater")
-        two2one_tailed(tab=t(as.matrix(v)), stat.col=1, p.col=2, alternative=alt.tmp)
+        two2one_tailed(tab=t(as.matrix(v)), stat.cols=1, p.cols=2, alternative=alt.tmp)
       })
       tab[wrong.sign, p.cols[2]][p2.larger.rows] <- p2.pv
     }

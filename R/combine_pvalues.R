@@ -37,14 +37,14 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
     stat.colnms <- grep_cols(tab, stat.cols=stat.cols)
     if (length(stat.colnms) != length(p.colnms)) stop("Lengths of p columns and stat columns must match.")
     for (col.ind in seq_along(length(p.colnms))){
-      tab.p[, col.ind] <- two2one_tailed(tab, stat.col=stat.colnms[col.ind], p.col=p.colnms[col.ind], 
+      tab.p[, col.ind] <- two2one_tailed(tab, stat.cols=stat.colnms[col.ind], p.cols=p.colnms[col.ind], 
                                          alternative=alternative)
     }
     if (any(rowSums(is.na(tab.p)) == 1)){
       stop("All rows of p-values, after accounting for stats, must not be all NA.")
     }
   }
-  tab.z <- apply(tab.p, MARGIN=2, qnorm, lower.tail = FALSE)
+  tab.z <- apply(tab.p, MARGIN=2, stats::qnorm, lower.tail = FALSE)
   # account for NAs
   combz.v <- apply(tab.z, MARGIN=1, FUN=function(zv){
     zv.nona <- zv[!is.na(zv)]
@@ -52,7 +52,7 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
   })
   combp.v <- stats::pnorm(combz.v, lower.tail = FALSE)
   if (!only.p){
-    return(cbind(z=combz.v, p=combp.v, FDR=p.adjust(combp.v, method = "BH")))
+    return(cbind(z=combz.v, p=combp.v, FDR=stats::p.adjust(combp.v, method = "BH")))
   } else {
     return(combp.v)
   }

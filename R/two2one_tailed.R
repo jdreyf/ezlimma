@@ -4,7 +4,7 @@
 #' 
 #' @param alternative Direction of change: either \code{"greater"} or \code{"less"}, or their synonyms  
 #' \code{"Up"} or \code{"Down"}.
-#' @param nperm Number of rotations used to estimate the p-values from \code{\link[limma]{mroast}}, or number of 
+#' @param nperm Number of rotations used to estimate the p-values from \code{\link[limma]{roast}}, or number of 
 #' permutations, where p-value calculated according to Phipson & Smyth (2010). Ignored if \code{NULL}.
 #' @inheritParams combine_pvalues
 #' @inheritParams prop_changed
