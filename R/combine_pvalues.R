@@ -20,7 +20,7 @@
 #'  combine_pvalues(tab)
 #' @export
 
-combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|Direction", only.p=TRUE,
+combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|rho|Direction", only.p=TRUE,
                             alternative=c("two.sided", "greater", "less", "Up", "Down")){
   stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(colnames(tab)))
   alternative <- match.arg(alternative)

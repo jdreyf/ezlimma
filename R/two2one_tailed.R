@@ -21,7 +21,7 @@
 # which is the equivalent of 1-p/2, so pv' = (nrot - b/2 + 1) / (nrot+1)
 # this is also consistent with 0.5<=pv'<=1
 
-two2one_tailed <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|Direction", 
+two2one_tailed <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|rho|Direction", 
                            alternative=c("greater", "less", "Up", "Down"), nperm=NULL){
   stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(colnames(tab)))
   alternative <- match.arg(alternative)

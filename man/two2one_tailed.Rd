@@ -5,8 +5,8 @@
 \title{Convert 2-tailed into 1-tailed p-values}
 \usage{
 two2one_tailed(tab, p.cols = "p|PValue",
-  stat.cols = "logFC|slope|cor|Direction", alternative = c("greater",
-  "less", "Up", "Down"), nperm = NULL)
+  stat.cols = "logFC|slope|cor|rho|Direction",
+  alternative = c("greater", "less", "Up", "Down"), nperm = NULL)
 }
 \arguments{
 \item{tab}{Matrix-like object with statistical columns, some containing p-values.}

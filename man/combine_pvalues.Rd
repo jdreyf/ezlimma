@@ -5,7 +5,7 @@
 \title{Combine p-values of a feature over multiple p-value columns of an object}
 \usage{
 combine_pvalues(tab, p.cols = "p|PValue",
-  stat.cols = "logFC|slope|cor|Direction", only.p = TRUE,
+  stat.cols = "logFC|slope|cor|rho|Direction", only.p = TRUE,
   alternative = c("two.sided", "greater", "less", "Up", "Down"))
 }
 \arguments{
