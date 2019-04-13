@@ -8,15 +8,17 @@
 #' @inheritParams roast_contrasts
 #' @return Modified result from \code{mroast} or \code{fry}.
 
-roast_one_tailed <- function(roast.res, fun, alternative, nrot, adjust.method){
-  direction <- sub("greater", "Up", sub("less", "Down", alternative))
+roast_two2one_tailed <- function(roast.res, fun, alternative, nrot, adjust.method){
   if (fun=="fry"){
-    roast.res[,"PValue"] <- fry_two2one_tailed(tab = roast.res, direction = direction)
+    # two2one_tailed returns a matrix
+    roast.res[,"PValue"] <- two2one_tailed(tab = roast.res, p.cols="PValue", stat.cols="Direction", 
+                                           alternative = alternative)[,1]
   } else {
-    roast.res[,"PValue"] <- mroast_two2one_tailed(tab = roast.res, direction = direction, nrot = nrot)
+    roast.res[,"PValue"] <- two2one_tailed(tab = roast.res, p.cols="PValue", stat.cols="Direction", 
+                                           alternative = alternative, nperm = nrot)[,1]
   }
   roast.res[,"FDR"] <- stats::p.adjust(roast.res[,"PValue"], method = adjust.method)
   mixed.cols <- grep("Mixed", colnames(roast.res))
-  if (length(mixed.cols)>0){ roast.res <- roast.res[,-mixed.cols] }
+  if (length(mixed.cols) > 0){ roast.res <- roast.res[, -mixed.cols] }
   return(roast.res)
 }

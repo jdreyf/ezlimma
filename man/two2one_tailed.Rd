@@ -24,7 +24,7 @@ statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}
 permutations, where p-value calculated according to Phipson & Smyth (2010). Ignored if \code{NULL}.}
 }
 \value{
-Matrix of p-values.
+matrix of p-values.
 }
 \description{
 Convert 2-tailed into 1-tailed p-values, possibly using signs of associated statistics, from a matrix-like object.

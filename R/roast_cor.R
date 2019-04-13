@@ -109,9 +109,11 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   
   # if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
   if (alternative!="two.sided"){
-    res <- roast_one_tailed(roast.res=res, fun=fun, alternative=alternative, nrot=nrot, adjust.method=adjust.method)
+    res <- roast_two2one_tailed(roast.res=res, fun=fun, alternative=alternative, nrot=nrot, adjust.method=adjust.method)
   }
-  colnames(res) <- gsub("PValue", "p", gsub("FDR.Mixed", "Mixed.FDR", gsub("PValue.Mixed", "Mixed.p", colnames(res))))
+  colnames(res) <- gsub("PValue", "p", 
+                        gsub("FDR.Mixed", "Mixed.FDR", 
+                             gsub("PValue.Mixed", "Mixed.p", colnames(res))))
   # add prefix to each column except 1st, which is NGenes
   if (!is.null(prefix)) colnames(res)[-1] <- paste(prefix, colnames(res)[-1], sep = ".")
   # let combine_pvalues find pvalue columns

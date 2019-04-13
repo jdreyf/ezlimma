@@ -47,5 +47,13 @@ test_that("2 --> 1 tailed", {
   expect_equal(tto1[1, "p"], tab3.ss[1, "p"]/2)
   expect_equal(tto1[5, "p"], 1-tab3.ss[5, "p"]/2)
   
-  
+  # fry
+  tto2 <- two2one_tailed(tab = rcn.m, p.cols="First3.p", stat.cols = "First3.Direction", alternative = "Up")
+  # frytto <- fry_two2one_tailed(tab = rcn.m, p.col="First3.p", dir.col = "First3.Direction", direction = "Up")
+  expect_true(all(round(tto2[c("pwy1", "pwy2", "pwy3") ,1], 4) == c(5e-04, 0.829, 0.211))) 
+
+  # nperm
+  tto3 <- two2one_tailed(tab = rcn.m, p.cols="First3.p", stat.cols = "First3.Direction", alternative = "Up", nperm = 999)
+  # mr <- mroast_two2one_tailed(tab = rcn.m, p.col="First3.p", dir.col = "First3.Direction", direction = "Up", nrot = 999)
+  expect_true(all(signif(tto3[c("pwy1", "pwy2", "pwy3") ,1], 4) == c(0.0010, 0.8295, 0.2115)))
 })

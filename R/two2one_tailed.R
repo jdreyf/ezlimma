@@ -8,7 +8,7 @@
 #' permutations, where p-value calculated according to Phipson & Smyth (2010). Ignored if \code{NULL}.
 #' @inheritParams combine_pvalues
 #' @inheritParams prop_changed
-#' @return Matrix of p-values.
+#' @return matrix of p-values.
 #' @references Phipson & Smyth (2010). Permutation P-values Should Never Be Zero: Calculating Exact P-values When 
 #' Permutations Are Randomly Drawn. Statistical Applications in Genetics and Molecular Biology, 9(1).
 

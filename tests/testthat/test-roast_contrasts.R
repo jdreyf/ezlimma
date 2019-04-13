@@ -30,7 +30,7 @@ test_that("weights", {
 
 test_that("one sided testing", {
   tmp <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
-  tmp2 <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", alternative = "less")
+  tmp2 <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", alternative = "less")
   expect_equal(1-tmp["pwy1", "First3.p"]/2, tmp2["pwy1", "First3.p"])
   expect_equal(tmp["pwy2", "First3.p"]/2, tmp2["pwy2", "First3.p"])
   expect_equal(1-tmp["pwy3", "First3.p"]/2, tmp2["pwy3", "First3.p"])
