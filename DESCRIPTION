@@ -21,6 +21,7 @@ Suggests:
 	covr,
 	ppcor,
 	readxl,
+	SDMTools,
     testthat,
 	tidyxl,
 	writexl

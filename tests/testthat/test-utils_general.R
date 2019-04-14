@@ -1,4 +1,4 @@
-context("utils")
+context("utils general")
 
 test_that("df_signif doesn't corrupt inputs", {
   test.df <- data.frame("num1-2"=1:4, num2=5:8, char1=letters[1:4], char2=letters[5:8], check.names=FALSE)
