@@ -89,3 +89,10 @@ test_that("testing a gene is independent of other genes", {
   hm2 <- lotman(E=ee, M=M, Y=pheno.v, covariates=covar.tmp)
   expect_equal(hm1[1, "EMY.p"], hm2["gene1", "EMY.p"])
 })
+
+# takes a few sec -- worth it.
+test_that("barfield", {
+  prop.sig.mat <- ezlimma:::sim_barfield(med.fcn = lotman, b1t2.v=c(0, 0.39), nsim = 50)
+  expect_lte(prop.sig.mat[1, 1], 0.03)
+  expect_gte(prop.sig.mat[2, 2], 0.6)
+})
