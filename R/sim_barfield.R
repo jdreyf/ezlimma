@@ -45,7 +45,7 @@ sim_barfield <- function(med.fcn, b1t2.v=c(0, 0.14, 0.39), alpha=0.05, nsamp=50,
         
         if (ngene >= 1){
           em.other <- b0+b2*x
-          m.other.mat <- matrix(rnorm(n=nsamp*(ngene-1), mean=em.other, sd=1), nrow=ngene-1, ncol=nsamp, byrow = TRUE)
+          m.other.mat <- matrix(rnorm(n=nsamp*ngene, mean=em.other, sd=1), nrow=ngene, ncol=nsamp, byrow = TRUE)
           med.mat <- rbind(m1, m.other.mat)
           dimnames(med.mat) <- list(paste0("m", 1:nrow(med.mat)), paste0("s", 1:ncol(med.mat)))
           med.res <- suppressWarnings(hitman(E=a, M=med.mat, Y=y, covariates = x))
@@ -56,7 +56,7 @@ sim_barfield <- function(med.fcn, b1t2.v=c(0, 0.14, 0.39), alpha=0.05, nsamp=50,
         }
       }
     }
-    if (verbose && sim %% 100 == 0) message("sim", sim, "\n")
+    if (verbose && sim %% 100 == 0) message("sim: ", sim)
   }
   # summarize
   prop.sig.mat <- apply(prop.sig.arr, MARGIN=c(1,2), FUN=mean)

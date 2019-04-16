@@ -90,6 +90,21 @@ test_that("testing a gene is independent of other genes", {
   expect_equal(hm1[1, "EMY.p"], hm2["gene1", "EMY.p"])
 })
 
+test_that("consistent & inconsistent", {
+  n <- 10
+  sigma <- 0.25
+  E <- rep(0:1, each=n)
+  ey <- rnorm(n=2*n, sd=sigma)
+  Y <- E+ey
+  eps <- rnorm(n=2*n, sd=sigma)
+  em.ic <- -ey+eps
+  em.c <- ey+eps
+  M <- rbind(ics=E+em.ic, cs=E+em.c)
+  lm <- lotman(E=E, M=M, Y=Y)
+  expect_lt(lm["cs", "EMY.p"], 0.01)
+  expect_gt(lm["ics", "EMY.p"], 0.9)
+})
+
 # takes a few sec -- worth it.
 test_that("barfield", {
   prop.sig.mat <- ezlimma:::sim_barfield(med.fcn = lotman, b1t2.v=c(0, 0.39), nsim = 50)

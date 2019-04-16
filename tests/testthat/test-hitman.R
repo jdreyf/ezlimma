@@ -83,9 +83,25 @@ test_that("NAs", {
   expect_silent(hitman(E=ee, M=M, Y=pheno.v))
 })
 
+test_that("consistent & inconsistent", {
+  n <- 10
+  sigma <- 0.25
+  E <- rep(0:1, each=n)
+  ey <- rnorm(n=2*n, sd=sigma)
+  Y <- E+ey
+  eps <- rnorm(n=2*n, sd=sigma)
+  em.ic <- -ey+eps
+  em.c <- ey+eps
+  M <- rbind(ics=E+em.ic, cs=E+em.c)
+  hm <- hitman(E=E, M=M, Y=Y)
+  expect_lt(hm["cs", "EMY.p"], 0.01)
+  expect_gt(hm["ics", "EMY.p"], 0.9)
+})
+
 # takes a few sec -- worth it.
 test_that("barfield", {
   prop.sig.mat <- ezlimma:::sim_barfield(med.fcn = hitman, b1t2.v=c(0, 0.39), nsim = 50, ngene = 9)
-  expect_lte(prop.sig.mat[1, 1], 0.03)
+  expect_lte(prop.sig.mat[1, 1], 0.05)
   expect_gte(prop.sig.mat[2, 2], 0.6)
 })
+
