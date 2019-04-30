@@ -40,7 +40,7 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 
 \item{add.means}{Logical indicating if (unweighted) group means per row should be added to the output.}
 
-\item{treat.lfc}{Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
+\item{treat.lfc}{Vector of logFC passed to \code{\link[limma:lmFit]{treat}} \code{lfc}. It is recycled as needed to match
 rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 which is \code{treat.lfc=log2(1.1)}.}
 
@@ -73,5 +73,5 @@ McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change th
 Bioinformatics 25, 765-771.
 }
 \seealso{
-\code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{limma_cor}}.
+\code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link{limma_cor}}.
 }

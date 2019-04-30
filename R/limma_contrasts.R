@@ -22,7 +22,7 @@
 #' include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 #' list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.
 #' @param add.means Logical indicating if (unweighted) group means per row should be added to the output.
-#' @param treat.lfc Vector of logFC passed to \code{\link[limma]{treat}} \code{lfc}. It is recycled as needed to match
+#' @param treat.lfc Vector of logFC passed to \code{\link[limma:lmFit]{treat}} \code{lfc}. It is recycled as needed to match
 #' rows of \code{object}. If given, \code{length(contrast.v)} must be 1. McCarthy & Smyth suggest a 10% fold-change,
 #' which is \code{treat.lfc=log2(1.1)}.
 #' @param moderated Logical; should \code{\link[limma]{eBayes}} be used? Otherwise an unmoderated version for 
@@ -40,7 +40,7 @@
 #' When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.  
 #' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
 #' Bioinformatics 25, 765-771.
-#' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{limma_cor}}.
+#' @seealso \code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link{limma_cor}}.
 #' @export
 
 # don't include parameters for robust fitting, since ppl unlikely to use
