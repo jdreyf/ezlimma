@@ -31,21 +31,21 @@ sim_barfield <- function(med.fcn, b1t2.v=c(0, 0.14, 0.39), alpha=0.05, nsamp=50,
   for (sim in 1:nsim){
     for (t2 in b1t2.v){
       for (b1 in b1t2.v){
-        x <- rnorm(n=nsamp)
-        a <- rnorm(n=nsamp)
+        x <- stats::rnorm(n=nsamp)
+        a <- stats::rnorm(n=nsamp)
         
         # eq 1; E(M1)
         em1 <- b0+b1*a+b2*x
-        m1 <- rnorm(n=nsamp, mean=em1)
+        m1 <- stats::rnorm(n=nsamp, mean=em1)
         
         # eq 3; E(Y)
         ey <- t0+t1*a+t2*m1+t3*x
-        y <- rnorm(n=nsamp, mean=ey)
+        y <- stats::rnorm(n=nsamp, mean=ey)
         names(y) <- paste0("s", 1:length(y))
         
         if (ngene >= 1){
           em.other <- b0+b2*x
-          m.other.mat <- matrix(rnorm(n=nsamp*ngene, mean=em.other, sd=1), nrow=ngene, ncol=nsamp, byrow = TRUE)
+          m.other.mat <- matrix(stats::rnorm(n=nsamp*ngene, mean=em.other, sd=1), nrow=ngene, ncol=nsamp, byrow = TRUE)
           med.mat <- rbind(m1, m.other.mat)
           dimnames(med.mat) <- list(paste0("m", 1:nrow(med.mat)), paste0("s", 1:ncol(med.mat)))
           med.res <- suppressWarnings(hitman(E=a, M=med.mat, Y=y, covariates = x))
