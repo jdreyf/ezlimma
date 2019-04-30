@@ -47,7 +47,7 @@
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA, trend=FALSE, block=NULL, 
                             correlation=NULL, adjust.method="BH", add.means=!is.null(grp), treat.lfc=NULL, 
                             moderated=TRUE, check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
-  stopifnot(is.na(weights) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
+  stopifnot(all(is.na(weights)) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
             length(weights)==ncol(object), is.null(treat.lfc) || length(contrast.v)==1, moderated || !trend)
   if (is.vector(object)) stop("'object' must be a matrix-like object; you can coerce it to one with 'as.matrix()'")
   if (is.null(design) || add.means){
