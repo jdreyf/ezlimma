@@ -5,7 +5,7 @@
 #' 
 #' @param method Character string indicating which correlation coefficient to be used for the test. One of 
 #' \code{"pearson"}, \code{"kendall"}, or \code{"spearman"}, can be abbreviated, see \code{\link[stats]{cor.test}}.
-#' @param alternative Alternative hypothesis, and must be one of\code{"two.sided"}, \code{"greater"}, or \code{"less"}. 
+#' @param alternative Alternative hypothesis; must be one of\code{"two.sided"}, \code{"greater"}, or \code{"less"}. 
 #' You can specify just the initial letter. \code{"greater"} corresponds to positive association, \code{"less"} to 
 #' negative association. See \code{\link[stats]{cor.test}}.
 #' @inheritParams limma_cor

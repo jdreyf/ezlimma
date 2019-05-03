@@ -21,7 +21,8 @@ features (e.g. genes) and columns to samples. Must have rownames that are non-du
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
+\item{phenotype}{Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
+Should be same length as \code{ncol(object)}.}
 
 \item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
 estimated.}

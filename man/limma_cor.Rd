@@ -14,7 +14,8 @@ limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
 features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
+\item{phenotype}{Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
+Should be same length as \code{ncol(object)}.}
 
 \item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
 estimated.}

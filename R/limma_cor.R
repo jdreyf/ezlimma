@@ -3,7 +3,8 @@
 #' Test correlation of each row of object to phenotype. By default, it uses the model 
 #' \code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient. See examples in vignette.
 #'
-#' @param phenotype Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.
+#' @param phenotype Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
+#' Should be same length as \code{ncol(object)}.
 #' @param prefix Character string to add to beginning of column names.
 #' @param coef Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.
 #' @param reorder.rows Logical, should rows be reordered by p-value?
@@ -58,9 +59,9 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   
   #change logFC to slope and get rid of FC
   colnames(res.mat) <- gsub("logFC", "slope", colnames(res.mat))
-  res.mat <- res.mat[,setdiff(colnames(res.mat), "FC")]
+  res.mat <- res.mat[, setdiff(colnames(res.mat), "FC"), drop=FALSE]
   
-  if (!reorder.rows){ res.mat <- res.mat[rownames(object),] }
+  if (!reorder.rows){ res.mat <- res.mat[rownames(object),, drop=FALSE] }
   if (!is.null(prefix)){ colnames(res.mat) <- paste(prefix, colnames(res.mat), sep=".") }
   return(res.mat)
 }

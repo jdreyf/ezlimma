@@ -12,7 +12,8 @@ limma_pcor(object, phenotype, covariates, reorder.rows = TRUE,
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
 features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as \code{ncol(object)}.}
+\item{phenotype}{Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
+Should be same length as \code{ncol(object)}.}
 
 \item{covariates}{Numeric vector with one element per sample or matrix-like object with rows corresponding 
 to samples and columns to covariates to be adjusted for.}
