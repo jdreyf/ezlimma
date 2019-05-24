@@ -6,7 +6,7 @@
 #' @param fit Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} alone (without 
 #' \code{\link[limma]{eBayes}}).
 #' @inheritParams limma_contrasts
-#' @return Object of \code{\link[limma]{MArrayLM-class}}.
+#' @return Object of \pkg{limma} \code{MArrayLM-class}.
 #' @details \code{trend} is only applicable if \code{moderated} is \code{TRUE}.
 
 ezebayes <- function(fit, moderated=TRUE, trend=FALSE){

@@ -86,3 +86,15 @@ test_that("!moderated", {
   expect_equal(pc$p.value, pc2$p.value)
   expect_equal(lc4[1, "p"], pc$p.value)
 })
+
+test_that("size", {
+  lc1 <- limma_cor(M[-1,], phenotype = covar)
+  lc2 <- limma_cor(M[-1,], phenotype = phenotype)
+  set.seed(42)
+  ph3 <- rnorm(ncol(M))
+  lc3 <- limma_cor(M[-1,], phenotype = ph3)
+  ph4 <- rnorm(ncol(M))
+  lc4 <- limma_cor(M[-1,], phenotype = ph4)
+  
+  expect_lte(mean(rbind(lc1, lc2, lc3, lc4)[,"p"] < 0.05), 0.05)
+})

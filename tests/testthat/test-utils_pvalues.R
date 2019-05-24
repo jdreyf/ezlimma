@@ -9,6 +9,7 @@ tab3[tab3[, "pheno.cor"] == 0, "pheno.p"] <- 1
 tab3.ss <- tab4 <- tab3[-1,]
 tab4[2, "Direction"] <- "less"
 tab3.sss <- tab3[-(1:2),]
+tab2.na <- rbind(tab2, c(NA, 0.5))
 
 # stat.cols="logFC|slope|cor|Direction"; p.cols="p|PValue"; alternative="greater"; nperm=NULL
 
@@ -24,6 +25,8 @@ test_that("combine_pvals", {
   expect_error(combine_pvalues(tab3))
   expect_warning(cp1 <- combine_pvalues(tab3.ss, alternative = "Up"))
   expect_warning(cp2 <- combine_pvalues(tab3.ss, alternative = "Down"))
+  #NAs
+  expect_silent(combine_pvalues(tab2.na))
 })
 
 test_that("grep_cols", {
@@ -32,6 +35,8 @@ test_that("grep_cols", {
   expect_equal(tmp, c("pheno.p", "x.p", "p"))
   expect_error(grep_cols(tab3, p.cols = ".p"))
   expect_error(grep_cols(matrix(1:9, nrow=3), p.cols = "p"))
+  #NAs
+  expect_equal(grep_cols(tab2.na, p.cols=1:2), c("foo.p", "bar.p"))
 })
 
 # test vs & roast fcns

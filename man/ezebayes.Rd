@@ -17,7 +17,7 @@ ezebayes(fit, moderated = TRUE, trend = FALSE)
 is constant.}
 }
 \value{
-Object of \code{\link[limma]{MArrayLM-class}}.
+Object of \pkg{limma} \code{MArrayLM-class}.
 }
 \description{
 Wrapper for \pkg{limma}'s \code{\link[limma]{eBayes}}, which computes empirical Bayes statistics, that allows for 

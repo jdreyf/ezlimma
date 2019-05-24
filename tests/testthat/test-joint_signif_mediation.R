@@ -1,4 +1,4 @@
-context("test-joint_signif_mediation")
+context("joint_signif_mediation")
 
 # add test with covariates
 

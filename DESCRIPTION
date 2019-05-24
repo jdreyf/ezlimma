@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and extends limma package
-Version: 0.2.3.9015
+Version: 0.2.3.9016
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"),
 			 person("Grace", "Daher", role = "ctb"))

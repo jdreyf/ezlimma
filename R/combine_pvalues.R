@@ -26,7 +26,7 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
   alternative <- match.arg(alternative)
   p.colnms <- grep_cols(tab, p.cols=p.cols)
   tab.p <- data.matrix(tab[, p.colnms])
-  if (any(tab.p == 0)){
+  if (any(tab.p == 0, na.rm = TRUE)){
     small.p <- max(10**(-15), min(tab.p[tab.p > 0])/2)
     warning("p-values should not be zero; these have been converted to ", small.p, ".", call. = FALSE)
     wh <- which(tab.p == 0)
@@ -40,7 +40,7 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
       tab.p[, col.ind] <- two2one_tailed(tab, stat.cols=stat.colnms[col.ind], p.cols=p.colnms[col.ind], 
                                          alternative=alternative)
     }
-    if (any(rowSums(is.na(tab.p)) == 1)){
+    if (any(rowMeans(is.na(tab.p)) == 1)){
       stop("All rows of p-values, after accounting for stats, must not be all NA.")
     }
   }
