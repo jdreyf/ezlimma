@@ -4,25 +4,32 @@
 \alias{two2one_tailed}
 \title{Convert 2-tailed into 1-tailed p-values}
 \usage{
-two2one_tailed(tab, stat.col = 1, p.col = 2,
-  alternative = c("greater", "less"))
+two2one_tailed(tab, p.cols = "p|PValue",
+  stat.cols = "logFC|slope|cor|rho|Direction",
+  alternative = c("greater", "less", "Up", "Down"), nperm = NULL)
 }
 \arguments{
-\item{tab}{table with statistics from \code{fry}.}
+\item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{stat.col}{name or index of column with signed statistics.}
+\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
 
-\item{p.col}{name or index of p-value column.}
+\item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
+statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
+\code{alternative} is \code{"two.sided"}.}
 
-\item{alternative}{direction of change. Can be a vector. \code{"greater"} or \code{"less"}.}
+\item{alternative}{Direction of change: either \code{"greater"} or \code{"less"}, or their synonyms
+\code{"Up"} or \code{"Down"}.}
+
+\item{nperm}{Number of rotations used to estimate the p-values from \code{\link[limma]{roast}}, or number of 
+permutations, where p-value calculated according to Phipson & Smyth (2010). Ignored if \code{NULL}.}
 }
 \value{
-p-values.
+matrix of p-values.
 }
 \description{
-Convert 2-tailed into 1-tailed p-values from matrix. Alternative "greater" corresponds to positive association, 
-"less" to negative association.
+Convert 2-tailed into 1-tailed p-values, possibly using signs of associated statistics, from a matrix-like object.
 }
-\details{
-This function is not meant to be called directly by the user.
+\references{
+Phipson & Smyth (2010). Permutation P-values Should Never Be Zero: Calculating Exact P-values When 
+Permutations Are Randomly Drawn. Statistical Applications in Genetics and Molecular Biology, 9(1).
 }

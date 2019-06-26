@@ -2,91 +2,81 @@
 % Please edit documentation in R/roast_contrasts.R
 \name{roast_contrasts}
 \alias{roast_contrasts}
-\title{Test contrasts of gene sets between groups using rotation testing with output
-to Excel}
+\title{Test contrasts of gene sets between groups using rotation testing with output to Excel}
 \usage{
-roast_contrasts(object, G, stats.tab, grp = NULL, contrast.v,
+roast_contrasts(object, G, feat.tab, grp = NULL, contrast.v,
   design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
   name = NA, weights = NA, gene.weights = NULL, trend = FALSE,
   block = NULL, correlation = NULL, adjust.method = "BH",
-  min.ngenes = 3, max.ngenes = 1000, nrot = 999,
-  alternative = c("two.sided", "less", "greater"), n.toptabs = Inf,
+  min.nfeats = 3, max.nfeats = 1000, nrot = 999,
+  alternative = c("two.sided", "less", "greater"), check.names = TRUE,
   seed = 0)
 }
 \arguments{
-\item{object}{Matrix-like data object containing log-ratios or
-log-expression values for a series of arrays, with rows corresponding to
-genes and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
-\item{stats.tab}{Table of feature (e.g. gene) statistics that the Excel
-table can link to.}
+\item{feat.tab}{Table of feature (e.g. gene) statistics that the Excel table can link to.}
 
-\item{grp}{Vector of phenotype groups of the samples, which represent valid
-variable names in R. Should be same length as \code{ncol(object)}. If the
-vector is named, names should match \code{colnames(object)}.}
+\item{grp}{Vector of sample groups. These must be valid variable names in R and the same length as 
+\code{ncol(object)}.}
 
-\item{contrast.v}{Named vector of contrasts for
-\code{\link[limma]{makeContrasts}}.}
+\item{contrast.v}{Named vector of contrasts, passed to \code{\link[limma]{makeContrasts}}.}
 
-\item{design}{Design matrix of the experiment, with rows corresponding to
-arrays and columns to coefficients to be estimated.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
+estimated.}
 
 \item{fun}{Function to use, either \code{fry} or \code{mroast}.}
 
-\item{set.statistic}{summary set statistic. Possibilities are \code{"mean"},
-\code{"floormean"}, \code{"mean50"}, or \code{"msq"}. Only for \code{mroast}.}
+\item{set.statistic}{Summary set statistic. Possibilities are \code{"mean"}, \code{"floormean"}, \code{"mean50"}, or 
+\code{"msq"}. Only for \code{mroast}.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{weights}{Non-negative precision weights passed to \code{lmFit}. Can be
-a numeric matrix of individual weights of same size as \code{object} or a numeric 
-vector of array weights with length equal to \code{ncol(object)}, or a numeric vector 
-of gene weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
- (with length one) doesn't pass weights to \code{limma}.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
-\item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent
-each gene's contribution to pathways. They are not for precision weights, from \code{weights}. This 
-vector must have length equal to \code{nrow(object)}. Only for \code{mroast}.}
+\item{gene.weights}{Numeric vector of directional (positive or negative) genewise weights. These represent each 
+gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
+length equal to \code{nrow(object)}. Only for \code{mroast}.}
 
-\item{trend}{Logical, should an intensity-trend be allowed for the prior
-variance? Default is that the prior variance is constant.}
+\item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+is constant.}
 
-\item{block}{Vector or factor specifying a blocking variable on the arrays.
-Has length equal to the number of arrays.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
-\item{correlation}{Inter-duplicate or inter-technical replicate
-correlation.}
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
-\item{adjust.method}{Method used to adjust the p-values for multiple testing.
-Only for \code{mroast}.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Only for \code{mroast}.}
 
-\item{min.ngenes}{Minimum number of genes needed in a gene set for testing.}
+\item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 
-\item{max.ngenes}{Maximum number of genes needed in a gene set for testing.}
+\item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{nrot}{Number of rotations used to estimate the p-values for \code{mroast}.}
 
-\item{alternative}{indicates the alternative hypothesis and must be one of
-\code{"two.sided"}, \code{"greater"} or \code{"less"}. \code{"greater"}
-corresponds to positive association, \code{"less"} to negative association.}
+\item{alternative}{Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
+\code{"greater"} corresponds to positive association, \code{"less"} to negative association.}
 
-\item{n.toptabs}{number of gene set toptables to write to CSV and link to from
-Excel}
+\item{check.names}{Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}
 }
 \value{
-data frame of gene set statistics.
+Data frame of gene set statistics.
 }
 \description{
-Test contrasts of gene sets using \code{\link[limma]{roast}} with functions
-\code{mroast} or \code{fry}. It returns a data frame with statistics per gene set, 
-and writes this to an Excel file. The Excel file links to CSV files, which contain 
-statistics per gene set. Some of the arguments only apply to \code{mroast}.
+Test contrasts of gene sets using \code{\link[limma]{roast}} with functions \code{mroast} or \code{fry}. It 
+returns a data frame with statistics per gene set, and writes this to an Excel file. The Excel file links to 
+CSV files, which contain statistics per gene set. Some of the arguments only apply to \code{mroast}. See 
+examples in vignette.
 }
 \details{
-Pathway names are altered to be valid filenames in Windows and Linux.
+Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
+rounded to 3 significant figures.
 }

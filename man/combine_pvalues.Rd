@@ -4,23 +4,34 @@
 \alias{combine_pvalues}
 \title{Combine p-values of a feature over multiple p-value columns of an object}
 \usage{
-combine_pvalues(mat, pv.cols = NULL)
+combine_pvalues(tab, p.cols = "p|PValue",
+  stat.cols = "logFC|slope|cor|rho|Direction", only.p = TRUE,
+  alternative = c("two.sided", "greater", "less", "Up", "Down"))
 }
 \arguments{
-\item{mat}{A matrix-like object with statistical columns, including some
-containing p-values. Must have \code{nrow(mat)>1} & \code{ncol(mat)>1}.}
+\item{tab}{Matrix-like object with statistical columns, some containing p-values.}
 
-\item{pv.cols}{the column names or column indices with p-values. If
-\code{NULL}, the function searches for columns that end with \code{.p} or \code{.pval}.}
+\item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
+
+\item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
+statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
+\code{alternative} is \code{"two.sided"}.}
+
+\item{only.p}{Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.}
+
+\item{alternative}{Direction of change: \code{"two.sided"}; \code{"greater"} or \code{"less"}, or their synonyms
+\code{"Up"} or \code{"Down"}.}
 }
 \value{
-A vector of p-values.
+Vector of p-values.
 }
 \description{
-Combine p-values of a feature over multiple p-value columns of an object.
+Combine p-values of a feature over multiple p-value columns of an object. If \code{alternative!="two.sided"},
+uses the direction of \code{stat.cols} to transform \code{p.cols} into one-sided p-values; this assumes that
+these p-values were originally calculated from two-sided tests, as is done in \pkg{limma}.
 }
 \details{
-This function uses the z-transform method to combine p-values across rows, equivalently to using unweighted 
+Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
 \code{method="z.transform"} in \code{survcomp::combine.test}.
 }
 \examples{

@@ -4,18 +4,20 @@
 \alias{hitman}
 \title{High-throughput mediation analysis}
 \usage{
-hitman(E, M, Y, covariates = NULL)
+hitman(E, M, Y, covariates = NULL, check.names = TRUE)
 }
 \arguments{
-\item{E}{A numeric vector or matrix of exposures. Can be a design matrix returned by 
-\code{\link[stats]{model.matrix}} or \code{\link[ezlimma]{batch2design}}.}
+\item{E}{A numeric vector of exposures.}
 
 \item{M}{A numeric matrix-like data object with one row per feature and one column per sample of mediators.
 Must have more than one feature.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
-\item{covariates}{Numeric vector or matrix of covariates.}
+\item{covariates}{Numeric vector with one element per sample or matrix-like object with rows corresponding 
+to samples and columns to covariates to be adjusted for.}
+
+\item{check.names}{Logical; should \code{names(E)==colnames(M) & colnames(M)==names(Y)} be checked?}
 }
 \value{
 Data frame with columns
@@ -24,18 +26,16 @@ Data frame with columns
 \item{EMY.FDR}{Overall FDR for mediation}
 \item{EM_dir.p}{p-value for E-->M accounting for direction of mediation}
 \item{MY_dir.p}{p-value for M-->Y accounting for direction of mediation}
+\item{EM.t}{t-statistic for E-->M, not accounting for direction}
 \item{EM.p}{p-value for E-->M, not accounting for direction}
-\item{EM.t or EM.F}{F-statistic or t-statistic for E-->M, not accounting for direction}
+\item{MY.t}{t-statistic for M-->Y, not accounting for direction}
 \item{MY.p}{p-value for M-->Y, not accounting for direction}
-\item{MY.slope}{slope of regression for M-->Y, not accounting for direction}
 }
-and annotation.
 }
 \description{
 High-throughput mediation analysis to test if rows of \code{M} mediate the effect of exposure \code{E} on outcome
-\code{Y}.
+\code{Y}. See examples in vignette.
 }
 \details{
-If \code{E} and \code{Y} have names, and \code{M} has colnames, they should all match. \code{E} and \code{Y}
-cannot have \code{NA}s.
+\code{E} and \code{Y} cannot have \code{NA}s.
 }

@@ -8,27 +8,27 @@ eztoptab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
   adjust.method = "BH", prefix = NULL, coef = NULL)
 }
 \arguments{
-\item{fit}{should be an object of class \code{MArrayLM} as produced by 
-\code{lmFit} and \code{eBayes}.}
+\item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}
 
-\item{cols}{columns of \code{topTable} output the user would like in the 
-output, although the names are changed. If \code{logFC} is specified, 
-\code{FC} will also be given.}
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
+"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
+automatically also be given.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{coef}{column number or column name specifying which coefficient or 
-contrast of the linear model is of interest. If \code{length(coef)>1}, an F-test will be performed,
-and \code{logFC} & \code{FC} will not be returned.}
+\item{coef}{Column index or column name specifying which coefficient or contrast of the linear model to test. 
+If \code{length(coef)>1}, an F-test will be performed, and \code{logFC} & \code{FC} will not be returned.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
-Wrapper for limma topTable function that subsets and changes colnames
+Wrapper for \pkg{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
 }
-\details{
-See \code{\link[limma]{topTable}} for more details, as this fuction is a wrapper for that one.
+\seealso{
+\code{\link[limma]{topTable}}.
 }

@@ -2,46 +2,52 @@
 % Please edit documentation in R/multi_cor.R
 \name{multi_cor}
 \alias{multi_cor}
-\title{Test correlation of each row of an object to each column of pheno.mat}
+\title{Test correlation of each row of an object to each column of pheno.tab}
 \usage{
-multi_cor(object, pheno.mat, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = TRUE, prefix = NULL, adjust.method = "BH",
-  limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
+multi_cor(object, pheno.tab, method = c("pearson", "spearman", "kendall",
+  "limma"), reorder.rows = TRUE, prefix = NULL, block = NULL,
+  correlation = NULL, adjust.method = "BH", covariates = NULL,
+  check.names = TRUE, limma.cols = c("AveExpr", "P.Value", "adj.P.Val",
+  "logFC"))
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values, with rows corresponding to features (e.g. genes) and 
-columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{pheno.mat}{matrix-like data object of phenotypes of the samples, with each column one 
-phenotype vector. Length and names of rows of \code{pheno.mat} should 
-correspond to columns of \code{object}.}
+\item{pheno.tab}{Matrix-like data object with columns as sample phenotypes, with \code{nrow(pheno.tab)==ncol(object)}.}
 
-\item{method}{a character string indicating which association is to be used 
+\item{method}{Character string indicating which association is to be used 
 for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
 from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}.}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}?}
+\item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
-\item{limma.cols}{if \code{method="limma"}, this specifies \code{cols} from 
-\code{\link{limma_cor}}. Ignored without a warning if \code{method} not 
-\code{"limma"}.}
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
+
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
+
+\item{covariates}{If \code{method="limma"}, numeric vector or matrix of covariates to include in 
+\code{\link{limma_cor}} \code{design} matrix.}
+
+\item{check.names}{Logical; should \code{rownames(pheno.tab)=colnames(object)} be checked?}
+
+\item{limma.cols}{If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.}
 }
 \value{
-Dataframe with several statistical columns corresponding to each
-  phenotype and one row per feature.
+Data frame with several statistical columns corresponding to each phenotype and one row per feature.
 }
 \description{
-Test correlation of each row of an object to each column of \code{pheno.mat} using 
+Test correlation of each row of an object to each column of \code{pheno.tab} using 
 one of Pearson's, Kendall's, or Spearman's correlation methods, or limma 
-regression in \code{\link{limma_cor}}.
+regression in \code{\link{limma_cor}}. See examples in vignette.
 }
 \details{
-Each column of \code{pheno.mat} is tested independently.
+Each column of \code{pheno.tab} is tested independently. Arguments \code{covariates}, \code{block}, and
+\code{correlation} only apply if \code{method="limma"}.
 }

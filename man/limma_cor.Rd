@@ -5,60 +5,70 @@
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
 limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
-  weights = NA, trend = FALSE, adjust.method = "BH",
-  reorder.rows = TRUE, reduce.df = 0, cols = c("AveExpr", "P.Value",
-  "adj.P.Val", "logFC"))
+  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
+  adjust.method = "BH", coef = 2, reorder.rows = TRUE,
+  moderated = TRUE, reduce.df = 0, check.names = TRUE,
+  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
 }
 \arguments{
-\item{object}{A matrix-like data object containing log-ratios or 
-log-expression values for a series of samples, with rows corresponding to 
-genes and columns to samples.}
+\item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
+features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
 
-\item{phenotype}{Vector of phenotypes of the samples. Should be same length as
-\code{ncol(object)}. If the vector is named, names should match 
-\code{colnames(object)}.}
+\item{phenotype}{Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
+Should be same length as \code{ncol(object)}.}
 
-\item{design}{the design matrix of the experiment, with rows corresponding to 
-samples and columns to coefficients to be estimated. Can be used to provide 
-covariates.}
+\item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
+estimated.}
 
-\item{prefix}{character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names.}
 
-\item{weights}{non-negative observation weights. Can be a numeric matrix of 
-individual weights, of same size as the object expression matrix, or a 
-numeric vector of array weights with length equal to \code{ncol} of the 
-expression matrix, or a numeric vector of gene weights with length equal to 
-\code{nrow} of the expression matrix. Set to \code{NULL} to ignore \code{object$weights}. \code{weights=NA} 
- (with length one) doesn't pass weights to \code{limma}.}
+\item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
+\code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
+weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+\code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
-\item{trend}{logical, should an intensity-trend be allowed for the prior 
-variance? Default is that the prior variance is constant.}
+\item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
+is constant.}
 
-\item{adjust.method}{method used to adjust the p-values for multiple testing.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 
-\item{reorder.rows}{logical, should rows be reordered by F-statistic from 
-\code{\link[limma]{toptable}} or be left in the same order as 
-\code{object}?}
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
-\item{reduce.df}{Number of degrees of freedom to subtract from residual. This may be necessary if
-\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= df.residual returned by
-\code{\link[limma]{lmFit}}.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
+include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
+list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{cols}{columns of \code{topTable} output the user would like in the 
-result. Some column names, such as \code{adj.P.Val} are changed. If \code{logFC}
-is specified, \code{FC} will also be given.}
+\item{coef}{Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.}
+
+\item{reorder.rows}{Logical, should rows be reordered by p-value?}
+
+\item{moderated}{Logical; should \code{\link[limma]{eBayes}} be used? Otherwise an unmoderated version for 
+\pkg{limma} to produce ordinary least squares statistics is used.}
+
+\item{reduce.df}{Number degrees of freedom to subtract from residual. This may be necessary if 
+\code{\link[limma]{removeBatchEffect}} was previously applied to \code{object}. Must be <= \code{df.residual} 
+returned by \code{\link[limma]{lmFit}}.}
+
+\item{check.names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
+
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
+"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
+automatically also be given.}
 }
 \value{
-Dataframe.
+Data frame.
 }
 \description{
-Test correlation of each row of object to phenotype using 
-\code{design=model.matrix(~1+phenotype)}, testing 2nd coefficient.
+Test correlation of each row of object to phenotype. By default, it uses the model 
+\code{design=model.matrix(~1+phenotype)} and tests 2nd coefficient. See examples in vignette.
 }
 \details{
-Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and \code{phenotype} 
-is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details in \code{\link[limma]{lmFit}}.
+Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and 
+\code{phenotype} is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details 
+in \code{\link[limma]{lmFit}}.
+
+When \code{moderated} is FALSE, an error is generated if \code{trend} is TRUE.
 }
 \seealso{
-\code{\link[limma]{lmFit}} and \code{\link[limma]{eBayes}}.
+\code{\link[limma]{lmFit}}; \code{\link[limma]{eBayes}}; \code{\link[ezlimma]{ezcor}}
 }

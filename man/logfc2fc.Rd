@@ -7,13 +7,13 @@
 logfc2fc(logFC)
 }
 \arguments{
-\item{logFC}{A numeric log2 fold-change.}
+\item{logFC}{Numeric vector of log2 fold-changes.}
 }
 \value{
-The fold-change.
+Fold-change.
 }
 \description{
-Transform a log2 fold-change to a possibly negative fold-change.
+Transform a log2 fold-change to a (possibly negative) fold-change.
 }
 \details{
 This function converts log fold-changes < 0 to their negative multiplicative reciprocal, e.g. 

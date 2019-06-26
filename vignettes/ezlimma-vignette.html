@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jonathan Dreyfuss" />
 
-<meta name="date" content="2019-01-10" />
+<meta name="date" content="2019-01-28" />
 
 <title>ezlimma vignette</title>
 
@@ -92,7 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ezlimma vignette</h1>
 <h4 class="author"><em>Jonathan Dreyfuss</em></h4>
-<h4 class="date"><em>2019-01-10</em></h4>
+<h4 class="date"><em>2019-01-28</em></h4>
 
 
 
@@ -108,19 +108,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="simulate-data" class="section level2">
 <h2>Simulate data</h2>
-<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups, with the first gene up-regulated in the first group. This is the example data from <code>limma</code> <code>contrasts.fit</code>.</p>
+<p>To demonstrate the package on a dataset, I’ll simulate log2 expression data with 100 genes and 6 samples in two groups with a continuous covariate. The covariate and the first gene will be associated with group. This is similar to the example data from <code>limma</code> <code>contrasts.fit</code>.</p>
 <p>We treat this data as being already processed. For many datasets, there are zeroes or missing values that might need to be imputed; samples need to be normalized to make them comparable and amenable to statistical tests; absent genes need to be removed; sample outliers need to be assessed to examine whether some experimental variables or batch effects need to be accounted for, or the samples need to be removed or down-weighted; and trends between a gene’s mean expression and its variance should be accounted for, especially in RNA-seq data, with <code>limma</code>’s <code>voom</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
 M &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">100</span><span class="op">*</span><span class="dv">6</span>, <span class="dt">sd=</span><span class="fl">0.3</span>), <span class="dt">nrow=</span><span class="dv">100</span>, <span class="dt">ncol=</span><span class="dv">6</span>)
 <span class="kw">dimnames</span>(M) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(M)), <span class="kw">paste0</span>(<span class="st">&quot;sample&quot;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(M)))
-grp &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;First3&quot;</span>, <span class="st">&quot;Last3&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>)
-M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
+M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>M[<span class="dv">1</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] <span class="op">+</span><span class="st"> </span><span class="dv">2</span>
+
+pheno &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">grp=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;First3&quot;</span>, <span class="st">&quot;Last3&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dt">yy=</span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M)))
+pheno<span class="op">$</span>yy[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>pheno<span class="op">$</span>yy[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span><span class="dv">2</span></code></pre></div>
 </div>
 <div id="gene-level-analysis" class="section level2">
 <h2>Gene level analysis</h2>
 <p>Assume we want to test if genes are changed in <code>First3</code>, in <code>Last3</code>, or in <code>Last3 - First3</code>. We can do this in two lines of code,</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contr.v &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">First3=</span><span class="st">&quot;First3&quot;</span>, <span class="dt">Last3=</span><span class="st">&quot;Last3&quot;</span>, <span class="dt">Last3vsFirst3=</span><span class="st">&quot;Last3-First3&quot;</span>)
-res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
+res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <span class="dt">grp=</span>pheno<span class="op">$</span>grp, <span class="dt">contrast.v =</span> contr.v)</code></pre></div>
 <p><code>First3</code> tests if the mean expression of genes in these samples differs from zero, and <code>Last3vsFirst3</code> tests difference between groups.</p>
 <p>This returns a data frame that looks like:</p>
 <table>
@@ -316,11 +318,8 @@ res0 &lt;-<span class="st"> </span><span class="kw">limma_contrasts</span>(M, <s
 </tr>
 </tbody>
 </table>
-<p>Similarly, we can test association to a phenotype variable. Let’s say we have a phenotype vector,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno.v &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M))
-pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>] &lt;-<span class="st"> </span>pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]<span class="op">-</span><span class="dv">1</span></code></pre></div>
-<p>we can test association with,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1 &lt;-<span class="st"> </span><span class="kw">ezcor</span>(M, pheno.v, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</code></pre></div>
+<p>We can test association to the continuous covariate with:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res1 &lt;-<span class="st"> </span><span class="kw">ezcor</span>(M, pheno<span class="op">$</span>yy, <span class="dt">method=</span><span class="st">&quot;pearson&quot;</span>)</code></pre></div>
 <p>where <code>method</code> can be any of <code>&quot;pearson&quot;</code>, <code>&quot;kendall&quot;</code>, or <code>&quot;spearman&quot;</code>. This returns a data frame like,</p>
 <table>
 <thead>
@@ -333,69 +332,69 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 </thead>
 <tbody>
 <tr class="odd">
-<td>gene9</td>
-<td align="right">-0.898</td>
-<td align="right">0.0152</td>
-<td align="right">0.73</td>
+<td>gene66</td>
+<td align="right">-0.925</td>
+<td align="right">0.00826</td>
+<td align="right">0.754</td>
+</tr>
+<tr class="even">
+<td>gene1</td>
+<td align="right">-0.875</td>
+<td align="right">0.02250</td>
+<td align="right">0.754</td>
+</tr>
+<tr class="odd">
+<td>gene60</td>
+<td align="right">-0.860</td>
+<td align="right">0.02790</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="even">
 <td>gene22</td>
-<td align="right">0.856</td>
-<td align="right">0.0296</td>
-<td align="right">0.73</td>
+<td align="right">0.789</td>
+<td align="right">0.06210</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="odd">
-<td>gene66</td>
-<td align="right">-0.840</td>
-<td align="right">0.0362</td>
-<td align="right">0.73</td>
+<td>gene9</td>
+<td align="right">-0.772</td>
+<td align="right">0.07170</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="even">
-<td>gene39</td>
-<td align="right">0.820</td>
-<td align="right">0.0457</td>
-<td align="right">0.73</td>
+<td>gene80</td>
+<td align="right">0.768</td>
+<td align="right">0.07470</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="odd">
-<td>gene15</td>
-<td align="right">0.808</td>
-<td align="right">0.0515</td>
-<td align="right">0.73</td>
+<td>gene47</td>
+<td align="right">0.765</td>
+<td align="right">0.07620</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="even">
 <td>gene19</td>
-<td align="right">0.791</td>
-<td align="right">0.0607</td>
-<td align="right">0.73</td>
+<td align="right">0.759</td>
+<td align="right">0.08000</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="odd">
-<td>gene98</td>
-<td align="right">0.788</td>
-<td align="right">0.0629</td>
-<td align="right">0.73</td>
+<td>gene99</td>
+<td align="right">-0.757</td>
+<td align="right">0.08140</td>
+<td align="right">0.754</td>
 </tr>
 <tr class="even">
-<td>gene95</td>
-<td align="right">0.783</td>
-<td align="right">0.0653</td>
-<td align="right">0.73</td>
-</tr>
-<tr class="odd">
-<td>gene80</td>
-<td align="right">0.780</td>
-<td align="right">0.0673</td>
-<td align="right">0.73</td>
-</tr>
-<tr class="even">
-<td>gene47</td>
-<td align="right">0.767</td>
-<td align="right">0.0754</td>
-<td align="right">0.73</td>
+<td>gene15</td>
+<td align="right">0.755</td>
+<td align="right">0.08260</td>
+<td align="right">0.754</td>
 </tr>
 </tbody>
 </table>
-<p>Similarly, we can test association using linear regression with <code>limma</code>, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that b=0. So it returns slopes rather than correlation coefficients. The code is,</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno.v)</code></pre></div>
+<p>Similarly, we can test association using linear regression with <code>limma</code>, where the model is <em>gene expression = a + bx + error</em>, and we test coefficient 2, i.e. the null hypothesis that <em>b=0</em>. So it returns slopes rather than correlation coefficients. The code is,</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res2 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">phenotype =</span> pheno<span class="op">$</span>yy)</code></pre></div>
 <p>The output is,</p>
 <table>
 <thead>
@@ -412,77 +411,76 @@ pheno.v[<span class="dv">1</span><span class="op">:</span><span class="dv">3</sp
 <td>gene1</td>
 <td align="right">1.1500</td>
 <td align="right">0.00000</td>
-<td align="right">1.10e-06</td>
-<td align="right">-0.742</td>
+<td align="right">0.000</td>
+<td align="right">-0.644</td>
 </tr>
 <tr class="even">
-<td>gene9</td>
-<td align="right">0.0285</td>
-<td align="right">0.00505</td>
-<td align="right">2.53e-01</td>
-<td align="right">-0.358</td>
-</tr>
-<tr class="odd">
 <td>gene66</td>
 <td align="right">0.0757</td>
+<td align="right">0.00536</td>
+<td align="right">0.268</td>
+<td align="right">-0.250</td>
+</tr>
+<tr class="odd">
+<td>gene9</td>
+<td align="right">0.0285</td>
 <td align="right">0.01340</td>
-<td align="right">3.04e-01</td>
-<td align="right">-0.316</td>
+<td align="right">0.314</td>
+<td align="right">-0.222</td>
+</tr>
+<tr class="even">
+<td>gene19</td>
+<td align="right">-0.2180</td>
+<td align="right">0.01930</td>
+<td align="right">0.314</td>
+<td align="right">0.210</td>
+</tr>
+<tr class="odd">
+<td>gene59</td>
+<td align="right">-0.0479</td>
+<td align="right">0.02030</td>
+<td align="right">0.314</td>
+<td align="right">0.208</td>
 </tr>
 <tr class="even">
 <td>gene15</td>
 <td align="right">0.0376</td>
-<td align="right">0.01540</td>
-<td align="right">3.04e-01</td>
-<td align="right">0.309</td>
+<td align="right">0.02050</td>
+<td align="right">0.314</td>
+<td align="right">0.208</td>
 </tr>
 <tr class="odd">
-<td>gene19</td>
-<td align="right">-0.2180</td>
-<td align="right">0.01720</td>
-<td align="right">3.04e-01</td>
-<td align="right">0.304</td>
+<td>gene99</td>
+<td align="right">-0.0156</td>
+<td align="right">0.02680</td>
+<td align="right">0.314</td>
+<td align="right">-0.199</td>
+</tr>
+<tr class="even">
+<td>gene60</td>
+<td align="right">-0.1380</td>
+<td align="right">0.02720</td>
+<td align="right">0.314</td>
+<td align="right">-0.198</td>
+</tr>
+<tr class="odd">
+<td>gene12</td>
+<td align="right">0.1470</td>
+<td align="right">0.02820</td>
+<td align="right">0.314</td>
+<td align="right">-0.197</td>
 </tr>
 <tr class="even">
 <td>gene39</td>
 <td align="right">-0.1610</td>
-<td align="right">0.01820</td>
-<td align="right">3.04e-01</td>
-<td align="right">0.301</td>
-</tr>
-<tr class="odd">
-<td>gene98</td>
-<td align="right">0.0289</td>
-<td align="right">0.03620</td>
-<td align="right">4.67e-01</td>
-<td align="right">0.267</td>
-</tr>
-<tr class="even">
-<td>gene99</td>
-<td align="right">-0.0156</td>
-<td align="right">0.03740</td>
-<td align="right">4.67e-01</td>
-<td align="right">-0.266</td>
-</tr>
-<tr class="odd">
-<td>gene60</td>
-<td align="right">-0.1380</td>
-<td align="right">0.05830</td>
-<td align="right">5.86e-01</td>
-<td align="right">-0.241</td>
-</tr>
-<tr class="even">
-<td>gene31</td>
-<td align="right">0.0857</td>
-<td align="right">0.05860</td>
-<td align="right">5.86e-01</td>
-<td align="right">-0.241</td>
+<td align="right">0.03870</td>
+<td align="right">0.387</td>
+<td align="right">0.186</td>
 </tr>
 </tbody>
 </table>
-<p>Because this is a regression, we can also adjust for covariates. We do this by creating our own design matrix instead of letting <code>limma_cor</code> create one from <code>phenotype</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">covar &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M))
-design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="dv">1</span><span class="op">+</span>pheno.v<span class="op">+</span>covar)
+<p>Because this is a regression, we can test for association to <code>yy</code> while adjusting for <code>grp</code>. We do this by creating our own design matrix instead of letting <code>limma_cor</code> create one from <code>phenotype</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">design &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="dv">1</span><span class="op">+</span>yy<span class="op">+</span>grp, <span class="dt">data=</span>pheno)
 res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span class="dt">design =</span> design)</code></pre></div>
 <p>which gives</p>
 <table>
@@ -497,81 +495,81 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 </thead>
 <tbody>
 <tr class="odd">
-<td>gene1</td>
-<td align="right">1.1500</td>
-<td align="right">0.00000</td>
-<td align="right">0.000</td>
-<td align="right">-0.878</td>
-</tr>
-<tr class="even">
 <td>gene9</td>
-<td align="right">0.0285</td>
-<td align="right">0.00796</td>
-<td align="right">0.282</td>
-<td align="right">-0.343</td>
-</tr>
-<tr class="odd">
-<td>gene66</td>
-<td align="right">0.0757</td>
-<td align="right">0.01010</td>
-<td align="right">0.282</td>
-<td align="right">-0.333</td>
+<td align="right">0.02850</td>
+<td align="right">0.00383</td>
+<td align="right">0.305</td>
+<td align="right">-0.451</td>
 </tr>
 <tr class="even">
-<td>gene15</td>
-<td align="right">0.0376</td>
-<td align="right">0.01130</td>
-<td align="right">0.282</td>
-<td align="right">0.328</td>
+<td>gene31</td>
+<td align="right">0.08570</td>
+<td align="right">0.00904</td>
+<td align="right">0.305</td>
+<td align="right">-0.406</td>
 </tr>
 <tr class="odd">
-<td>gene99</td>
-<td align="right">-0.0156</td>
-<td align="right">0.02380</td>
-<td align="right">0.417</td>
-<td align="right">-0.292</td>
-</tr>
-<tr class="even">
-<td>gene60</td>
-<td align="right">-0.1380</td>
-<td align="right">0.02510</td>
-<td align="right">0.417</td>
-<td align="right">-0.289</td>
-</tr>
-<tr class="odd">
-<td>gene19</td>
-<td align="right">-0.2180</td>
-<td align="right">0.02920</td>
-<td align="right">0.417</td>
-<td align="right">0.282</td>
+<td>gene98</td>
+<td align="right">0.02890</td>
+<td align="right">0.00914</td>
+<td align="right">0.305</td>
+<td align="right">0.406</td>
 </tr>
 <tr class="even">
 <td>gene39</td>
-<td align="right">-0.1610</td>
-<td align="right">0.04330</td>
-<td align="right">0.542</td>
-<td align="right">0.261</td>
+<td align="right">-0.16100</td>
+<td align="right">0.01360</td>
+<td align="right">0.339</td>
+<td align="right">0.384</td>
 </tr>
 <tr class="odd">
-<td>gene80</td>
-<td align="right">0.1620</td>
-<td align="right">0.05950</td>
-<td align="right">0.633</td>
-<td align="right">0.243</td>
+<td>gene15</td>
+<td align="right">0.03760</td>
+<td align="right">0.03500</td>
+<td align="right">0.537</td>
+<td align="right">0.328</td>
 </tr>
 <tr class="even">
-<td>gene74</td>
-<td align="right">-0.2460</td>
-<td align="right">0.07160</td>
-<td align="right">0.633</td>
-<td align="right">-0.232</td>
+<td>gene40</td>
+<td align="right">-0.05700</td>
+<td align="right">0.03770</td>
+<td align="right">0.537</td>
+<td align="right">-0.323</td>
+</tr>
+<tr class="odd">
+<td>gene44</td>
+<td align="right">0.00594</td>
+<td align="right">0.03820</td>
+<td align="right">0.537</td>
+<td align="right">0.322</td>
+</tr>
+<tr class="even">
+<td>gene37</td>
+<td align="right">-0.15400</td>
+<td align="right">0.04560</td>
+<td align="right">0.537</td>
+<td align="right">0.310</td>
+</tr>
+<tr class="odd">
+<td>gene19</td>
+<td align="right">-0.21800</td>
+<td align="right">0.05260</td>
+<td align="right">0.537</td>
+<td align="right">0.301</td>
+</tr>
+<tr class="even">
+<td>gene34</td>
+<td align="right">-0.00532</td>
+<td align="right">0.05450</td>
+<td align="right">0.537</td>
+<td align="right">0.299</td>
 </tr>
 </tbody>
 </table>
 <p>We can also test multiple phenotypes together. Say we had a matrix of phenotypes as</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno.mat &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">pheno1=</span>pheno.v, <span class="dt">pheno2=</span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M)))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pheno.mat &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">pheno1=</span>pheno<span class="op">$</span>yy, <span class="dt">pheno2=</span><span class="kw">rnorm</span>(<span class="kw">ncol</span>(M)))</code></pre></div>
 <p>then we could test both phenotypes together in one line, as</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res4 &lt;-<span class="st"> </span><span class="kw">multi_cor</span>(M, <span class="dt">pheno.mat =</span> pheno.mat, <span class="dt">reorder.rows =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res4 &lt;-<span class="st"> </span><span class="kw">multi_cor</span>(<span class="dt">object=</span>M, <span class="dt">pheno.tab =</span> pheno.mat, <span class="dt">reorder.rows =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -586,104 +584,101 @@ res3 &lt;-<span class="st"> </span><span class="kw">limma_cor</span>(M, <span cl
 </thead>
 <tbody>
 <tr class="odd">
-<td>gene59</td>
-<td align="right">0.313</td>
-<td align="right">0.5450</td>
-<td align="right">0.923</td>
-<td align="right">-0.895</td>
-<td align="right">0.0159</td>
-<td align="right">0.797</td>
+<td>gene60</td>
+<td align="right">-0.860</td>
+<td align="right">0.0279</td>
+<td align="right">0.754</td>
+<td align="right">0.417</td>
+<td align="right">0.4110</td>
+<td align="right">0.964</td>
 </tr>
 <tr class="even">
-<td>gene85</td>
-<td align="right">0.459</td>
-<td align="right">0.3600</td>
-<td align="right">0.923</td>
-<td align="right">-0.810</td>
-<td align="right">0.0509</td>
-<td align="right">0.977</td>
+<td>gene39</td>
+<td align="right">0.701</td>
+<td align="right">0.1210</td>
+<td align="right">0.776</td>
+<td align="right">0.634</td>
+<td align="right">0.1760</td>
+<td align="right">0.933</td>
 </tr>
 <tr class="odd">
-<td>gene12</td>
-<td align="right">-0.572</td>
-<td align="right">0.2350</td>
-<td align="right">0.923</td>
-<td align="right">0.672</td>
-<td align="right">0.1440</td>
-<td align="right">0.977</td>
+<td>gene67</td>
+<td align="right">0.500</td>
+<td align="right">0.3120</td>
+<td align="right">0.855</td>
+<td align="right">-0.798</td>
+<td align="right">0.0573</td>
+<td align="right">0.933</td>
 </tr>
 <tr class="even">
-<td>gene48</td>
-<td align="right">-0.709</td>
-<td align="right">0.1140</td>
-<td align="right">0.763</td>
-<td align="right">0.525</td>
-<td align="right">0.2850</td>
-<td align="right">0.977</td>
-</tr>
-<tr class="odd">
-<td>gene36</td>
-<td align="right">0.484</td>
-<td align="right">0.3300</td>
-<td align="right">0.923</td>
-<td align="right">-0.741</td>
-<td align="right">0.0918</td>
-<td align="right">0.977</td>
-</tr>
-<tr class="even">
-<td>gene40</td>
-<td align="right">-0.650</td>
-<td align="right">0.1620</td>
-<td align="right">0.901</td>
-<td align="right">-0.575</td>
-<td align="right">0.2320</td>
-<td align="right">0.977</td>
-</tr>
-<tr class="odd">
-<td>gene15</td>
-<td align="right">0.808</td>
-<td align="right">0.0515</td>
-<td align="right">0.730</td>
-<td align="right">0.369</td>
-<td align="right">0.4710</td>
-<td align="right">0.977</td>
-</tr>
-<tr class="even">
-<td>gene45</td>
-<td align="right">0.489</td>
-<td align="right">0.3250</td>
-<td align="right">0.923</td>
-<td align="right">-0.708</td>
-<td align="right">0.1160</td>
-<td align="right">0.977</td>
+<td>gene98</td>
+<td align="right">0.602</td>
+<td align="right">0.2060</td>
+<td align="right">0.855</td>
+<td align="right">0.719</td>
+<td align="right">0.1080</td>
+<td align="right">0.933</td>
 </tr>
 <tr class="odd">
 <td>gene1</td>
-<td align="right">-0.726</td>
-<td align="right">0.1020</td>
-<td align="right">0.730</td>
-<td align="right">0.423</td>
-<td align="right">0.4040</td>
-<td align="right">0.977</td>
+<td align="right">-0.875</td>
+<td align="right">0.0225</td>
+<td align="right">0.754</td>
+<td align="right">0.356</td>
+<td align="right">0.4880</td>
+<td align="right">0.982</td>
 </tr>
 <tr class="even">
-<td>gene31</td>
-<td align="right">-0.664</td>
-<td align="right">0.1500</td>
-<td align="right">0.901</td>
-<td align="right">-0.483</td>
-<td align="right">0.3320</td>
-<td align="right">0.977</td>
+<td>gene86</td>
+<td align="right">-0.502</td>
+<td align="right">0.3100</td>
+<td align="right">0.855</td>
+<td align="right">-0.723</td>
+<td align="right">0.1040</td>
+<td align="right">0.933</td>
+</tr>
+<tr class="odd">
+<td>gene34</td>
+<td align="right">0.397</td>
+<td align="right">0.4360</td>
+<td align="right">0.890</td>
+<td align="right">0.786</td>
+<td align="right">0.0639</td>
+<td align="right">0.933</td>
+</tr>
+<tr class="even">
+<td>gene19</td>
+<td align="right">0.759</td>
+<td align="right">0.0800</td>
+<td align="right">0.754</td>
+<td align="right">0.420</td>
+<td align="right">0.4070</td>
+<td align="right">0.964</td>
+</tr>
+<tr class="odd">
+<td>gene74</td>
+<td align="right">-0.551</td>
+<td align="right">0.2580</td>
+<td align="right">0.855</td>
+<td align="right">0.649</td>
+<td align="right">0.1630</td>
+<td align="right">0.933</td>
+</tr>
+<tr class="even">
+<td>gene38</td>
+<td align="right">-0.471</td>
+<td align="right">0.3460</td>
+<td align="right">0.855</td>
+<td align="right">0.712</td>
+<td align="right">0.1120</td>
+<td align="right">0.933</td>
 </tr>
 </tbody>
 </table>
 <p>where the result is ordered by the combined p-value of the two associations per gene. The <code>method</code> options for the association test are: <code>&quot;pearson&quot;</code> (the default), <code>&quot;spearman&quot;</code>, <code>&quot;kendall&quot;</code>, as before, or <code>&quot;limma&quot;</code>, where it will use <code>limma_cor</code>. This function only allows one method for all phenotypes.</p>
 <p>We can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (<code>hitman</code>). We set the exposure (<code>E</code>) to group, the outcome (<code>Y</code>) to <code>pheno.v</code>, and test each gene in <code>M</code> as a mediator. For <code>hitman</code> we transform the exposure to numeric, and set the names of the <code>phenoype</code> to those of <code>M</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grp.num &lt;-<span class="st"> </span><span class="kw">batch2design</span>(grp)
-res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp.num, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno.v, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
-<pre><code>## Warning in hitman(E = grp.num, M = M, Y = setNames(pheno.v, nm =
-## colnames(M))): E and Y are not associated, so mediation may not be
-## meaningful.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">grp.num &lt;-<span class="st"> </span><span class="kw">batch2design</span>(pheno<span class="op">$</span>grp)
+res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class="dt">E =</span> grp.num, <span class="dt">M =</span> M, <span class="dt">Y =</span> <span class="kw">setNames</span>(pheno<span class="op">$</span>yy, <span class="dt">nm=</span><span class="kw">colnames</span>(M)))</code></pre></div>
 <p><code>hitman</code> returns a table with a combined (“EMY”) p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in <code>M</code>, and the conditional association of the gene in <code>M</code> to <code>Y</code> given <code>E</code>.</p>
 <table>
 <thead>
@@ -821,7 +816,7 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy2&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">11</span><span class="op">:</span><span class="dv">20</span>)),
           <span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;pwy3&quot;</span>, <span class="dt">description=</span><span class="ot">NA</span>, <span class="dt">genes=</span><span class="kw">paste0</span>(<span class="st">&quot;gene&quot;</span>, <span class="dv">21</span><span class="op">:</span><span class="dv">30</span>)))</code></pre></div>
 <p>This object would normally be read in using <code>read_gmt</code>. Then we can test each of these gene sets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res5 &lt;-<span class="st"> </span><span class="kw">roast_contrasts</span>(<span class="dt">object=</span>M, <span class="dt">G=</span>G, <span class="dt">stats.tab=</span>res0, <span class="dt">grp=</span>grp, <span class="dt">contrast.v =</span> contr.v, <span class="dt">fun=</span><span class="st">&quot;fry&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">res5 &lt;-<span class="st"> </span><span class="kw">roast_contrasts</span>(<span class="dt">object=</span>M, <span class="dt">G=</span>G, <span class="dt">feat.tab=</span>res0, <span class="dt">grp=</span>pheno<span class="op">$</span>grp, <span class="dt">contrast.v =</span> contr.v, <span class="dt">fun=</span><span class="st">&quot;fry&quot;</span>, <span class="dt">name=</span><span class="ot">NA</span>)</code></pre></div>
 <p>If we set <code>name</code> to a value other than <code>NA</code>, this would create a folder with one CSV per pathway, and an Excel file that looks like</p>
 <table>
 <thead>
@@ -935,7 +930,7 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 <h2>System info</h2>
 <p>Here is the information on the system on which this document was compiled:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.5.0 (2018-04-23)
+<pre><code>## R version 3.5.2 (2018-12-20)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
 ## Running under: Windows 7 x64 (build 7601) Service Pack 1
 ## 
@@ -952,13 +947,13 @@ res.hit &lt;-<span class="st"> </span><span class="kw">hitman</span>(<span class
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] ezlimma_0.2.1 limma_3.36.1 
+## [1] ezlimma_0.2.1.9002 limma_3.36.5      
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] compiler_3.5.0  magrittr_1.5    htmltools_0.3.6 tools_3.5.0    
-##  [5] yaml_2.1.19     Rcpp_0.12.17    stringi_1.1.7   rmarkdown_1.11 
-##  [9] highr_0.6       knitr_1.21      xfun_0.4        digest_0.6.15  
-## [13] stringr_1.3.1   statmod_1.4.30  evaluate_0.10.1</code></pre>
+##  [1] compiler_3.5.2  magrittr_1.5    tools_3.5.2     htmltools_0.3.6
+##  [5] yaml_2.2.0      Rcpp_1.0.0      stringi_1.2.4   rmarkdown_1.11 
+##  [9] highr_0.7       knitr_1.21      stringr_1.3.1   xfun_0.4       
+## [13] digest_0.6.18   statmod_1.4.30  evaluate_0.12</code></pre>
 </div>
 
 

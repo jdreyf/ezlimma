@@ -4,13 +4,13 @@
 \alias{df_signif}
 \title{Apply \code{signif} function to numeric columns of data frames}
 \usage{
-df_signif(df, digits = 3)
+df_signif(tab, digits = 3)
 }
 \arguments{
-\item{df}{A data frame}
+\item{tab}{A data frame}
 
 \item{digits}{number of digits passed to \code{signif}.}
 }
 \description{
-Apply \code{signif} function to numeric columns of data frames
+Apply \code{signif} function to numeric columns of data frames.
 }

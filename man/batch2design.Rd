@@ -14,4 +14,5 @@ Numeric matrix.
 }
 \description{
 Transform factor vector into design matrix, based on code from \code{\link[limma]{removeBatchEffect}}.
+See examples in vignette.
 }
