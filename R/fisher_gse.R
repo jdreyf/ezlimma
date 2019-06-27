@@ -10,7 +10,7 @@
 #' rounded to 3 significant figures.
 #' @export
 
-fisher_gse <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", mmin.nfeats=3, max.nfeats=1000){
+fisher_gse <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
   
   stopifnot(!is.null(names(gsets)))
   for(gset in gsets){
