@@ -18,14 +18,10 @@ multi.gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternat
   if (is.vector(gstats)){ 
     gstats <- as.matrix(gstats)
     colnames(gstats) <- "gst"
-<<<<<<< HEAD
   }
   if (is.data.frame(gstats)){ 
     gstats <- data.matrix(gstats) 
   }
-=======
-    }
->>>>>>> 8653ddd118dd6a1773d917c1a8ba74b672e39d8b
   stopifnot(!is.null(rownames(gstats)), rownames(gstats) %in% rownames(feat.tab))
   
   # get G index
@@ -34,10 +30,6 @@ multi.gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternat
   # run geneSetTest
   for(i in 1:ncol(gstats)){
     gstat <- gstats[, i, drop=TRUE]
-<<<<<<< HEAD
-=======
-    names(gstat) <- rownames(gstats)
->>>>>>> 8653ddd118dd6a1773d917c1a8ba74b672e39d8b
     
     pval <- vapply(index, function(x){
       limma::geneSetTest(x, statistics=gstat, alternative=alternative, type=type, ranks.only=ranks.only, nsim=nsim)
@@ -83,3 +75,4 @@ multi.gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternat
   
   return(res)
 }
+
