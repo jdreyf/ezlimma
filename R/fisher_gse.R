@@ -4,12 +4,7 @@
 #' The Excel file links to CSV files, which contain statistics per gene set. 
 #' 
 #' @param gsets Named test gene set list (e.g. differential genes). Each element is vector of gene IDs corresponding to the rownames of *feat.tab*
-#' @param G Gene set list as returned from \code{\link{read_gmt}}.
-#' @param feat.tab Table of feature (e.g. gene) statistics that the Excel table can link to.
-#' @param name Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.
-#' @param adjust.method Method used to adjust the p-values for multiple testing.
-#' @param min.nfeats Minimum number of features (e.g. genes) needed in a gene set for testing.
-#' @param max.nfeats Maximum number of features (e.g. genes) needed in a gene set for testing.
+#' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
