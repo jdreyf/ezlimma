@@ -1,16 +1,16 @@
 #' Fisher Exact Test of gene set enrichment with output to Excel
 #' 
-#' Test gene set enrichment using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set, and writes this to an Excel file. 
-#' The Excel file links to CSV files, which contain statistics per gene set. 
+#' Test gene set enrichment using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set,
+#' and writes this to an Excel file. The Excel file links to CSV files, which contain statistics per gene set.
 #' 
-#' @param gsets Named test gene set list (e.g. differential genes). Each element is vector of gene IDs corresponding to the rownames of *feat.tab*
+#' @param gsets Named list of gene sets whose element is a vector of (differential) gene IDs corresponding to the rownames of \code{feat.tab}
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
 #' @export
 
-fisher_gse <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
+fisher_enrichment_test <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
   
   stopifnot(!is.null(names(gsets)))
   for(gset in gsets){
@@ -22,7 +22,7 @@ fisher_gse <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfea
   
   # make each index set as vector of two-level factors
   index.b <- lapply(index, FUN=function(x) factor(-as.numeric(rownames(feat.tab) %in% x), levels=c(-1,0)))
-  ngenes <- Vapply(index, FUN=length, FUN.VALUE=numeric(1))
+  ngenes <- vapply(index, FUN=length, FUN.VALUE=numeric(1))
   
   # run fisher.test for each test set
   for(i in seq_along(gsets)){
@@ -35,8 +35,7 @@ fisher_gse <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfea
     res.tmp$FDR <- stats::p.adjust(res.tmp$p, method=adjust.method)
     colnames(res.tmp) <- paste(names(gsets)[i], colnames(res.tmp), sep = '.')
     
-    f(i == 1) res <- cbind(NGenes=ngenes, res.tmp)
-    else res <- cbind(res, res.tmp[rownames(res), ])
+    if(i == 1) res <- cbind(NGenes=ngenes, res.tmp) else res <- cbind(res, res.tmp[rownames(res), ])
   }
   
   # order rows by combined p-values

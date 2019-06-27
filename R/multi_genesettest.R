@@ -3,7 +3,7 @@
 #' Test whether a set of genes is highly ranked. It returns a data frame with statistics per gene set, and writes this to an Excel file. 
 #' The Excel file links to CSV files, which contain statistics per gene set. 
 #' 
-#' @param gsats A named vectoror, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
+#' @param gstats A named vectoror, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
 #' The names or rownames should be the same as the rownames of  *feat.tab*
 #' @inheritParams roast_contrasts
 #' @inheritParams limma::geneSetTest
@@ -12,7 +12,7 @@
 #' rounded to 3 significant figures.
 #' @export
 
-multi_gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternative="mixed", type="auto", adjust.method ="BH", 
+multi_genesettest <- function(gstats, G, feat.tab, name=NA, alternative="mixed", type="auto", adjust.method ="BH", 
                       min.nfeats=3, max.nfeats=1000, ranks.only=TRUE, nsim=9999){
   
   if (is.vector(gstats)){ 
@@ -52,9 +52,8 @@ multi_gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternat
     
     colnames(res.tmp) <- paste(colnames(gstats)[i], colnames(res.tmp), sep=".")
     
-    ngenes <- Vapply(index, FUN=length, FUN.VALUE=numeric(1))
-    if(i == 1) res <- cbind(NGenes=ngenes, res.tmp)
-    else res <- cbind(res, res.tmp[rownames(res), ])
+    ngenes <- vapply(index, FUN=length, FUN.VALUE=numeric(1))
+    if(i == 1) res <- cbind(NGenes=ngenes, res.tmp) else res <- cbind(res, res.tmp[rownames(res), ])
   }
   
   # order rows by combined p-values
@@ -75,4 +74,3 @@ multi_gst <- function(gstats, G, feat.tab, name=NA, adjust.method="BH", alternat
   
   return(res)
 }
-
