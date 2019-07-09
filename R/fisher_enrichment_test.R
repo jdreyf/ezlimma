@@ -40,8 +40,7 @@ fisher_enrichment_test <- function(gsets, G, feat.tab, name=NA, adjust.method="B
   
   # order rows by combined p-values
   res <- res[order(combine_pvalues(res)), ]
-  rownames(res) <- clean_filenames(rownames(res))
-  
+ 
   # change FDR to appropriate adjustment name if user doesn"t use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
