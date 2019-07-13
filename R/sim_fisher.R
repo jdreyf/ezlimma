@@ -4,13 +4,14 @@
 #' 
 #' 
 #' @param effect.v Numeric vector of log fold-changes or percent of phentotypes to add.
+#' @param test.ft Compare to \code{\link[stats]{fisher.test}}.
 #' @inheritParams roast_contrasts
 #' @inheritParams hitman
 #' @inheritParams sim_barfield
 
 # competitive test, so can only test one pathway at a time
 # need high alpha for less variance in estimate
-sim_fisher <- function(G, feat.tab, grp, effect.v=c(0, 0.2), alpha=0.2, nsim=99, test=TRUE, seed=1, verbose=TRUE){
+sim_fisher <- function(G, feat.tab, grp, effect.v=c(0, 0.2), alpha=0.2, nsim=99, test.ft=TRUE, seed=1, verbose=FALSE){
   stopifnot(nrow(feat.tab) > 10, length(G) >= 1)
   all.feats <- rownames(feat.tab)
   g1 <- G[[1]]$genes
@@ -38,13 +39,13 @@ sim_fisher <- function(G, feat.tab, grp, effect.v=c(0, 0.2), alpha=0.2, nsim=99,
       
       fet <- fisher_enrichment_test(sig.sets = sig.set, G=G, feat.tab = feat.tab)
       #test
-      if (test){
+      if (test.ft){
         ftp <- stats::fisher.test(all.feats %in% sig.set[[1]], all.feats %in% g1, alternative = "greater")$p.value
         stopifnot(all.equal(fet["pwy1", "top.p"], ftp))
       }
       prop.sig.mat[sim, paste0("eff_", ev)] <- fet["pwy1", "top.p"] < alpha
     }
-    if (sim %% 100 == 0) cat("sim: ", sim, "\n")
+    if (verbose & sim %% 100 == 0) cat("sim: ", sim, "\n")
   }
   (prop.sig.mat <- rbind(avg=colMeans(prop.sig.mat), prop.sig.mat))
 }

@@ -5,7 +5,7 @@
 \title{Apply \code{fisher_enrichment_test} to simulated data}
 \usage{
 sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
-  nsim = 99, test = TRUE, seed = 1, verbose = TRUE)
+  nsim = 99, test.ft = TRUE, seed = 1, verbose = FALSE)
 }
 \arguments{
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
@@ -20,6 +20,8 @@ sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
 \item{alpha}{Alpha level.}
 
 \item{nsim}{Number of simulations.}
+
+\item{test.ft}{Compare to \code{\link[stats]{fisher.test}}.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}
