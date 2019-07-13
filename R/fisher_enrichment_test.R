@@ -1,21 +1,20 @@
 #' Fisher Exact Test of gene set enrichment with output to Excel
 #' 
-#' Test gene set enrichment using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set,
-#' and writes this to an Excel file. The Excel file links to CSV files, which contain statistics per gene set.
+#' Test enrichment of one or more vectors of significant genes against defined gene sets using \code{\link[stats]{fisher.test}}. 
+#' It returns a data frame with statistics per gene set, and can write this to an Excel file. The Excel file links to CSV files, 
+#' which contain statistics per gene set.
 #' 
-#' @param gsets Named list of gene sets whose element is a vector of (differential) gene IDs corresponding to the rownames of \code{feat.tab}
+#' @param sig.sets Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
 #' @export
 
-fisher_enrichment_test <- function(gsets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
+fisher_enrichment_test <- function(sig.sets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
   
-  stopifnot(!is.null(names(gsets)))
-  for(gset in gsets){
-    stopifnot(gset %in% rownames(feat.tab))
-  }
+  stopifnot(!is.null(names(sig.sets)))
+  for(gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
   
   # get G index
   index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
@@ -25,23 +24,23 @@ fisher_enrichment_test <- function(gsets, G, feat.tab, name=NA, adjust.method="B
   ngenes <- vapply(index, FUN=length, FUN.VALUE=numeric(1))
   
   # run fisher.test for each test set
-  for(i in seq_along(gsets)){
-    gset.b <- factor(-as.numeric(rownames(feat.tab) %in% gsets[[i]]), levels=c(-1,0))
-    res.tmp <- as.data.frame(t(vapply(index.b, FUN=function(x.b){
+  for(ind in seq_along(sig.sets)){
+    gset.b <- factor(-as.numeric(rownames(feat.tab) %in% sig.sets[[ind]]), levels=c(-1,0))
+    res.va <- vapply(index.b, FUN=function(x.b){
       tb <- table(x.b, gset.b)
-      c(num=tb[1,1], p= stats::fisher.test(tb, alternative="greater")$p.value)
-    }, FUN.VALUE = numeric(2))))
-    
+      c(num=tb[1,1], p=stats::fisher.test(tb, alternative="greater")$p.value)
+    }, FUN.VALUE = numeric(2))
+    res.tmp <- as.data.frame(t(res.va))
     res.tmp$FDR <- stats::p.adjust(res.tmp$p, method=adjust.method)
-    colnames(res.tmp) <- paste(names(gsets)[i], colnames(res.tmp), sep = '.')
+    colnames(res.tmp) <- paste(names(sig.sets)[ind], colnames(res.tmp), sep = '.')
     
-    if(i == 1) res <- cbind(NGenes=ngenes, res.tmp) else res <- cbind(res, res.tmp[rownames(res), ])
+    if(ind == 1) res <- cbind(NGenes=ngenes, res.tmp) else res <- cbind(res, res.tmp[rownames(res), ])
   }
   
   # order rows by combined p-values
   res <- res[order(combine_pvalues(res)), ]
  
-  # change FDR to appropriate adjustment name if user doesn"t use FDR
+  # change FDR to appropriate adjustment name if user doesn't use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }

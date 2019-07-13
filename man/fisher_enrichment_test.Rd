@@ -4,11 +4,11 @@
 \alias{fisher_enrichment_test}
 \title{Fisher Exact Test of gene set enrichment with output to Excel}
 \usage{
-fisher_enrichment_test(gsets, G, feat.tab, name = NA,
+fisher_enrichment_test(sig.sets, G, feat.tab, name = NA,
   adjust.method = "BH", min.nfeats = 3, max.nfeats = 1000)
 }
 \arguments{
-\item{gsets}{Named list of gene sets whose element is a vector of (differential) gene IDs corresponding to the rownames of \code{feat.tab}}
+\item{sig.sets}{Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
@@ -26,8 +26,9 @@ fisher_enrichment_test(gsets, G, feat.tab, name = NA,
 Data frame of gene set statistics.
 }
 \description{
-Test gene set enrichment using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set,
-and writes this to an Excel file. The Excel file links to CSV files, which contain statistics per gene set.
+Test enrichment of one or more vectors of significant genes against defined gene sets using \code{\link[stats]{fisher.test}}. 
+It returns a data frame with statistics per gene set, and can write this to an Excel file. The Excel file links to CSV files, 
+which contain statistics per gene set.
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
