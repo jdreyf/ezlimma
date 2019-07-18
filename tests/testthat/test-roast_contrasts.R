@@ -78,9 +78,10 @@ test_that("proportion up & down", {
 
 test_that("one pwy", {
   rcf1 <- roast_contrasts(object=M, G=G[1], feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
+  expect_equal(rownames(rcf1), "pwy1")
   rcm1 <- roast_contrasts(object=M, G=G[1], feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast")
+  expect_equal(rownames(rcm1), "pwy1")
 })
-
 
 test_that("clean names & write", {
   unlink("bad_names_fry", recursive = TRUE) #in case it already exists
