@@ -2,6 +2,6 @@
 
 language: r
 sudo: false
-cache: packages
+bioc_packages: limma
 after_success:
 - Rscript -e 'covr::codecov()'
