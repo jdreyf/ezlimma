@@ -4,7 +4,7 @@
 \alias{fisher_enrichment_test}
 \title{Fisher Exact Test of gene set enrichment with output to Excel}
 \usage{
-fisher_enrichment_test(sig.sets, G, feat.tab, name = NA,
+fisher_enrichment_test(sig.sets, G, feat.tab = NULL, name = NA,
   adjust.method = "BH", min.nfeats = 3, max.nfeats = 1000)
 }
 \arguments{
@@ -33,4 +33,6 @@ which contain statistics per gene set.
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 rounded to 3 significant figures.
+
+\code{feat.tab} is needed if \code{!is.na(name)}.
 }

@@ -44,9 +44,9 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
       stop("All rows of p-values, after accounting for stats, must not be all NA.")
     }
   }
-  tab.z <- apply(tab.p, MARGIN=2, stats::qnorm, lower.tail = FALSE)
+  tab.z <- apply(as.matrix(tab.p), MARGIN=2, stats::qnorm, lower.tail = FALSE)
   # account for NAs
-  combz.v <- apply(tab.z, MARGIN=1, FUN=function(zv){
+  combz.v <- apply(as.matrix(tab.z), MARGIN=1, FUN=function(zv){
     zv.nona <- zv[!is.na(zv)]
     sum(zv)/sqrt(length(zv))
   })

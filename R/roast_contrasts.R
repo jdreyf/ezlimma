@@ -45,7 +45,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   
   if (fun=="mroast") set.seed(seed=seed)
 
-  # # get G index
+  # get G index
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
   if (is.null(design)){
@@ -103,7 +103,8 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     contr.cols <- paste(contr.nm, c("logFC", "p"), sep=".")
     if (all(contr.cols %in% colnames(feat.tab))){
       prop.diff <- signif(prop_changed(feat.tab=feat.tab[, contr.cols, drop=FALSE], feat.lst=index), 2)
-      res.tmp <- data.frame(res.tmp[, 1:2], prop.diff[rownames(res.tmp),], res.tmp[, -(1:2)])
+      res.tmp <- data.frame(res.tmp[, 1:2, drop=FALSE], prop.diff[rownames(res.tmp),, drop=FALSE], 
+                            res.tmp[, -(1:2), drop=FALSE])
     }
     
     # if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
@@ -124,7 +125,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   }# end for i
   
   # let combine_pvalues find pvalue columns
-  res <- res[order(combine_pvalues(res)), ]
+  if (nrow(res) > 1) res <- res[order(combine_pvalues(res)), ]
 
   # change FDR to appropriate adjustment name if user doesn"t use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
