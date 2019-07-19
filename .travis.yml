@@ -2,6 +2,7 @@
 
 language: r
 sudo: false
+warnings_are_errors: false
 bioc_packages: limma
 after_success:
 - Rscript -e 'covr::codecov()'
