@@ -26,8 +26,8 @@ sim_fisher_hitman <- function(G, E, all.feats, effect.v=c(0, 0.2), alpha=0.05, n
   
   for (sim in 1:nsim){
     for (ev in effect.v){
-      obj.test <- matrix(stats::rnorm(n=length(all.feats)*length(grp)), ncol=length(grp), nrow=length(all.feats),
-                         dimnames=list(all.feats, names(grp)))
+      obj.test <- matrix(stats::rnorm(n=length(all.feats)*length(E)), ncol=length(E), nrow=length(all.feats),
+                         dimnames=list(all.feats, names(E)))
       if (ev > 0){
         # to geneset & 1% of others
         other.sig <- sample(x=other.g, size=prop.other.sig*length(other.g))

@@ -61,7 +61,8 @@ hitman <- function(E, M, Y, covariates=NULL, check.names=TRUE){
     max(v)^2
   })
   EMY.FDR <- stats::p.adjust(EMY.p, method="BH")
-  ret <- cbind(EMY.p, EMY.FDR, ret)
+  EMY.z <- stats::qnorm(p=EMY.p, lower.tail = FALSE)
+  ret <- cbind(EMY.z, EMY.p, EMY.FDR, ret)
   ret <- ret[order(ret$EMY.p),]
   return(ret)
 }
