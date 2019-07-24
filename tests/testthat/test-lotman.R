@@ -71,7 +71,7 @@ test_that("gene1", {
   
   expect_equal(hm["gene1", "MY.p"], hm["gene1", "MY_dir.p"])
   expect_equal(hm["gene1", "EM.p"], hm["gene1", "EM_dir.p"])
-  expect_equal(hm["gene1", "EMY.p"], max(hm["gene1", "EM.p"], hm["gene1", "MY.p"])^2)
+  expect_equal(hm["gene1", "EMY.p"], max(hm["gene1", "EM.p"], hm["gene1", "MY.p"])^1.2)
 })
 
 test_that("NAs", {
