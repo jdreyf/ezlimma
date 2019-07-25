@@ -10,7 +10,6 @@
 #' @param nsamp Number of samples.
 #' @param nsim Number of simulations.
 #' @param ngene Number of genes other than that of primary interest to simulate.
-#' @param med.sims Number of simulations for \code{mediate} in \pkg{mediation}.
 #' @param seed Random seed.
 #' @param verbose Logical; should the number of simulations be printed every 100 simulations?
 #' @param ... Sent to \code{med.fcn}

@@ -27,8 +27,6 @@ in column \code{"EMY.p"}, like \code{\link{hitman}} or \code{\link{lotman}}. Its
 \item{verbose}{Logical; should the number of simulations be printed every 100 simulations?}
 
 \item{...}{Sent to \code{med.fcn}}
-
-\item{med.sims}{Number of simulations for \code{mediate} in \pkg{mediation}.}
 }
 \value{
 Matrix with proportion of significant calls for every combination of \code{t2} and \code{b1}.

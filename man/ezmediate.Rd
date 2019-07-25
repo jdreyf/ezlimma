@@ -9,8 +9,7 @@ ezmediate(E, M, Y, covariates = NULL, sims = 10^4)
 \arguments{
 \item{E}{A numeric vector of exposures.}
 
-\item{M}{A numeric matrix-like data object with one row per feature and one column per sample of mediators.
-Must have more than one feature.}
+\item{M}{Vector of a potential mediator.}
 
 \item{Y}{A numeric vector of \code{length(E)} of outcomes.}
 
