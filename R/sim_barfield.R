@@ -10,15 +10,17 @@
 #' @param nsamp Number of samples.
 #' @param nsim Number of simulations.
 #' @param ngene Number of genes other than that of primary interest to simulate.
+#' @param med.sims Number of simulations for \code{mediate} in \pkg{mediation}.
 #' @param seed Random seed.
 #' @param verbose Logical; should the number of simulations be printed every 100 simulations?
+#' @param ... Sent to \code{med.fcn}
 #' @return Matrix with proportion of significant calls for every combination of \code{t2} and \code{b1}.
 #' @references Barfield R, Shen J, Just AC, Vokonas PS, Schwartz J, Baccarelli AA, VanderWeele TJ, Lin X. 
 #' Testing for the indirect effect under the null for genome-wide mediation analyses. Genet Epidemiol. 
 #' 2017 Dec;41(8):824-833.
 
 sim_barfield <- function(med.fcn, b1t2.v=c(0, 0.14, 0.39), alpha=0.05, nsamp=50, nsim=10**4, ngene=0,
-                              seed=1, verbose=TRUE){
+                              seed=1, verbose=TRUE, ...){
   #t = theta; b = beta
   t0 <- t1 <- t3 <- b0 <- b2 <- 0.14
   prop.sig.arr <- array(NA, dim=c(length(b1t2.v), length(b1t2.v), nsim), 
@@ -48,10 +50,18 @@ sim_barfield <- function(med.fcn, b1t2.v=c(0, 0.14, 0.39), alpha=0.05, nsamp=50,
           m.other.mat <- matrix(stats::rnorm(n=nsamp*ngene, mean=em.other, sd=1), nrow=ngene, ncol=nsamp, byrow = TRUE)
           med.mat <- rbind(m1, m.other.mat)
           dimnames(med.mat) <- list(paste0("m", 1:nrow(med.mat)), paste0("s", 1:ncol(med.mat)))
-          med.res <- suppressWarnings(hitman(E=a, M=med.mat, Y=y, covariates = x))
+          # check med.fcn name
+          if (deparse(substitute(med.fcn)) == "hitman"){
+            med.res <- suppressWarnings(hitman(E=a, M=med.mat, Y=y, covariates = x, ...))
+          } else {
+            med.res <- apply(med.mat, MARGIN = 1, FUN=function(v){
+              med.res <- ezmediate(E=a, M=v, Y=y, covariates = x, ...)
+            })
+            med.res <- matrix(med.res, nrow=length(med.res), ncol=1, dimnames = list(names(med.res), "EMY.p"))
+          }
           prop.sig.arr[paste0("t2_", t2), paste0("b1_", b1), paste0("sim_", sim)] <- med.res["m1", "EMY.p"] < alpha
         } else {
-          med.res <- suppressWarnings(med.fcn(E=a, M=m1, Y=y, covariates = x))
+          med.res <- suppressWarnings(med.fcn(E=a, M=m1, Y=y, covariates = x, ...))
           prop.sig.arr[paste0("t2_", t2), paste0("b1_", b1), paste0("sim_", sim)] <- med.res[1, "EMY.p"] < alpha
         }
       }

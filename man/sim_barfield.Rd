@@ -5,7 +5,8 @@
 \title{Simulate & test mediation methods as in Barfield et al. (2017)}
 \usage{
 sim_barfield(med.fcn, b1t2.v = c(0, 0.14, 0.39), alpha = 0.05,
-  nsamp = 50, nsim = 10^4, ngene = 0, seed = 1, verbose = TRUE)
+  nsamp = 50, nsim = 10^4, ngene = 0, seed = 1, verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{med.fcn}{Mediation function to test. Must accept parameters and output matrix with mediation p-value 
@@ -24,6 +25,10 @@ in column \code{"EMY.p"}, like \code{\link{hitman}} or \code{\link{lotman}}. Its
 \item{seed}{Random seed.}
 
 \item{verbose}{Logical; should the number of simulations be printed every 100 simulations?}
+
+\item{...}{Sent to \code{med.fcn}}
+
+\item{med.sims}{Number of simulations for \code{mediate} in \pkg{mediation}.}
 }
 \value{
 Matrix with proportion of significant calls for every combination of \code{t2} and \code{b1}.

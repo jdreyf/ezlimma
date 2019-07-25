@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and extends limma package
-Version: 0.2.3.9022
+Version: 0.2.3.9023
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"),
 			 person("Grace", "Daher", role = "ctb"))
@@ -19,6 +19,7 @@ Imports:
 	stats
 Suggests:
 	covr,
+	mediation,
 	ppcor,
 	readxl,
 	SDMTools,
