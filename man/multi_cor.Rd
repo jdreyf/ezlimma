@@ -22,7 +22,7 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 
 \item{reorder.rows}{Logical, should rows be reordered by p-value?}
 
-\item{prefix}{Character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names. \code{NULL} does not add a prefix.}
 
 \item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
 

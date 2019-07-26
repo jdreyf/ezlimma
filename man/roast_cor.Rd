@@ -48,7 +48,7 @@ is constant.}
 
 \item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
 
-\item{prefix}{Character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names. \code{NULL} does not add a prefix.}
 
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete

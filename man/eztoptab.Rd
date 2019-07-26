@@ -18,7 +18,7 @@ automatically also be given.}
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
 list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
 
-\item{prefix}{Character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names. \code{NULL} does not add a prefix.}
 
 \item{coef}{Column index or column name specifying which coefficient or contrast of the linear model to test. 
 If \code{length(coef)>1}, an F-test will be performed, and \code{logFC} & \code{FC} will not be returned.}

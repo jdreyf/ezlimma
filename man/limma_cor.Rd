@@ -20,7 +20,7 @@ Should be same length as \code{ncol(object)}.}
 \item{design}{Design matrix of the experiment, with rows corresponding to samples and columns to coefficients to be 
 estimated.}
 
-\item{prefix}{Character string to add to beginning of column names.}
+\item{prefix}{Character string to add to beginning of column names. \code{NULL} does not add a prefix.}
 
 \item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
 \code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 

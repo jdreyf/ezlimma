@@ -5,7 +5,7 @@
 #'
 #' @param phenotype Numeric vector of sample characteristics (e.g. phenotypes or treatments). 
 #' Should be same length as \code{ncol(object)}.
-#' @param prefix Character string to add to beginning of column names.
+#' @param prefix Character string to add to beginning of column names. \code{NULL} does not add a prefix.
 #' @param coef Column index or column name of the linear model to test, passed to \code{\link{eztoptab}}.
 #' @param reorder.rows Logical, should rows be reordered by p-value?
 #' @param reduce.df Number degrees of freedom to subtract from residual. This may be necessary if 
