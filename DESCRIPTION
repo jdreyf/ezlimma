@@ -1,14 +1,14 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and extends limma package
-Version: 0.2.3.9023
+Version: 0.2.3.9024
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"),
 			 person("Grace", "Daher", role = "ctb"))
 BugReports: https://github.com/jdreyf/ezlimma/issues
 Description: Functions for more easily using limma, such as to test multiple 
     contrasts for genes or pathways in one line. Also, an Excel front-end for
-	limma's pathway analysis methods roast and fry, and mediation analysis.
+	limma's pathway analysis methods roast and fry.
 Imports:
 	devtools,
 	knitr,
@@ -19,8 +19,6 @@ Imports:
 	stats
 Suggests:
 	covr,
-	mediation,
-	ppcor,
 	readxl,
 	SDMTools,
     testthat,

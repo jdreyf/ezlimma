@@ -95,17 +95,6 @@ knitr::kable(signif(res4[1:10,], 3))
 
 where the result is ordered by the combined p-value of the two associations per gene. The `method` options for the association test are: `"pearson"` (the default), `"spearman"`, `"kendall"`, as before, or `"limma"`, where it will use `limma_cor`. This function only allows one method for all phenotypes.
 
-We  can also test what genes mediate the effect of group on the continuous phenotype. This is called high-throughput mediation analysis (`hitman`). We set the exposure (`E`) to group, the outcome (`Y`) to `pheno.v`, and test each gene in `M` as a mediator. For `hitman` we transform the exposure to numeric, and set the names of the `phenoype` to those of `M`.  
-```{r}
-grp.num <- as.numeric(pheno$grp == "Last3")
-res.hit <- hitman(E = grp.num, M = M, Y = setNames(pheno$yy, nm=colnames(M)))
-```
-
-`hitman` returns a table with a combined ("EMY") p-value and FDR for each gene. This combined statistic is based on the association of E to the gene in `M`, and the conditional association of the gene in `M` to `Y` given `E`.
-```{r, echo=FALSE}
-knitr::kable(signif(res.hit[1:10,], 3))
-```
-
 ## Gene set level analysis
 At a higher level than features (e.g. genes) lie feature sets, such as gene sets or pathways. These can be tested with `limma`'s `roast` functions, which are implemented for multiple sets at a time with the functions `mroast` or its faster approximation `fry`. We have written wrappers around these to allow for easier testing, and to make an Excel file where each gene set links to a CSV containing the statistics on its genes, made using the feature-level functions.
 

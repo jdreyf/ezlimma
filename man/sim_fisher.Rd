@@ -23,8 +23,7 @@ sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
 
 \item{test.ft}{Compare to \code{\link[stats]{fisher.test}}.}
 
-\item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
-simulations. Ignored if \code{fun="fry"}.}
+\item{seed}{Random seed for reprodubility.}
 
 \item{verbose}{Logical; should the number of simulations be printed every 100 simulations?}
 }

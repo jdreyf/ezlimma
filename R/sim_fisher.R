@@ -3,10 +3,12 @@
 #' Apply \code{fisher_enrichment_test} to simulated data.
 #' 
 #' @param effect.v Numeric vector of log fold-changes or percent of phentotypes to add.
+#' @param alpha Alpha level.
+#' @param nsim Number of simulations.
 #' @param test.ft Compare to \code{\link[stats]{fisher.test}}.
+#' @param seed Random seed for reprodubility.
+#' @param verbose Logical; should the number of simulations be printed every 100 simulations?
 #' @inheritParams roast_contrasts
-#' @inheritParams hitman
-#' @inheritParams sim_barfield
 
 # competitive test, so can only test one pathway at a time
 # need high alpha for less variance in estimate
