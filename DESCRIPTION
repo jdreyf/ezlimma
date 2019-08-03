@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and extends limma package
-Version: 0.2.3.9024
+Version: 0.2.3.9025
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"),
 			 person("Grace", "Daher", role = "ctb"))
@@ -10,15 +10,19 @@ Description: Functions for more easily using limma, such as to test multiple
     contrasts for genes or pathways in one line. Also, an Excel front-end for
 	limma's pathway analysis methods roast and fry.
 Imports:
-	devtools,
 	knitr,
 	limma (>= 3.34.8),
 	MASS,
+	ppcor,
+	rlang,
 	rmarkdown,
+	sessioninfo,
 	statmod,
-	stats
+	stats,
+	tibble
 Suggests:
 	covr,
+	devtools,
 	readxl,
 	SDMTools,
     testthat,

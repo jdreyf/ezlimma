@@ -14,7 +14,16 @@
 # assume that if "logFC" in cols, then want "FC"
 # limma_contrasts tests one coef at a time
 eztoptab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.method="BH", prefix=NULL, coef=NULL){
-  stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr",  "t", "F", "P.Value", "adj.P.Val", "B", "logFC"))
+  stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr", "z", "t", "F", "P.Value", "adj.P.Val", "B", "logFC"))
+  
+  if ("z" %in% cols){
+    if (!("t" %in% cols)){
+      cols <- c(cols, "t")
+      rm.t <- TRUE
+    } else {
+      rm.t <- FALSE
+    }
+  }
   
   if (!is.null(coef) && length(coef)>=2){
     # topTableF tests all coefficients if at least 2, so using topTable to potentially test a subset
@@ -24,13 +33,21 @@ eztoptab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.method
     tt <- limma::topTable(fit, number=Inf, sort.by="P", adjust.method=adjust.method, coef=coef)
   }
   
+  
+  if ("z" %in% cols){
+    tt <- add_zcols(tt, fit = fit)
+    if (rm.t) cols <- setdiff(cols, grep_cols(tt, stat.cols = "t"))
+  }
+  
   # FC
   if ("logFC" %in% cols){
     tt$FC <- logfc2fc(tt$logFC)
     cols <- c(cols, "FC")
   }
+  
   tt <- tt[, cols, drop=FALSE]
   colnames(tt) <- sub("P.Value", "p", colnames(tt))
+  
   # p.adjust says fdr is alias for BH
   if (adjust.method %in% c("BH", "fdr")){
     colnames(tt) <- sub("adj\\.P\\.Val", "FDR", colnames(tt))

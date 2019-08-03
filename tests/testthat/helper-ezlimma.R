@@ -1,6 +1,5 @@
 library(covr)
 library(limma) #for EList-class
-library(ppcor)
 library(testthat)
 
 # example from limma::contrasts.fit
@@ -42,3 +41,6 @@ rcr.m <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast")
 
 fl <- lapply(G, FUN=function(x) x$genes)
 names(fl) <- lapply(G, FUN=function(x) x$name)
+
+fit <- limma::eBayes(lmFit(M))
+fit2 <- limma::eBayes(lmFit(M, design = design))

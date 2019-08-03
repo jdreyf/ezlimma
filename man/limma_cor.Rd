@@ -51,9 +51,9 @@ returned by \code{\link[limma]{lmFit}}.}
 
 \item{check.names}{Logical; should \code{names(phenotype)==rownames(object)} be checked?}
 
-\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
-"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
-automatically also be given.}
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include 
+\code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "B"}. Some of these column names are then changed here. 
+If \code{logFC} is specified, \code{FC} will automatically also be given.}
 }
 \value{
 Data frame.

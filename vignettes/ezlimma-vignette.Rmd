@@ -119,5 +119,5 @@ except the first column would have links to the CSVs in the folder. Similarly, w
 
 ## System info
 ```{r si}
-devtools::session_info()
+sessioninfo::session_info()
 ```

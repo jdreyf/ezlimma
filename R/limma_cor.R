@@ -25,6 +25,7 @@
 limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=NA, trend=FALSE, block=NULL, correlation=NULL,
                       adjust.method="BH", coef=2, reorder.rows=TRUE, moderated=TRUE, reduce.df=0, check.names=TRUE,
                       cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
+  
    stopifnot(all(is.na(weights)) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
              length(weights)==ncol(object), is.numeric(reduce.df), reduce.df >= 0, is.null(phenotype)!=is.null(design), 
              moderated || !trend)

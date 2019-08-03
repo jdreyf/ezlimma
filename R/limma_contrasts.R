@@ -29,9 +29,9 @@
 #' \pkg{limma} to produce ordinary least squares statistics is used.
 #' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 #' and \code{add.means} is \code{FALSE}.
-#' @param cols Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
-#' "adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
-#' automatically also be given.
+#' @param cols Columns of \code{topTable} output to include. Possibilities include 
+#' \code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "B"}. Some of these column names are then changed here. 
+#' If \code{logFC} is specified, \code{FC} will automatically also be given.
 #' @return Data frame.
 #' @details If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
 #' \code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
@@ -47,6 +47,7 @@
 limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=NA, trend=FALSE, block=NULL, 
                             correlation=NULL, adjust.method="BH", add.means=!is.null(grp), treat.lfc=NULL, 
                             moderated=TRUE, check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
+  
   stopifnot(all(is.na(weights)) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
             length(weights)==ncol(object), is.null(treat.lfc) || length(contrast.v)==1, moderated || !trend)
   if (is.vector(object)) stop("'object' must be a matrix-like object; you can coerce it to one with 'as.matrix()'")

@@ -50,9 +50,9 @@ which is \code{treat.lfc=log2(1.1)}.}
 \item{check.names}{Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 and \code{add.means} is \code{FALSE}.}
 
-\item{cols}{Columns of \code{topTable} output to include. Possibilities include \code{"logFC", "AveExpr", "t", "P.Value",
-"adj.P.Val", "B"}. Some of these column names are then changed here. If \code{logFC} is specified, \code{FC} will 
-automatically also be given.}
+\item{cols}{Columns of \code{topTable} output to include. Possibilities include 
+\code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "B"}. Some of these column names are then changed here. 
+If \code{logFC} is specified, \code{FC} will automatically also be given.}
 }
 \value{
 Data frame.
