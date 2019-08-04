@@ -57,6 +57,15 @@ test_that("matches limma_contrast with covariate", {
   expect_equal(lc3$p, eztt3[rownames(lc3), "Last3vsFirst3.p"])
 })
 
+test_that("z col", {
+  lc2 <- limma_cor(M, phenotype = pheno.v, trend=TRUE, cols = "z")
+  expect_equal(colnames(lc2), "z")
+  
+  lc3 <- limma_cor(M, phenotype = pheno.v, trend=TRUE, cols = c("z", "P.Value"))
+  expect_equal(colnames(lc3)[1], "z")
+  expect_equal(colnames(lc3)[2], "p")
+})
+
 test_that("!moderated", {
   expect_error(limma_cor(object=M, phenotype = pheno.v, trend=TRUE, moderated = FALSE))
   
