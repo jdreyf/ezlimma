@@ -38,7 +38,8 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
     design <- stats::model.matrix(~1+phenotype)
   } else {
     #if pheno is NULL, design was given
-    stopifnot(is.numeric(design[,2]))
+    # pheno could be in first column if not intercept
+    stopifnot(is.numeric(design))
   }
   
   if (length(weights)!=1 || !is.na(weights)){

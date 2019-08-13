@@ -8,3 +8,4 @@ test_that("one comparison", {
   expect_lte(which(colnames(eztt2) == "abc.z"), which(colnames(eztt2) == "abc.t"))
   expect_true(all(abs(eztt2$abc.z) <= abs(eztt2$abc.t)))
 })
+

@@ -96,6 +96,11 @@ test_that("!moderated", {
   expect_equal(lc4[1, "p"], pc$p.value)
 })
 
+test_that("reduce.df has effect", {
+  lc2 <- limma_cor(M, phenotype = pheno.v, reduce.df = 3)
+  expect_gte(mean(lc2$p >= lc[rownames(lc2), "p"]), 0.6)
+})
+
 test_that("size", {
   lc1 <- limma_cor(M[-1,], phenotype = covar)
   lc2 <- limma_cor(M[-1,], phenotype = phenotype)
