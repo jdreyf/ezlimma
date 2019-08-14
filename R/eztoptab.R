@@ -8,6 +8,7 @@
 #' @inheritParams limma_contrasts
 #' @inheritParams limma_cor
 #' @return Data frame.
+#' @details If \code{length(coef)>=2}, \code{"z"} will not be returned.
 #' @seealso \code{\link[limma]{topTable}}.
 
 # sort by p
@@ -16,27 +17,15 @@
 eztoptab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.method="BH", prefix=NULL, coef=NULL){
   stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr", "z", "t", "F", "P.Value", "adj.P.Val", "B", "logFC"))
   
-  if ("z" %in% cols){
-    if (!("t" %in% cols)){
-      cols <- c(cols, "t")
-      rm.t <- TRUE
-    } else {
-      rm.t <- FALSE
-    }
-  }
-  
   if (!is.null(coef) && length(coef)>=2){
     # topTableF tests all coefficients if at least 2, so using topTable to potentially test a subset
     tt <- limma::topTable(fit, number=Inf, sort.by="F", adjust.method=adjust.method, coef=coef)
     cols <- setdiff(cols, c("logFC", "t"))
   } else {
     tt <- limma::topTable(fit, number=Inf, sort.by="P", adjust.method=adjust.method, coef=coef)
-  }
-  
-  
-  if ("z" %in% cols){
-    tt <- add_zcols(tt, fit = fit)
-    if (rm.t) cols <- setdiff(cols, grep_cols(tt, stat.cols = "t"))
+    if ("z" %in% cols){
+      tt <- add_zcols(tt, p.suffix = "P.Value")
+    }
   }
   
   # FC

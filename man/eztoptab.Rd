@@ -29,6 +29,9 @@ Data frame.
 \description{
 Wrapper for \pkg{limma} \code{\link[limma]{topTable}} function that subsets and changes colnames
 }
+\details{
+If \code{length(coef)>=2}, \code{"z"} will not be returned.
+}
 \seealso{
 \code{\link[limma]{topTable}}.
 }

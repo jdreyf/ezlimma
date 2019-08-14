@@ -4,14 +4,17 @@
 \alias{add_zcols}
 \title{Add column to toptab with z-stats}
 \usage{
-add_zcols(toptab, fit)
+add_zcols(toptab, stat.suffix = "t", p.suffix = "p")
 }
 \arguments{
 \item{toptab}{Table with genes as rows and statistics as columns. Must include a column with t-statistics that
-is \code{"t"}, or ends with \code{".t"}.}
+is \code{"t"} or ends with \code{".t"} & a column of p-values is \code{"p"} or ends with \code{".p"}.
+Columns with t-statistics and those with p-values must have same prefixes.}
 
-\item{fit}{object of class \code{\link[limma]{marraylm}}.}
+\item{stat.suffix}{SUffix of numeric signed statistics column(s).}
+
+\item{p.suffix}{SUffix of numeric p-value column(s).}
 }
 \description{
-Add column to toptab with z-stats using \code{\link[limma]{zscore}}.
+Add column to toptab with z-stats.
 }

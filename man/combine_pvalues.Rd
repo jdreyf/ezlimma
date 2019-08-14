@@ -14,8 +14,7 @@ combine_pvalues(tab, p.cols = "p|PValue",
 \item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
 
 \item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
-statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
-\code{alternative} is \code{"two.sided"}.}
+statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}.}
 
 \item{only.p}{Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.}
 
@@ -33,6 +32,8 @@ these p-values were originally calculated from two-sided tests, as is done in \p
 \details{
 Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
 \code{method="z.transform"} in \code{survcomp::combine.test}.
+
+\code{stat.cols} are ignored if \code{alternative} is \code{"two.sided"}.
 }
 \examples{
  tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)

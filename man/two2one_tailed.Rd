@@ -14,8 +14,7 @@ two2one_tailed(tab, p.cols = "p|PValue",
 \item{p.cols}{Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.}
 
 \item{stat.cols}{Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
-statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}. Ignored if 
-\code{alternative} is \code{"two.sided"}.}
+statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}.}
 
 \item{alternative}{Direction of change: either \code{"greater"} or \code{"less"}, or their synonyms
 \code{"Up"} or \code{"Down"}.}
