@@ -3,7 +3,7 @@
 #' Test whether a set of genes is highly ranked. It returns a data frame with statistics per gene set, and writes this to an Excel file. 
 #' The Excel file links to CSV files, which contain statistics per gene set. 
 #' 
-#' @param gstats A named vectoror, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
+#' @param gstats A named vector, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
 #' The names or rownames should be the same as the rownames of  *feat.tab*
 #' @inheritParams roast_contrasts
 #' @inheritParams limma::geneSetTest
@@ -31,9 +31,9 @@ multi_genesettest <- function(gstats, G, feat.tab, name=NA, alternative="mixed",
   for(i in 1:ncol(gstats)){
     gstat <- gstats[, i, drop=TRUE]
     
-    pval <- vapply(index, function(x){
+    pval <- vapply(index, FUN=function(x){
       limma::geneSetTest(x, statistics=gstat, alternative=alternative, type=type, ranks.only=ranks.only, nsim=nsim)
-    })
+    }, FUN.VALUE = numeric(1))
     
     # some pval may > 1
     # the problems arises because the two-sided test method is to double the smaller of the two tail probabilities.  If both of the tail

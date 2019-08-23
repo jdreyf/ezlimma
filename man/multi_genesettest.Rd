@@ -10,7 +10,7 @@ multi_genesettest(gstats, G, feat.tab, name = NA,
   nsim = 9999)
 }
 \arguments{
-\item{gstats}{A named vectoror, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
+\item{gstats}{A named vector, matrix or data.frame of genewise statistic (e.g. z-scores, t-statistics) by which genes can be ranked. 
 The names or rownames should be the same as the rownames of  *feat.tab*}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
