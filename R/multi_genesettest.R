@@ -13,7 +13,7 @@
 #' @export
 
 multi_genesettest <- function(gstats, G, feat.tab, name=NA, alternative="mixed", type="auto", adjust.method ="BH", 
-                      min.nfeats=3, max.nfeats=1000, ranks.only=TRUE, nsim=9999){
+                              min.nfeats=3, max.nfeats=1000, ranks.only=TRUE, nsim=9999){
   
   if (is.vector(gstats)){ 
     gstats <- as.matrix(gstats)
