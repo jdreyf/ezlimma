@@ -10,7 +10,6 @@
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
-#' @export
 
 multi_genesettest <- function(gstats, G, feat.tab, name=NA, alternative="mixed", type="auto", adjust.method ="BH", 
                               min.nfeats=3, max.nfeats=1000, ranks.only=TRUE, nsim=9999){

@@ -1,16 +1,17 @@
-#' A wrapper function for \code{limma::cameraPR} with output to Excel
+#' A wrapper function for \code{cameraPR} with output to Excel
 #' 
 #' 
 #' Test whether a set of genes is highly ranked relative to other genes in terms of differential expression, 
-#' accounting for inter-gene correlation \code{\link[limma]{camera}}.
+#' accounting for inter-gene correlation with \code{\link[limma:camera]{cameraPR}}.
 #' To find pathways whose genes have large magnitude changes, independent of direction of their change, 
 #' provide \code{abs} of gene stats, and set \code{alternative="Up"}.
 #' It returns a data frame with statistics per gene set, and writes this to an Excel file. 
 #' The Excel file links to CSV files, which contain statistics per gene set. 
 #' 
-#' @param gstats A nmatrix-like data object with rownames & one column of genewise statistic (e.g. z-scores, t-statistics) 
-#' by which genes can be ranked. 
-#' The names should be the same as the rownames of  *feat.tab*
+#' @param gstats A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
+#' (e.g. z-scores, t-statistics) by which genes can be ranked. 
+#' The row names should be the same as the rownames of \code{feat.tab}.
+#' All values must \code{\link[base:is.finite]{finite}}.
 #' @param alternative Alternative hypothesis; must be one of\code{"two.sided"}; \code{"greater"} or \code{"less"},
 #' or their synonyms  \code{"Up"} or \code{"Down"}.
 #' @inheritParams roast_contrasts
@@ -23,34 +24,37 @@
 ezcamerapr <- function(gstats, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
                       min.nfeats=3, max.nfeats=1000){
   alternative <- match.arg(alternative)
-  
-  # in case it's a dataframe, which is a problem in sapply
-  gstats <- data.matrix(gstats)
-  stopifnot(!is.null(rownames(gstats)), rownames(gstats) %in% rownames(feat.tab))
+  if (is.data.frame(gstats)){ gstats <- data.matrix(gstats) }
+  stopifnot(!is.null(rownames(gstats)), !is.null(colnames(gstats)), rownames(gstats) %in% rownames(feat.tab),
+            is.finite(gstats))
   
   # gstats must be matrix
   index <- g_index(G=G, object=gstats, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
-  gstats.v <- stats::setNames(gstats, nm=rownames(gstats))
-  tab <- t(vapply(index, FUN=function(xx){
-    # gstats must be vector
-    tmp <- limma::cameraPR(statistic=gstats.v, index=xx)
-    tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
-    data.matrix(tmp)
-  }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
-  tab <- as.data.frame(tab)
-  
-  if (alternative!="two.sided"){
-    tab$p <- two2one_tailed(tab=tab, alternative = alternative)
-  }
-  
-  tab$FDR <- p.adjust(tab$p, method=adjust.method)
-  # change FDR to appropriate adjustment name if user doesn't use FDR
-  if (!(adjust.method %in% c("BH", "fdr"))){
-    colnames(tab) <- gsub("FDR$", adjust.method, colnames(tab))
+  for (col.ind in 1:ncol(gstats)){
+    gstats.v <- stats::setNames(gstats[, col.ind], nm=rownames(gstats))
+    tab.tmp <- t(vapply(index, FUN=function(xx){
+      # gstats must be vector
+      tmp <- limma::cameraPR(statistic=gstats.v, index=xx)
+      tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
+      data.matrix(tmp)
+    }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
+    tab.tmp <- as.data.frame(tab.tmp)
+    if (alternative!="two.sided"){
+      tab.tmp$p <- two2one_tailed(tab=tab.tmp, alternative = alternative)
+    }
+    tab.tmp$FDR <- stats::p.adjust(tab.tmp$p, method=adjust.method)
+    # change FDR to appropriate adjustment name if user doesn't use FDR
+    if (!(adjust.method %in% c("BH", "fdr"))){
+      colnames(tab.tmp) <- gsub("FDR$", adjust.method, colnames(tab.tmp))
+    }
+    # don't name ngenes
+    colnames(tab.tmp)[-1] <- paste(colnames(gstats)[col.ind], colnames(tab.tmp)[-1], sep=".")
+    # NGenes must be conserved, b/c all stats must be finite
+    if (col.ind == 1) tab <- tab.tmp else tab <- data.frame(tab, tab.tmp[rownames(tab), setdiff(colnames(tab.tmp), "NGenes")])
   }
   # order rows by p-values
-  tab <- tab[order(tab$p), ]
+  tab <- tab[order(combine_pvalues(tab)), ]
   
   res.xl <- df_signif(as.data.frame(tab), digits=3)
   # write xlsx file with links

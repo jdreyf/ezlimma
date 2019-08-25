@@ -2,16 +2,17 @@
 % Please edit documentation in R/ezcamerapr.R
 \name{ezcamerapr}
 \alias{ezcamerapr}
-\title{A wrapper function for \code{limma::cameraPR} with output to Excel}
+\title{A wrapper function for \code{cameraPR} with output to Excel}
 \usage{
 ezcamerapr(gstats, G, feat.tab, name = NA, adjust.method = "BH",
   alternative = c("two.sided", "greater", "less", "Up", "Down"),
   min.nfeats = 3, max.nfeats = 1000)
 }
 \arguments{
-\item{gstats}{A nmatrix-like data object with rownames & one column of genewise statistic (e.g. z-scores, t-statistics) 
-by which genes can be ranked. 
-The names should be the same as the rownames of  *feat.tab*}
+\item{gstats}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
+(e.g. z-scores, t-statistics) by which genes can be ranked. 
+The row names should be the same as the rownames of \code{feat.tab}.
+All values must \code{\link[base:is.finite]{finite}}.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
@@ -33,7 +34,7 @@ Data frame of gene set statistics.
 }
 \description{
 Test whether a set of genes is highly ranked relative to other genes in terms of differential expression, 
-accounting for inter-gene correlation \code{\link[limma]{camera}}.
+accounting for inter-gene correlation with \code{\link[limma:camera]{cameraPR}}.
 To find pathways whose genes have large magnitude changes, independent of direction of their change, 
 provide \code{abs} of gene stats, and set \code{alternative="Up"}.
 It returns a data frame with statistics per gene set, and writes this to an Excel file. 
