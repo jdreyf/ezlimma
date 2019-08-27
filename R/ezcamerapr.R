@@ -14,15 +14,15 @@
 #' All values must \code{\link[base:is.finite]{finite}}.
 #' @param alternative Alternative hypothesis; must be one of\code{"two.sided"}; \code{"greater"} or \code{"less"},
 #' or their synonyms  \code{"Up"} or \code{"Down"}.
+#' @inheritParams limma::camera
 #' @inheritParams roast_contrasts
-#' @inheritParams limma::geneSetTest
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
 #' @export
 
 ezcamerapr <- function(gstats, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
-                      min.nfeats=3, max.nfeats=1000){
+                      min.nfeats=3, max.nfeats=1000, inter.gene.cor=0.01){
   alternative <- match.arg(alternative)
   if (is.data.frame(gstats)){ gstats <- data.matrix(gstats) }
   stopifnot(!is.null(rownames(gstats)), !is.null(colnames(gstats)), rownames(gstats) %in% rownames(feat.tab),
@@ -35,7 +35,7 @@ ezcamerapr <- function(gstats, G, feat.tab, name=NA, adjust.method ="BH", altern
     gstats.v <- stats::setNames(gstats[, col.ind], nm=rownames(gstats))
     tab.tmp <- t(vapply(index, FUN=function(xx){
       # gstats must be vector
-      tmp <- limma::cameraPR(statistic=gstats.v, index=xx)
+      tmp <- limma::cameraPR(statistic=gstats.v, index=xx, inter.gene.cor=inter.gene.cor)
       tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
       data.matrix(tmp)
     }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))

@@ -6,7 +6,7 @@
 \usage{
 ezcamerapr(gstats, G, feat.tab, name = NA, adjust.method = "BH",
   alternative = c("two.sided", "greater", "less", "Up", "Down"),
-  min.nfeats = 3, max.nfeats = 1000)
+  min.nfeats = 3, max.nfeats = 1000, inter.gene.cor = 0.01)
 }
 \arguments{
 \item{gstats}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
@@ -28,6 +28,8 @@ or their synonyms  \code{"Up"} or \code{"Down"}.}
 \item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
+
+\item{inter.gene.cor}{numeric, optional preset value for the inter-gene correlation within tested sets.  If \code{NA} or \code{NULL}, then an inter-gene correlation will be estimated for each tested set.}
 }
 \value{
 Data frame of gene set statistics.
