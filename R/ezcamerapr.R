@@ -8,12 +8,14 @@
 #' It returns a data frame with statistics per gene set, and writes this to an Excel file. 
 #' The Excel file links to CSV files, which contain statistics per gene set. 
 #' 
-#' @param gstats A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
+#' @param stats.tab A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
 #' (e.g. z-scores, t-statistics) by which genes can be ranked. 
-#' The row names should be the same as the rownames of \code{feat.tab}.
-#' All values must \code{\link[base:is.finite]{finite}}.
+#' The row names should be the same as the row names of \code{feat.tab}.
+#' All values must be \code{\link[base:is.finite]{finite}}.
 #' @param alternative Alternative hypothesis; must be one of\code{"two.sided"}; \code{"greater"} or \code{"less"},
 #' or their synonyms  \code{"Up"} or \code{"Down"}.
+#' @param inter.gene.cor Numeric inter-gene correlation within tested sets. Can be estimated with 
+#' \code{\link[limma:interGeneCorrelation]{cameraPR}}.
 #' @inheritParams limma::camera
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
@@ -21,21 +23,21 @@
 #' rounded to 3 significant figures.
 #' @export
 
-ezcamerapr <- function(gstats, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
+ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
                       min.nfeats=3, max.nfeats=1000, inter.gene.cor=0.01){
   alternative <- match.arg(alternative)
-  if (is.data.frame(gstats)){ gstats <- data.matrix(gstats) }
-  stopifnot(!is.null(rownames(gstats)), !is.null(colnames(gstats)), rownames(gstats) %in% rownames(feat.tab),
-            is.finite(gstats))
+  if (is.data.frame(stats.tab)){ stats.tab <- data.matrix(stats.tab) }
+  stopifnot(!is.null(rownames(stats.tab)), !is.null(colnames(stats.tab)), rownames(stats.tab) %in% rownames(feat.tab),
+            is.finite(stats.tab))
   
-  # gstats must be matrix
-  index <- g_index(G=G, object=gstats, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
+  # stats.tab must be matrix
+  index <- g_index(G=G, object=stats.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
 
-  for (col.ind in 1:ncol(gstats)){
-    gstats.v <- stats::setNames(gstats[, col.ind], nm=rownames(gstats))
+  for (col.ind in 1:ncol(stats.tab)){
+    stats.tab.v <- stats::setNames(stats.tab[, col.ind], nm=rownames(stats.tab))
     tab.tmp <- t(vapply(index, FUN=function(xx){
-      # gstats must be vector
-      tmp <- limma::cameraPR(statistic=gstats.v, index=xx, inter.gene.cor=inter.gene.cor)
+      # stats.tab must be vector
+      tmp <- limma::cameraPR(statistic=stats.tab.v, index=xx, inter.gene.cor=inter.gene.cor)
       tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
       data.matrix(tmp)
     }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
@@ -49,7 +51,7 @@ ezcamerapr <- function(gstats, G, feat.tab, name=NA, adjust.method ="BH", altern
       colnames(tab.tmp) <- gsub("FDR$", adjust.method, colnames(tab.tmp))
     }
     # don't name ngenes
-    colnames(tab.tmp)[-1] <- paste(colnames(gstats)[col.ind], colnames(tab.tmp)[-1], sep=".")
+    colnames(tab.tmp)[-1] <- paste(colnames(stats.tab)[col.ind], colnames(tab.tmp)[-1], sep=".")
     # NGenes must be conserved, b/c all stats must be finite
     if (col.ind == 1) tab <- tab.tmp else tab <- data.frame(tab, tab.tmp[rownames(tab), setdiff(colnames(tab.tmp), "NGenes")])
   }

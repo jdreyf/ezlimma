@@ -4,15 +4,15 @@
 \alias{ezcamerapr}
 \title{A wrapper function for \code{cameraPR} with output to Excel}
 \usage{
-ezcamerapr(gstats, G, feat.tab, name = NA, adjust.method = "BH",
+ezcamerapr(stats.tab, G, feat.tab, name = NA, adjust.method = "BH",
   alternative = c("two.sided", "greater", "less", "Up", "Down"),
   min.nfeats = 3, max.nfeats = 1000, inter.gene.cor = 0.01)
 }
 \arguments{
-\item{gstats}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
+\item{stats.tab}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
 (e.g. z-scores, t-statistics) by which genes can be ranked. 
-The row names should be the same as the rownames of \code{feat.tab}.
-All values must \code{\link[base:is.finite]{finite}}.}
+The row names should be the same as the row names of \code{feat.tab}.
+All values must be \code{\link[base:is.finite]{finite}}.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
@@ -29,7 +29,8 @@ or their synonyms  \code{"Up"} or \code{"Down"}.}
 
 \item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
-\item{inter.gene.cor}{numeric, optional preset value for the inter-gene correlation within tested sets.  If \code{NA} or \code{NULL}, then an inter-gene correlation will be estimated for each tested set.}
+\item{inter.gene.cor}{Numeric inter-gene correlation within tested sets. Can be estimated with 
+\code{\link[limma:interGeneCorrelation]{cameraPR}}.}
 }
 \value{
 Data frame of gene set statistics.
