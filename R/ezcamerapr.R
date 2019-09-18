@@ -15,7 +15,7 @@
 #' @param alternative Alternative hypothesis; must be one of\code{"two.sided"}; \code{"greater"} or \code{"less"},
 #' or their synonyms  \code{"Up"} or \code{"Down"}.
 #' @param inter.gene.cor Numeric inter-gene correlation within tested sets. Can be estimated with 
-#' \code{\link[limma:interGeneCorrelation]{cameraPR}}.
+#' \code{\link[limma:camera]{interGeneCorrelation}}.
 #' @inheritParams limma::camera
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.

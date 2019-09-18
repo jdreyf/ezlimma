@@ -30,7 +30,7 @@ or their synonyms  \code{"Up"} or \code{"Down"}.}
 \item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{inter.gene.cor}{Numeric inter-gene correlation within tested sets. Can be estimated with 
-\code{\link[limma:interGeneCorrelation]{cameraPR}}.}
+\code{\link[limma:camera]{interGeneCorrelation}}.}
 }
 \value{
 Data frame of gene set statistics.
