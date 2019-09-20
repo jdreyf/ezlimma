@@ -25,8 +25,8 @@ write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name){
   dir.create(paste0(name, '/pathways'))
   
   for(pwy in rownames(tx)){
-    stat <- feat.tab[feat.lst[[pwy]], ]
-    stat <- stat[order(combine_pvalues(stat)), ]
+    stat <- feat.tab[feat.lst[[pwy]],, drop=FALSE]
+    stat <- stat[order(combine_pvalues(stat)),, drop=FALSE]
     utils::write.csv(stat, paste0(name, '/pathways/', pwy, '.csv'))
   }
   writexl::write_xlsx(x=tx, path = paste0(name, "/", name, ".xlsx"))
