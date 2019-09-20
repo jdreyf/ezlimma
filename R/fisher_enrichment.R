@@ -13,7 +13,7 @@
 #' \code{feat.tab} is needed if \code{!is.na(name)}.
 #' @export
 
-fisher_enrichment_test <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
+fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
   stopifnot(!is.null(names(sig.sets)), is.na(name) || !is.null(feat.tab))
   for(gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
   

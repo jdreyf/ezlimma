@@ -2,7 +2,7 @@
 % Please edit documentation in R/sim_fisher.R
 \name{sim_fisher}
 \alias{sim_fisher}
-\title{Apply \code{fisher_enrichment_test} to simulated data}
+\title{Apply \code{fisher_enrichment} to simulated data}
 \usage{
 sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
   nsim = 99, test.ft = TRUE, seed = 1, verbose = FALSE)
@@ -28,5 +28,5 @@ sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
 \item{verbose}{Logical; should the number of simulations be printed every 100 simulations?}
 }
 \description{
-Apply \code{fisher_enrichment_test} to simulated data.
+Apply \code{fisher_enrichment} to simulated data.
 }
