@@ -21,7 +21,7 @@ fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method
   index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
   
   # make each index set as vector of two-level factors
-  index.b <- lapply(index, FUN=function(x) factor(-as.numeric(rownames(feat.tab) %in% x), levels=c(-1,0)))
+  index.b <- lapply(index, FUN=function(x) factor(-as.numeric(rownames(feat.tab) %in% x), levels=c(-1, 0)))
   ngenes <- vapply(index, FUN=length, FUN.VALUE=numeric(1))
   
   # run fisher.test for each test set
