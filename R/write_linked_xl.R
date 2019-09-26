@@ -26,7 +26,7 @@ write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name){
   
   for(pwy in rownames(tx)){
     stat <- feat.tab[feat.lst[[pwy]],, drop=FALSE]
-    if (grepl(pattern="p|PValue", x=colnames(stat))) stat <- stat[order(combine_pvalues(stat)),, drop=FALSE]
+    if (any(grepl(pattern="p|PValue", x=colnames(stat)))) stat <- stat[order(combine_pvalues(stat)),, drop=FALSE]
     utils::write.csv(stat, paste0(name, '/pathways/', pwy, '.csv'))
   }
   writexl::write_xlsx(x=tx, path = paste0(name, "/", name, ".xlsx"))
