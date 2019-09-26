@@ -56,9 +56,8 @@ limma_tost <- function(object, grp=NULL, contrast.v, tost.lfc, design=NULL, weig
   # equivalent to ptost=max(p1, p2) from TOSTER::TOSTtwo.raw & identical expression from equivalence::tost
   pv <- pt(tstat.right, df=fit2$df.total, lower.tail=TRUE)
   qv <- p.adjust(pv, method=adjust.method)
-  mtt <- cbind(tstat.right, pv, qv)
-  colnames(mtt) <- paste0(names(contrast.v), "_tost.", c("t", "p", "FDR"))
-  # dimnames(mtt) <- list(rownames(fit2), paste(names(contrast.v)[1], colnames(mtt), sep='.'))
+  mtt <- cbind(fit2$coefficients, tstat.right, pv, qv)
+  colnames(mtt) <- paste0(names(contrast.v), "_tost.", c("logFC", "t", "p", "FDR"))
   mtt <- mtt[order(mtt[,2]),, drop=FALSE]
   
   # cbind grp means
