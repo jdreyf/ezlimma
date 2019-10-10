@@ -26,9 +26,9 @@ fisher_enrichment(sig.sets, G, feat.tab = NULL, name = NA,
 Data frame of gene set statistics.
 }
 \description{
-Test enrichment of one or more vectors of significant genes against defined gene sets using \code{\link[stats]{fisher.test}}. 
-It returns a data frame with statistics per gene set, and can write this to an Excel file. The Excel file links to CSV files, 
-which contain statistics per gene set.
+Test enrichment of one or more vectors of significant genes against the universe of genes in \code{feat.tab} per 
+gene set using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set, and can 
+write this to Excel. The Excel file links to CSV files, which contain statistics per genes in a set.
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are

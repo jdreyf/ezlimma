@@ -1,8 +1,8 @@
 #' Fisher Exact Test of gene set enrichment with output to Excel
 #' 
-#' Test enrichment of one or more vectors of significant genes against defined gene sets using \code{\link[stats]{fisher.test}}. 
-#' It returns a data frame with statistics per gene set, and can write this to an Excel file. The Excel file links to CSV files, 
-#' which contain statistics per gene set.
+#' Test enrichment of one or more vectors of significant genes against the universe of genes in \code{feat.tab} per 
+#' gene set using \code{\link[stats]{fisher.test}}. It returns a data frame with statistics per gene set, and can 
+#' write this to Excel. The Excel file links to CSV files, which contain statistics per genes in a set.
 #' 
 #' @param sig.sets Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.
 #' @inheritParams roast_contrasts
@@ -15,7 +15,7 @@
 
 fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
   stopifnot(!is.null(names(sig.sets)), is.na(name) || !is.null(feat.tab))
-  for(gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
+  for (gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
   
   # get G index
   index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
