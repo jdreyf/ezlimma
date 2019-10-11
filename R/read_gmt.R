@@ -10,8 +10,10 @@
 #' @export
 
 read_gmt <- function(file.path){
-  x0 <- scan(file.path, what="", sep="\n", quiet=TRUE)
-  x1 <- strsplit(x0, "\t")
+  x00 <- scan(file.path, what="", sep="\n", quiet=TRUE)
+  # sometimes have literal \" inside character string name
+  x0 <- gsub(pattern='\"', replacement = '', x=x00, fixed = TRUE)
+  x1 <- strsplit(x=x0, split="\t")
   x2 <- lapply(x1, FUN=function(v){
     list(name=v[1], description=v[2], genes=v[c(-1,-2)])
   })

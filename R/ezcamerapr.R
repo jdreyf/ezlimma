@@ -43,7 +43,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
     }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
     tab.tmp <- as.data.frame(tab.tmp)
     if (alternative!="two.sided"){
-      tab.tmp$p <- two2one_tailed(tab=tab.tmp, alternative = alternative)
+      tab.tmp$p <- two2one_tailed(tab=tab.tmp, alternative = alternative)[,1]
     }
     tab.tmp$FDR <- stats::p.adjust(tab.tmp$p, method=adjust.method)
     # change FDR to appropriate adjustment name if user doesn't use FDR
