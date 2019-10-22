@@ -14,4 +14,20 @@ test_that("tost", {
   
   lt2 <- limma_tost(object=M["gene94",,drop=FALSE], grp = grp, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE)
   expect_equal(as.numeric(signif(lt2[1, "Last3vsFirst3_tost.p"], 3)), 0.0425)
+  
+  # errors
+  expect_error(limma_tost(object=M["gene94",], grp = grp, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE))
+  expect_error(limma_tost(object=rbind(g94=M["gene94",], g94=M["gene94",]), grp = grp, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE))
+  
+  obj.tmp <- rbind(g94=M["gene94",], tmp=M["gene94",])
+  rownames(obj.tmp)[2] <- ""
+  expect_error(limma_tost(object=obj.tmp, grp = grp, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE))
+  
+  # weights
+  expect_error(limma_tost(object=M["gene94",, drop=FALSE], grp = grp, weights = 1:2, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE))
+  lt3 <- limma_tost(object=M["gene94",, drop=FALSE], grp = grp, weights = rep(1, 6), contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = FALSE)
+  expect_equal(as.numeric(signif(lt3[1, "Last3vsFirst3_tost.p"], 3)), 0.0425)
+  
+  lt4 <- limma_tost(object=M["gene94",,drop=FALSE], grp = grp, contrast.v = contr.v[3], tost.lfc = log2(1.2), add.means = TRUE)
+  expect_equal(as.numeric(signif(lt4[1, "Last3vsFirst3_tost.p"], 3)), 0.0425)
 })

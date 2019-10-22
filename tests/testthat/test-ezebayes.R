@@ -34,4 +34,17 @@ test_that("ezebayes", {
   g1.t <- t.test(x=M["gene1", grp=="Last3"], y=M["gene1", grp=="First3"], var.equal = TRUE)
   expect_equal(setNames(fit2.ez$t["gene1", 3], nm="t"), g1.t$statistic)
   expect_equal(fit2.ez$p.value["gene1", 3], g1.t$p.value)
+  
+  # errors
+  fit.err.cf <- fit
+  fit.err.cf$coefficients <- NULL
+  expect_error(ezebayes(fit = fit.err.cf, moderated = FALSE))
+  
+  fit.err.df <- fit
+  fit.err.df$df.residual <- rep(0, length(fit$df.residual))
+  expect_error(ezebayes(fit = fit.err.df, moderated = FALSE))
+  
+  fit.err.s <- fit
+  fit.err.s$sigma <- rep(Inf, length(fit$sigma))
+  expect_error(ezebayes(fit = fit.err.s, moderated = FALSE))
 })

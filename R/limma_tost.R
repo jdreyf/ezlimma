@@ -54,8 +54,8 @@ limma_tost <- function(object, grp=NULL, contrast.v, tost.lfc, design=NULL, weig
   se <- as.matrix(fit2$stdev.unscaled) * sqrt(fit2$s2.post)
   tstat.right <- (acoef - tost.lfc)/se
   # equivalent to ptost=max(p1, p2) from TOSTER::TOSTtwo.raw & identical expression from equivalence::tost
-  pv <- pt(tstat.right, df=fit2$df.total, lower.tail=TRUE)
-  qv <- p.adjust(pv, method=adjust.method)
+  pv <- stats::pt(tstat.right, df=fit2$df.total, lower.tail=TRUE)
+  qv <- stats::p.adjust(pv, method=adjust.method)
   mtt <- cbind(fit2$coefficients, tstat.right, pv, qv)
   colnames(mtt) <- paste0(names(contrast.v), "_tost.", c("logFC", "t", "p", "FDR"))
   mtt <- mtt[order(mtt[,2]),, drop=FALSE]
