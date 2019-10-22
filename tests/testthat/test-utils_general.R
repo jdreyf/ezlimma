@@ -21,5 +21,5 @@ test_that("clean filenames", {
   res <- clean_filenames(nm.test)
   expect_false(any(duplicated(res)))
   expect_equal(res, c('_', '__', 'sulfate_sulfite_met', 'hi__', 'hellohello', "hello_world_",
-                               'CON_', 'coM2_', 'con_', 'CON__', 'CON___'))
+                      'CON_', 'coM2_', 'con_', 'CON__', 'CON___'))
 })

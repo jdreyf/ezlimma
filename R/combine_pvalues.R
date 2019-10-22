@@ -7,14 +7,14 @@
 #' @param tab Matrix-like object with statistical columns, some containing p-values.
 #' @param p.cols Indices or \code{\link{regexp}} with column names or column names suffix of numeric p-value columns.
 #' @param stat.cols Indices or \code{\link{regexp}} with column names or column names suffix with numeric signed 
-#' statistics, or with \code{"Up", "Down"} values. These should match \code{p.cols}.
+#' statistics, or with \code{"Up", "Down"} values.
 #' @param only.p Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.
 #' @param alternative Direction of change: \code{"two.sided"}; \code{"greater"} or \code{"less"}, or their synonyms  
 #' \code{"Up"} or \code{"Down"}.
 #' @details Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
 #' \code{method="z.transform"} in \code{survcomp::combine.test}.
 #' 
-#' \code{stat.cols} are ignored if \code{alternative} is \code{"two.sided"}.
+#' \code{stat.cols} are ignored if \code{alternative} is \code{"two.sided"}. Otherwise, they should match \code{p.cols}.
 #' @return Vector of p-values.
 #' @examples
 #'  tab <- data.frame(foo.p=(1:9)/9, bar.p=(9:1)/9)

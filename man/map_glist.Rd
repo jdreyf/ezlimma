@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_glist.R
 \name{map_glist}
 \alias{map_glist}
-\title{Gets the mapped IDs (rownames) of features (e.g. genes) for a gene set list of a particular type (e.g. gene symbols)}
+\title{Map pathway list gene IDs to another ID type}
 \usage{
 map_glist(G, annot, sep.str = " /// ", symbol.col = "Gene.Symbol")
 }
@@ -19,5 +19,10 @@ map_glist(G, annot, sep.str = " /// ", symbol.col = "Gene.Symbol")
 Gene set list *G* with the symbols replaced by the mapped IDs.
 }
 \description{
-Gets the mapped IDs (rownames) of features (e.g. genes) for a gene set list of a particular type (e.g. gene symbols)
+Map pathway list with old gene IDs (e.g. entrez IDs) to another ID type (e.g. gene symbols) using a table with both
+annotation types. The original IDs can be separated within a column of annot with a string, e.g. " /// ".
+The other IDs should be the rownames of annot.
+}
+\details{
+Gene annotations are transformed to upper-case to avoid missing matches of different cases.
 }

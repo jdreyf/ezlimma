@@ -7,6 +7,7 @@
 #' @return Vector of column names.
 
 # cannot set defaults, since xor
+# could give numeric cols to include validity tests
 grep_cols <- function(tab, p.cols=NULL, stat.cols=NULL){
   stopifnot(xor(is.null(p.cols), is.null(stat.cols)), !all(is.numeric(p.cols)) || all(p.cols %in% 1:ncol(tab)),  
             !all(is.numeric(stat.cols)) || all(stat.cols %in% 1:ncol(tab)), !is.null(colnames(tab)))
