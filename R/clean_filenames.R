@@ -3,10 +3,11 @@
 #' Alter names to be valid filenames in both Linux and Windows, and ensure they are unique. Improper characters 
 #' are replaced with "_". Filenames are limited to 199 characters for Windows.
 #'
-#' @param nm Character string of names.
+#' @param nm Character vector of names.
+#' @param nm.nchar Numeric maximum number of characters allowed in \code{nm}.
 #' @export
 
-clean_filenames <- function(nm){
+clean_filenames <- function(nm, nm.nchar=199){
   # https://stackoverflow.com/questions/1976007/what-characters-are-forbidden-in-windows-and-linux-directory-names
   # safe characters
   nm <- gsub("[^[:alnum:]\\.]", "_", nm)
@@ -27,7 +28,7 @@ clean_filenames <- function(nm){
   
   # limit filenames to 199 characters
   # https://stackoverflow.com/questions/265769/maximum-filename-length-in-ntfs-windows-xp-and-windows-vista
-  nm <- substr(x=nm, start=1, stop=199)
+  nm <- substr(x=nm, start=1, stop=nm.nchar)
   
   return(nm)
 }

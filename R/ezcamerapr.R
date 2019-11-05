@@ -24,7 +24,7 @@
 #' @export
 
 ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
-                      min.nfeats=3, max.nfeats=1000, inter.gene.cor=0.01){
+                      min.nfeats=3, max.nfeats=1000, inter.gene.cor=0.01, pwy.nchar=199){
   alternative <- match.arg(alternative)
   if (is.data.frame(stats.tab)){ stats.tab <- data.matrix(stats.tab) }
   stopifnot(!is.null(rownames(stats.tab)), !is.null(colnames(stats.tab)), rownames(stats.tab) %in% rownames(feat.tab),
@@ -62,7 +62,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "cameraPR", sep="_")
-    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm)
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   return(tab)
 }

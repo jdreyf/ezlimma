@@ -5,7 +5,8 @@
 \title{Fisher Exact Test of gene set enrichment with output to Excel}
 \usage{
 fisher_enrichment(sig.sets, G, feat.tab = NULL, name = NA,
-  adjust.method = "BH", min.nfeats = 3, max.nfeats = 1000)
+  adjust.method = "BH", min.nfeats = 3, max.nfeats = 1000,
+  pwy.nchar = 199)
 }
 \arguments{
 \item{sig.sets}{Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.}
@@ -21,6 +22,8 @@ fisher_enrichment(sig.sets, G, feat.tab = NULL, name = NA,
 \item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 
 \item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
+
+\item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
 Data frame of gene set statistics.

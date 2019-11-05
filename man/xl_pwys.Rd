@@ -4,10 +4,12 @@
 \alias{xl_pwys}
 \title{Make XL data frame for \code{writexl}}
 \usage{
-xl_pwys(pwy.tab)
+xl_pwys(pwy.tab, pwy.nchar = 199)
 }
 \arguments{
 \item{pwy.tab}{A table of pathway results.}
+
+\item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
 A data frame with xl links

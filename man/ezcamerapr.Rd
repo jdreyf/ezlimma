@@ -6,7 +6,8 @@
 \usage{
 ezcamerapr(stats.tab, G, feat.tab, name = NA, adjust.method = "BH",
   alternative = c("two.sided", "greater", "less", "Up", "Down"),
-  min.nfeats = 3, max.nfeats = 1000, inter.gene.cor = 0.01)
+  min.nfeats = 3, max.nfeats = 1000, inter.gene.cor = 0.01,
+  pwy.nchar = 199)
 }
 \arguments{
 \item{stats.tab}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 
@@ -31,6 +32,8 @@ or their synonyms  \code{"Up"} or \code{"Down"}.}
 
 \item{inter.gene.cor}{Numeric inter-gene correlation within tested sets. Can be estimated with 
 \code{\link[limma:camera]{interGeneCorrelation}}.}
+
+\item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
 Data frame of gene set statistics.

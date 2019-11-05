@@ -4,7 +4,7 @@
 \alias{write_linked_xl}
 \title{Write Excel XLSX file with links to CSVs}
 \usage{
-write_linked_xl(pwy.tab, feat.lst, feat.tab, name)
+write_linked_xl(pwy.tab, feat.lst, feat.tab, name, pwy.nchar = 199)
 }
 \arguments{
 \item{pwy.tab}{A table of pathway results.}
@@ -14,6 +14,8 @@ write_linked_xl(pwy.tab, feat.lst, feat.tab, name)
 \item{feat.tab}{Table of feature (e.g. gene) statistics.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
+
+\item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
 Invisibly, the data frame that's written to Excel.

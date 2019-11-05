@@ -13,7 +13,7 @@
 #' \code{feat.tab} is needed if \code{!is.na(name)}.
 #' @export
 
-fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000){
+fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, pwy.nchar=199){
   stopifnot(!is.null(names(sig.sets)), is.na(name) || !is.null(feat.tab))
   for (gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
   
@@ -50,7 +50,7 @@ fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "fisher_test", sep="_")
-    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm)
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   
   return(res)

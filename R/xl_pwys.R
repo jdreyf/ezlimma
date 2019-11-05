@@ -10,12 +10,12 @@
 #'   \item{\code{pwy.csv.nms}}{vector of pathway names to write to csv files}
 #' }
 
-xl_pwys <- function(pwy.tab){
+xl_pwys <- function(pwy.tab, pwy.nchar=199){
   stopifnot(nrow(pwy.tab) > 0, ncol(pwy.tab) > 0)
 
   pwys <- rownames(pwy.tab)
   # don't allow invalid names in pwys, which are written as filenames
-  pwys.clean <- clean_filenames(pwys)
+  pwys.clean <- clean_filenames(pwys, nm.nchar=pwy.nchar)
   
   urls <- paste0("pathways/", pwys.clean, ".csv")
   xl_links <- writexl::xl_hyperlink(url=urls, name = pwys)

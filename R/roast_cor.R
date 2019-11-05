@@ -20,7 +20,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
                     fun=c("fry", "mroast"), set.statistic = "mean",
                     weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
                     correlation = NULL, prefix=NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, 
-                    alternative=c("two.sided", "less", "greater"), nrot=999, check.names=TRUE, seed=0){
+                    alternative=c("two.sided", "less", "greater"), nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
             is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
@@ -128,7 +128,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
-    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm)
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   return(res)
 }

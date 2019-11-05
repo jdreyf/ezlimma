@@ -13,13 +13,3 @@ test_that("logfc2fc", {
   expect_equal(logfc2fc(0), 1)
   expect_equal(logfc2fc(-2), -4)
 })
-
-test_that("clean filenames", {
-  expect_equal(clean_filenames("a"), "a")
-  expect_equal(clean_filenames("."), "_")
-  nm.test <- c("~", "`", "sulfate/sulfite met", "hi**", "hellohello", "hello world.", "CON", "coM2", "con.", "CON", "CON")
-  res <- clean_filenames(nm.test)
-  expect_false(any(duplicated(res)))
-  expect_equal(res, c('_', '__', 'sulfate_sulfite_met', 'hi__', 'hellohello', "hello_world_",
-                      'CON_', 'coM2_', 'con_', 'CON__', 'CON___'))
-})

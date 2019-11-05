@@ -88,8 +88,13 @@ test_that("clean names & write", {
   
   G[[1]]$name <-"^path.way_1"
   G[[2]]$name <- "LPT2"
-  expect_error(rcn.f <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", 
-                                        name = "bad_names"), NA)
+  G[[3]]$name <- "REACTOME_INHIBITION_OF_THE_PROTEOLYTIC_ACTIVITY_OF_APC_C_REQUIRED_FOR_THE_ONSET_OF_ANAPHASE_BY_MITOT.csv"
+  res <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", name = "bad_names", pwy.nchar = 50)
+  
+  expect_true(file.exists("bad_names_fry/pathways/REACTOME_INHIBITION_OF_THE_PROTEOLYTIC_ACTIVITY_OF.csv"))
+  expect_true(file.exists("bad_names_fry/pathways/LPT2_.csv"))
+  expect_true(file.exists("bad_names_fry/pathways/_path.way_1.csv"))
+  
   unlink("bad_names_fry", recursive = TRUE)
 })
   

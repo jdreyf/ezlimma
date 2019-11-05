@@ -9,7 +9,8 @@ roast_cor(object, G, feat.tab, name = NA, phenotype = NULL,
   weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
   correlation = NULL, prefix = NULL, adjust.method = "BH",
   min.nfeats = 3, max.nfeats = 1000, alternative = c("two.sided",
-  "less", "greater"), nrot = 999, check.names = TRUE, seed = 0)
+  "less", "greater"), nrot = 999, check.names = TRUE,
+  pwy.nchar = 199, seed = 0)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
@@ -65,6 +66,8 @@ list of options. A \code{NULL} value will result in the default adjustment metho
 
 \item{check.names}{Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 and \code{add.means} is \code{FALSE}.}
+
+\item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 
 \item{seed}{Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 simulations. Ignored if \code{fun="fry"}.}

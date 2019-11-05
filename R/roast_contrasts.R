@@ -21,6 +21,7 @@
 #' @param alternative Alternative hypothesis; must be one of \code{"two.sided"}, \code{"greater"} or \code{"less"}. 
 #' \code{"greater"} corresponds to positive association, \code{"less"} to negative association.
 #' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}.
+#' @param pwy.nchar Numeric maximum number of characters allowed in pathway name.
 #' @param seed Integer seed to set for reproducility if \code{fun="mroast"}, since \code{mroast} uses random 
 #' simulations. Ignored if \code{fun="fry"}.
 #' @inheritParams limma_contrasts
@@ -33,7 +34,7 @@
 roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
                             set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
                             correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
-                            alternative=c("two.sided", "less", "greater"), check.names=TRUE, seed=0){
+                            alternative=c("two.sided", "less", "greater"), check.names=TRUE, pwy.nchar=199, seed=0){
   stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
             is.null(gene.weights) || length(gene.weights)==nrow(object), ncol(object) > 1)
   # only mroast takes some arguments
@@ -136,7 +137,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
-    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm)
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }# end if !is.na(name)
   return(res)
 }

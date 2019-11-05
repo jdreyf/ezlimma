@@ -4,10 +4,12 @@
 \alias{clean_filenames}
 \title{Alter names to valid filenames}
 \usage{
-clean_filenames(nm)
+clean_filenames(nm, nm.nchar = 199)
 }
 \arguments{
-\item{nm}{Character string of names.}
+\item{nm}{Character vector of names.}
+
+\item{nm.nchar}{Numeric maximum number of characters allowed in \code{nm}.}
 }
 \description{
 Alter names to be valid filenames in both Linux and Windows, and ensure they are unique. Improper characters 
