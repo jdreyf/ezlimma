@@ -49,7 +49,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
                             moderated=TRUE, check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
   
   stopifnot(all(is.na(weights)) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
-            length(weights)==ncol(object), is.null(treat.lfc) || length(contrast.v)==1, moderated || !trend)
+              length(weights)==ncol(object), is.null(treat.lfc) || length(contrast.v)==1, moderated || !trend)
   if (is.vector(object)) stop("'object' must be a matrix-like object; you can coerce it to one with 'as.matrix()'")
   if (is.null(design) || add.means){
     stopifnot(ncol(object)==length(grp))
@@ -57,7 +57,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   }
   if (any(duplicated(rownames(object)))) stop("object cannot have duplicated rownames.")
   if (any(rownames(object)=="")) stop("object cannot have an empty rowname ''.")
-
+  
   if (is.null(design)){
     design <- stats::model.matrix(~0+grp)
     colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
