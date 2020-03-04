@@ -9,12 +9,10 @@
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
-#' 
-#' \code{feat.tab} is needed if \code{!is.na(name)}.
 #' @export
 
-fisher_enrichment <- function(sig.sets, G, feat.tab=NULL, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, pwy.nchar=199){
-  stopifnot(!is.null(names(sig.sets)), is.na(name) || !is.null(feat.tab))
+fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, pwy.nchar=199){
+  stopifnot(!is.null(names(sig.sets)), !is.null(feat.tab))
   for (gset in sig.sets){ stopifnot(gset %in% rownames(feat.tab)) }
   
   # get G index

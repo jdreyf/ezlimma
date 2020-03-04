@@ -4,10 +4,18 @@
 \alias{ezcamerapr}
 \title{A wrapper function for \code{cameraPR} with output to Excel}
 \usage{
-ezcamerapr(stats.tab, G, feat.tab, name = NA, adjust.method = "BH",
+ezcamerapr(
+  stats.tab,
+  G,
+  feat.tab,
+  name = NA,
+  adjust.method = "BH",
   alternative = c("two.sided", "greater", "less", "Up", "Down"),
-  min.nfeats = 3, max.nfeats = 1000, inter.gene.cor = 0.01,
-  pwy.nchar = 199)
+  min.nfeats = 3,
+  max.nfeats = 1000,
+  inter.gene.cor = 0.01,
+  pwy.nchar = 199
+)
 }
 \arguments{
 \item{stats.tab}{A matrix-like data object with gene row names & named columns of numeric gene-wise statistics 

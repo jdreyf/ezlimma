@@ -18,7 +18,7 @@ statistics, or with \code{"Up", "Down"} values.}
 Vector of column names.
 }
 \description{
-Find p-value or stat columns in table and check their validity.
+Find p-value or stat column names in table and check their validity.
 }
 \details{
 Exactly one of \code{p.cols} or \code{stat.cols} should not be \code{NULL}.

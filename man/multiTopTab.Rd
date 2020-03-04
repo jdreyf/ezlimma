@@ -4,8 +4,11 @@
 \alias{multiTopTab}
 \title{Combine one or more toptables extracted from linear model fit}
 \usage{
-multiTopTab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
-  adjust.method = "BH")
+multiTopTab(
+  fit,
+  cols = c("P.Value", "adj.P.Val", "logFC"),
+  adjust.method = "BH"
+)
 }
 \arguments{
 \item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}

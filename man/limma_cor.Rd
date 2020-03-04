@@ -4,11 +4,23 @@
 \alias{limma_cor}
 \title{Test correlation of each row of object to phenotype using moderated variance}
 \usage{
-limma_cor(object, phenotype = NULL, design = NULL, prefix = NULL,
-  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", coef = 2, reorder.rows = TRUE,
-  moderated = TRUE, reduce.df = 0, check.names = TRUE,
-  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC"))
+limma_cor(
+  object,
+  phenotype = NULL,
+  design = NULL,
+  prefix = NULL,
+  weights = NA,
+  trend = FALSE,
+  block = NULL,
+  correlation = NULL,
+  adjust.method = "BH",
+  coef = 2,
+  reorder.rows = TRUE,
+  moderated = TRUE,
+  reduce.df = 0,
+  check.names = TRUE,
+  cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC")
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

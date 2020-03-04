@@ -4,8 +4,13 @@
 \alias{eztoptab}
 \title{Wrapper for limma topTable function}
 \usage{
-eztoptab(fit, cols = c("P.Value", "adj.P.Val", "logFC"),
-  adjust.method = "BH", prefix = NULL, coef = NULL)
+eztoptab(
+  fit,
+  cols = c("P.Value", "adj.P.Val", "logFC"),
+  adjust.method = "BH",
+  prefix = NULL,
+  coef = NULL
+)
 }
 \arguments{
 \item{fit}{Object of class \code{MArrayLM} as produced by \code{\link[limma]{lmFit}} then \code{\link[limma]{eBayes}}.}

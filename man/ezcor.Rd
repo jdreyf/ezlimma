@@ -4,9 +4,16 @@
 \alias{ezcor}
 \title{Test correlation of each row of an object to a phenotype vector}
 \usage{
-ezcor(object, phenotype, method = "pearson", reorder.rows = TRUE,
-  prefix = NULL, adjust.method = "BH", alternative = "two.sided",
-  check.names = TRUE)
+ezcor(
+  object,
+  phenotype,
+  method = "pearson",
+  reorder.rows = TRUE,
+  prefix = NULL,
+  adjust.method = "BH",
+  alternative = "two.sided",
+  check.names = TRUE
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

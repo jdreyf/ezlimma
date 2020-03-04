@@ -4,9 +4,13 @@
 \alias{combine_pvalues}
 \title{Combine p-values of a feature over multiple p-value columns of an object}
 \usage{
-combine_pvalues(tab, p.cols = "p|PValue",
-  stat.cols = "logFC|slope|cor|rho|Direction", only.p = TRUE,
-  alternative = c("two.sided", "greater", "less", "Up", "Down"))
+combine_pvalues(
+  tab,
+  p.cols = "p|PValue",
+  stat.cols = "logFC|slope|cor|rho|Direction",
+  only.p = TRUE,
+  alternative = c("two.sided", "greater", "less", "Up", "Down")
+)
 }
 \arguments{
 \item{tab}{Matrix-like object with statistical columns, some containing p-values.}

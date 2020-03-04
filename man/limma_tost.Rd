@@ -4,10 +4,20 @@
 \alias{limma_tost}
 \title{Two one-sided test procedure with \pkg{limma} for statistical equivalence test}
 \usage{
-limma_tost(object, grp = NULL, contrast.v, tost.lfc, design = NULL,
-  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", add.means = !is.null(grp),
-  check.names = TRUE)
+limma_tost(
+  object,
+  grp = NULL,
+  contrast.v,
+  tost.lfc,
+  design = NULL,
+  weights = NA,
+  trend = FALSE,
+  block = NULL,
+  correlation = NULL,
+  adjust.method = "BH",
+  add.means = !is.null(grp),
+  check.names = TRUE
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

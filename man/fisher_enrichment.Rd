@@ -4,9 +4,16 @@
 \alias{fisher_enrichment}
 \title{Fisher Exact Test of gene set enrichment with output to Excel}
 \usage{
-fisher_enrichment(sig.sets, G, feat.tab = NULL, name = NA,
-  adjust.method = "BH", min.nfeats = 3, max.nfeats = 1000,
-  pwy.nchar = 199)
+fisher_enrichment(
+  sig.sets,
+  G,
+  feat.tab,
+  name = NA,
+  adjust.method = "BH",
+  min.nfeats = 3,
+  max.nfeats = 1000,
+  pwy.nchar = 199
+)
 }
 \arguments{
 \item{sig.sets}{Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.}
@@ -36,6 +43,4 @@ write this to Excel. The Excel file links to CSV files, which contain statistics
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 rounded to 3 significant figures.
-
-\code{feat.tab} is needed if \code{!is.na(name)}.
 }

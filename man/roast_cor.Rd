@@ -4,13 +4,30 @@
 \alias{roast_cor}
 \title{to Excel}
 \usage{
-roast_cor(object, G, feat.tab, name = NA, phenotype = NULL,
-  design = NULL, fun = c("fry", "mroast"), set.statistic = "mean",
-  weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
-  correlation = NULL, prefix = NULL, adjust.method = "BH",
-  min.nfeats = 3, max.nfeats = 1000, alternative = c("two.sided",
-  "less", "greater"), nrot = 999, check.names = TRUE,
-  pwy.nchar = 199, seed = 0)
+roast_cor(
+  object,
+  G,
+  feat.tab,
+  name = NA,
+  phenotype = NULL,
+  design = NULL,
+  fun = c("fry", "mroast"),
+  set.statistic = "mean",
+  weights = NA,
+  gene.weights = NULL,
+  trend = FALSE,
+  block = NULL,
+  correlation = NULL,
+  prefix = NULL,
+  adjust.method = "BH",
+  min.nfeats = 3,
+  max.nfeats = 1000,
+  alternative = c("two.sided", "less", "greater"),
+  nrot = 999,
+  check.names = TRUE,
+  pwy.nchar = 199,
+  seed = 0
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

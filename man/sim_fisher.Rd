@@ -4,8 +4,17 @@
 \alias{sim_fisher}
 \title{Apply \code{fisher_enrichment} to simulated data}
 \usage{
-sim_fisher(G, feat.tab, grp, effect.v = c(0, 0.2), alpha = 0.2,
-  nsim = 99, test.ft = TRUE, seed = 1, verbose = FALSE)
+sim_fisher(
+  G,
+  feat.tab,
+  grp,
+  effect.v = c(0, 0.2),
+  alpha = 0.2,
+  nsim = 99,
+  test.ft = TRUE,
+  seed = 1,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}

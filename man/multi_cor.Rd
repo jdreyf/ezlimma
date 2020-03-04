@@ -4,11 +4,19 @@
 \alias{multi_cor}
 \title{Test correlation of each row of an object to each column of pheno.tab}
 \usage{
-multi_cor(object, pheno.tab, method = c("pearson", "spearman", "kendall",
-  "limma"), reorder.rows = TRUE, prefix = NULL, block = NULL,
-  correlation = NULL, adjust.method = "BH", covariates = NULL,
-  check.names = TRUE, limma.cols = c("AveExpr", "P.Value", "adj.P.Val",
-  "logFC"))
+multi_cor(
+  object,
+  pheno.tab,
+  method = c("pearson", "spearman", "kendall", "limma"),
+  reorder.rows = TRUE,
+  prefix = NULL,
+  block = NULL,
+  correlation = NULL,
+  adjust.method = "BH",
+  covariates = NULL,
+  check.names = TRUE,
+  limma.cols = c("AveExpr", "P.Value", "adj.P.Val", "logFC")
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 

@@ -4,11 +4,22 @@
 \alias{limma_contrasts}
 \title{Apply limma's lmFit, contrasts.fit, & eBayes to one or more contrasts and return a table}
 \usage{
-limma_contrasts(object, grp = NULL, contrast.v, design = NULL,
-  weights = NA, trend = FALSE, block = NULL, correlation = NULL,
-  adjust.method = "BH", add.means = !is.null(grp), treat.lfc = NULL,
-  moderated = TRUE, check.names = TRUE, cols = c("P.Value",
-  "adj.P.Val", "logFC"))
+limma_contrasts(
+  object,
+  grp = NULL,
+  contrast.v,
+  design = NULL,
+  weights = NA,
+  trend = FALSE,
+  block = NULL,
+  correlation = NULL,
+  adjust.method = "BH",
+  add.means = !is.null(grp),
+  treat.lfc = NULL,
+  moderated = TRUE,
+  check.names = TRUE,
+  cols = c("P.Value", "adj.P.Val", "logFC")
+)
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
