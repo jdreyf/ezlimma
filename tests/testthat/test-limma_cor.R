@@ -90,10 +90,11 @@ test_that("!moderated", {
   expect_equal(lc2$p, lc4$p)
   
   # matches ppcor
-  pc <- ppcor::pcor.test(x=pheno.v, y=M[1,], z=covar)
-  pc2 <- ppcor::pcor.test(y=pheno.v, x=M[1,], z=covar)
-  expect_equal(pc$p.value, pc2$p.value)
-  expect_equal(lc4[1, "p"], pc$p.value)
+  # pc <- ppcor::pcor.test(x=pheno.v, y=M[1,], z=covar)
+  # pc2 <- ppcor::pcor.test(y=pheno.v, x=M[1,], z=covar)
+  # expect_equal(pc$p.value, pc2$p.value)
+  # pc$p.value is 0.9643012
+  expect_equal(signif(lc4[1, "p"], digits = 4), 0.9643)
 })
 
 test_that("reduce.df has effect", {
