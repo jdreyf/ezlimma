@@ -5,7 +5,7 @@
 \title{Fisher Exact Test of gene set enrichment with output to Excel}
 \usage{
 fisher_enrichment(
-  sig.sets,
+  sig.set,
   G,
   feat.tab,
   name = NA,
@@ -16,7 +16,8 @@ fisher_enrichment(
 )
 }
 \arguments{
-\item{sig.sets}{Named list whose elements are a vector of significant gene IDs matching \code{rownames(feat.tab)}.}
+\item{sig.set}{Named list of length one whose sole element is a vector of significant gene IDs matching 
+\code{rownames(feat.tab)}.}
 
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
@@ -43,4 +44,10 @@ write this to Excel. The Excel file links to CSV files, which contain statistics
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 rounded to 3 significant figures.
+}
+\examples{
+ G = list(s1=list(name = "s1", description=NULL, genes=letters[3:10]), 
+   s2=list(name = "s2", description=NULL, genes=letters[2:99]))
+ feat.tab <- matrix(rnorm(18), ncol=3, dimnames=list(letters[1:6], paste0("col", 1:3)))
+ fisher_enrichment(sig.set = list(A=letters[1:3]), G = G, feat.tab = feat.tab)
 }

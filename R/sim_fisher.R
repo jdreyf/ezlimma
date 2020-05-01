@@ -38,7 +38,7 @@ sim_fisher <- function(G, feat.tab, grp, effect.v=c(0, 0.2), alpha=0.2, nsim=99,
       
       sig.set <- list(top=rownames(feat.tab.tmp)[1:10])
       
-      fet <- fisher_enrichment(sig.sets = sig.set, G=G, feat.tab = feat.tab, name=NA)
+      fet <- fisher_enrichment(sig.set = sig.set, G=G, feat.tab = feat.tab, name=NA)
       #test
       if (test.ft){
         ftp <- stats::fisher.test(all.feats %in% sig.set[[1]], all.feats %in% g1, alternative = "greater")$p.value
