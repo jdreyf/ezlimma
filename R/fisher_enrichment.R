@@ -6,11 +6,8 @@
 #' 
 #' @param sig.set Named list of length one whose sole element is a vector of significant gene IDs matching 
 #' \code{rownames(feat.tab)}.
-#' @param return.lst Logical; if \code{FALSE} returns table of pathway statistics, whereas if \code{TRUE} returns
-#' list whose 1st element is table of pathway statistics and 2nd element is matrix whose column \code{i} is
-#' \code{sig.set[[i]] G[[i]]$genes)}. Meant for internal use.  
 #' @inheritParams roast_contrasts
-#' @return Data frame of gene set statistics.
+#' @return Table of pathway statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
 #' @examples
@@ -21,7 +18,7 @@
 #' @export
 
 fisher_enrichment <- function(sig.set, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, 
-                              return.lst=FALSE, pwy.nchar=199){
+                              pwy.nchar=199){
   stopifnot(!is.null(names(sig.set)), !is.null(feat.tab), sig.set[[1]] %in% rownames(feat.tab), length(sig.set) == 1)
   
   # get G index
@@ -43,14 +40,6 @@ fisher_enrichment <- function(sig.set, G, feat.tab, name=NA, adjust.method="BH",
   colnames(res.tmp) <- paste(names(sig.set)[ind], colnames(res.tmp), sep = '.')
   res <- cbind(NGenes=ngenes, res.tmp)
   
-  if (return.lst){
-    gene.membership <- vapply(index.b, FUN = function(xx){
-      # -1 indicates membership
-      xx != 0 & gset.b != 0
-    }, FUN.VALUE = numeric(nrow(feat.tab)))
-    rownames(gene.membership) <- rownames(feat.tab)
-  }
-  
   # order rows by combined p-values
   res <- res[order(combine_pvalues(res)), ]
   
@@ -66,10 +55,5 @@ fisher_enrichment <- function(sig.set, G, feat.tab, name=NA, adjust.method="BH",
     write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   
-  if (!return.lst){
-    return(res)
-  } else {
-    res.lst <- list(pwy.stats = res, gene.membership = gene.membership)
-    return(res.lst)
-  }
+  return(res)
 }

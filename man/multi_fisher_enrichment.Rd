@@ -34,7 +34,8 @@ multi_fisher_enrichment(
 \item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
-Data frame of gene set statistics.
+List with two elements: \code{pwy.stats}, a table of pathway statistics; and \code{feat.tab}, a table that 
+appends a binary matrix of which genes are in which \code{sig.set} and the input \code{feat.tab}.
 }
 \description{
 Test enrichment of multiple vectors of significant genes against the universe of genes in \code{feat.tab} per 

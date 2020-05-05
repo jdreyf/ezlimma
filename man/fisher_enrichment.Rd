@@ -12,7 +12,6 @@ fisher_enrichment(
   adjust.method = "BH",
   min.nfeats = 3,
   max.nfeats = 1000,
-  return.lst = FALSE,
   pwy.nchar = 199
 )
 }
@@ -32,14 +31,10 @@ fisher_enrichment(
 
 \item{max.nfeats}{Maximum number of features (e.g. genes) needed in a gene set for testing.}
 
-\item{return.lst}{Logical; if \code{FALSE} returns table of pathway statistics, whereas if \code{TRUE} returns
-list whose 1st element is table of pathway statistics and 2nd element is matrix whose column \code{i} is
-\code{sig.set[[i]] G[[i]]$genes)}. Meant for internal use.}
-
 \item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
-Data frame of gene set statistics.
+Table of pathway statistics.
 }
 \description{
 Test enrichment of one or more vectors of significant genes against the universe of genes in \code{feat.tab} per 

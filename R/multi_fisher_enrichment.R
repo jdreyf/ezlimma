@@ -8,7 +8,8 @@
 #' @param sig.sets Named list whose elements are vectors of significant gene IDs matching 
 #' \code{rownames(feat.tab)}.
 #' @inheritParams roast_contrasts
-#' @return Data frame of gene set statistics.
+#' @return List with two elements: \code{pwy.stats}, a table of pathway statistics; and \code{feat.tab}, a table that 
+#' appends a binary matrix of which genes are in which \code{sig.set} and the input \code{feat.tab}.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
 #' @seealso \code{\link[ezlimma]{fisher_enrichment}}
@@ -18,41 +19,40 @@
 multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, 
                                     pwy.nchar=199){
   stopifnot(!duplicated(names(sig.sets)), length(sig.sets) > 1)
+  
+  # get G index
+  index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
    
-  fe.lst <- list()
+  # want gene membership matrix, which will be subset by pathway for CSVs
+  # fe = fisher enrichment
+  feats.all <- unique(unlist(sig.sets))
+  stopifnot(feats.all %in% rownames(feat.tab))
+  fe.mat <- matrix(0, nrow=length(feats.all), ncol=length(sig.sets), dimnames=list(feats.all, names(sig.sets)))
+  
   for (ind in 1:length(sig.sets)){
-    nm <- names(sig.sets)[[ind]]
+    nm.ss <- names(sig.sets)[[ind]]
     sig.set <- list(sig.sets[[ind]])
-    names(sig.set) <- nm
-    fe.lst[[nm]] <- fisher_enrichment(sig.set=sig.set, G=G, feat.tab=feat.tab, name=NA, adjust.method=adjust.method, 
-                      min.nfeats=min.nfeats, max.nfeats=max.nfeats, return.lst=TRUE, pwy.nchar=pwy.nchar)
+    names(sig.set) <- nm.ss
+    fe.tmp <- fisher_enrichment(sig.set=sig.set, G=G, feat.tab=feat.tab, name=NA, adjust.method=adjust.method, 
+                      min.nfeats=min.nfeats, max.nfeats=max.nfeats, pwy.nchar=pwy.nchar)
     
     if (ind == 1){
-      pwy.mat <- fe.lst[[nm]]$pwy.stats
+      pwy.mat <- fe.tmp
     } else {
-      pwy.mat <- cbind(pwy.mat, fe.lst[[nm]]$pwy.stats[rownames(pwy.mat), -1])
+      pwy.mat <- cbind(pwy.mat, fe.tmp[rownames(pwy.mat), -1])
     }
     
-    # assume diff sig.sets return same pwys? yes, since subset in fisher_enrich by overlap of rownames(feat.tab) & G
-    # assume diff sig.sets return same genes? yes, should all return rownames(feat.tab)
-    if (ind == 1){
-      gene.mem.lst <- list()
-      gene.mem.tmp <- fe.lst[[nm]]$gene.membership
-      pwy.nms <- colnames(gene.mem.tmp)
-      for (pwy.tmp in pwy.nms){
-        gene.mem.lst[[pwy.tmp]] <- gene.mem.tmp[, pwy.tmp, drop=FALSE]
-        colnames(gene.mem.lst[[pwy.tmp]]) <- nm
-      }
-    } else {
-      gene.mem.tmp <- fe.lst[[nm]]$gene.membership
-      pwy.nms <- colnames(gene.mem.tmp)
-      for (pwy.tmp in pwy.nms){
-        gene.mem.lst[[pwy.tmp]] <- cbind(gene.mem.lst[[pwy.tmp]], 
-                                         gene.mem.tmp[rownames(gene.mem.lst[[pwy.tmp]]), pwy.tmp, drop=FALSE])
-        colnames(gene.mem.lst[[pwy.tmp]])[ncol(gene.mem.lst[[pwy.tmp]])] <- nm
-      }
-    }
-  } # end for ind
+    fe.mat[, nm.ss] <- rownames(fe.mat) %in% sig.set[[1]]
+  }
+  fe.df <- data.frame(fe.mat[rownames(feat.tab), ], feat.tab)
+
   # writexl
-  return(list(pwy.stats=pwy.mat, gene.membership=gene.mem.lst))
+  res.xl <- signif(pwy.mat, digits = 3)
+  # write xlsx file with links
+  if (!is.na(name)){
+    nm <- paste(name, "fisher_test", sep="_")
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=fe.df, name=nm, pwy.nchar=pwy.nchar)
+  }
+  
+  return(list(pwy.stats=pwy.mat, feat.tab=fe.df))
 }
