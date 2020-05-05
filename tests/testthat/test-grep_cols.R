@@ -3,6 +3,7 @@ context("grep cols")
 test_that("from helper", {
   expect_equal(grep_cols(tab=rcr.m, p.cols = "p")[1], "p")
   expect_equal(grep_cols(tab=rcr.m, p.cols = 5), "p")
+  expect_error(grep_cols(tab=rcr.m[, 1:3], p.cols = "p"))
   rcr.m[1, "p"] <- NA
   expect_error(grep_cols(tab=rcr.m, p.cols = 5))
   expect_error(grep_cols(tab=rcr.m, stat.cols = "Down"))

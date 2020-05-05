@@ -1,6 +1,6 @@
 #' Find p-value or stat columns in table
 #' 
-#' Find p-value or stat column names in table and check their validity.
+#' Find p-value or stat column names in table and check their validity. If no columns are found, it returns an error.
 #' 
 #' @inheritParams combine_pvalues
 #' @details Exactly one of \code{p.cols} or \code{stat.cols} should not be \code{NULL}.
