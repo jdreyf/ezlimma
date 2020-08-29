@@ -34,6 +34,21 @@ test_that("throw error for NAs in pheno", {
   expect_error(limma_cor(M, pheno2, reorder.rows = FALSE))
 })
 
+test_that("Handles NAs in M", {
+  mm <- M
+  mm[1, 1] <- NA
+  expect_silent(lc.na <- limma_cor(mm, pheno.v, reorder.rows = FALSE))
+  expect_true(lc.na[1, "p"] != lc["gene1", "p"])
+  
+  mm[1, 1:5] <- NA
+  expect_warning(lc.na <- limma_cor(mm, pheno.v, reorder.rows = TRUE))
+  expect_true(is.na(lc.na["gene1", "p"]))
+  
+  mm[1, 1:6] <- NA
+  expect_silent(lc.na <- limma_cor(mm, pheno.v, reorder.rows = TRUE))
+  expect_true(is.na(lc.na["gene1", "p"]))
+})
+
 test_that("matches limma_contrast grp-means parametrization", {
   lc <- limma_cor(M, phenotype = design[,"Last3Arrays"])
   expect_equal(lc$p, eztt[rownames(lc), "Last3vsFirst3.p"])
