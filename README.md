@@ -1,7 +1,7 @@
 # ezlimma
 R package that streamlines & extends the popular R/Bioconductor package `limma`.
 
-[![Build Status](https://travis-ci.org/jdreyf/ezlimma.svg?branch=master)](https://travis-ci.org/jdreyf/ezlimma)
+[![Build Status](https://travis-ci.com/jdreyf/ezlimma.svg?branch=master)](https://travis-ci.com/jdreyf/ezlimma)
 [![Coverage Status](https://img.shields.io/codecov/c/github/jdreyf/ezlimma/master.svg)](https://codecov.io/github/jdreyf/ezlimma?branch=master)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
