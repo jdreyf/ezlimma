@@ -13,6 +13,6 @@ fc2ratio(FC)
 Vector of corresponding ratios.
 }
 \description{
-Transform fold-change (FC) into a ratio. It's assumed \pkg{ezlimma} tranformed a ratio less than 1 into
+Transform fold-change (FC) into a ratio. It's assumed \pkg{ezlimma} transformed a ratio less than 1 into
 a negative FC, e.g. a ratio of 0.5 gave a FC of -2. This function reverses that operation.
 }
