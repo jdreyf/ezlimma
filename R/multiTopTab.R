@@ -12,9 +12,11 @@ multiTopTab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.met
   contrasts <- gsub(" ", "", colnames(fit$contrasts))
   # get gene order
   # limma 3.16 has row.names=row number & "ID" column; limma 3.18 has row.names=ID
-  # fit doesn"t have F-stat if using limma::treat()
+  # fit doesn't have F-stat if using limma::treat()
+  # If coef has single value, then uses moderated t-statistics/p-values
+  # If coef is null, then tests all coefs except "(Intercept)"
   if (!is.null(fit$F)){
-    ttf <- limma::topTableF(fit, number=Inf)
+    ttf <- limma::topTable(fit, number=Inf)
   } else {
     ttf <- limma::topTable(fit, coef=1, number=Inf, sort.by="p")
   }

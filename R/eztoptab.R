@@ -18,8 +18,8 @@ eztoptab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.method
   stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr", "z", "t", "F", "P.Value", "adj.P.Val", "B", "logFC"))
   
   if (!is.null(coef) && length(coef)>=2){
-    # topTableF tests all coefficients if at least 2, so using topTable to potentially test a subset
-    tt <- limma::topTable(fit, number=Inf, sort.by="F", adjust.method=adjust.method, coef=coef)
+    # topTable tests all coefficients if at least 2 of them
+    tt <- limma::topTable(fit, number=Inf, adjust.method=adjust.method, coef=coef)
     cols <- setdiff(cols, c("logFC", "t"))
   } else {
     tt <- limma::topTable(fit, number=Inf, sort.by="P", adjust.method=adjust.method, coef=coef)
