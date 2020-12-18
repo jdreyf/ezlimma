@@ -27,7 +27,7 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
   # fe = fisher enrichment
   feats.all <- unique(unlist(sig.sets))
   stopifnot(feats.all %in% rownames(feat.tab))
-  fe.mat <- matrix(0, nrow=length(feats.all), ncol=length(sig.sets), dimnames=list(feats.all, names(sig.sets)))
+  fe.tab <- data.frame(matrix(0, nrow=length(feats.all), ncol=length(sig.sets), dimnames=list(feats.all, names(sig.sets))))
   
   for (ind in 1:length(sig.sets)){
     nm.ss <- names(sig.sets)[[ind]]
@@ -39,12 +39,12 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
     if (ind == 1){
       pwy.mat <- fe.tmp
     } else {
-      pwy.mat <- cbind(pwy.mat, fe.tmp[rownames(pwy.mat), -1])
+      pwy.mat <- cbind(pwy.mat, fe.tmp[rownames(pwy.mat), -1, drop=FALSE])
     }
     
-    fe.mat[, nm.ss] <- rownames(fe.mat) %in% sig.set[[1]]
+    fe.tab[, nm.ss] <- as.numeric(rownames(fe.tab) %in% sig.set[[1]])
   }
-  fe.df <- data.frame(fe.mat[rownames(feat.tab), ], feat.tab)
+  fe.df <- data.frame(fe.tab[rownames(feat.tab),, drop=FALSE], feat.tab)
 
   # writexl
   res.xl <- signif(pwy.mat, digits = 3)
