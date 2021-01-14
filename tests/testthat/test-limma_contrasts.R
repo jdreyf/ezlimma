@@ -1,5 +1,11 @@
 context("limma_contrasts")
 
+test_that("one contrast", {
+  # p-values are sorted
+  eztt1 <- limma_contrasts(M, grp = grp, contrast.v = contr.v[1])
+  expect_equal(eztt1$First3.p, sort(eztt1$First3.p))
+})
+
 test_that("lmFit array weights only affect if given in 'weights'", {
   wts <- (1:ncol(M))/ncol(M)
   fit.aw <- lmFit(M, design=design, array.weights=wts)
