@@ -4,6 +4,10 @@ test_that("one contrast", {
   # p-values are sorted
   eztt1 <- limma_contrasts(M, grp = grp, contrast.v = contr.v[1])
   expect_equal(eztt1$First3.p, sort(eztt1$First3.p))
+  
+  contr.tmp <- c(First3="First3Arrays")
+  eztt2 <- limma_contrasts(object=M, contrast.v = contr.tmp, design=design)
+  expect_equal(eztt2$First3.p, sort(eztt2$First3.p))
 })
 
 test_that("lmFit array weights only affect if given in 'weights'", {

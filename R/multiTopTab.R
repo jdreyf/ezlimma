@@ -15,7 +15,7 @@ multiTopTab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.met
   # fit doesn't have F-stat if using limma::treat()
   # If coef has single value, then uses moderated t-statistics/p-values
   # If coef is null, then tests all coefs except "(Intercept)"
-  if (!is.null(fit$F)){
+  if (!is.null(fit$F) & ncol(fit$coefficients) > 1){
     ttf <- limma::topTable(fit, number=Inf)
   } else {
     ttf <- limma::topTable(fit, coef=1, number=Inf, sort.by="p")
