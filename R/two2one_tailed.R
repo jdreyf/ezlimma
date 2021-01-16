@@ -44,11 +44,12 @@ two2one_tailed <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|rh
         }
       })
     } # stat.char.colnms
-    tab <- data.matrix(tab[, colnames(tab) %in% c(stat.colnms, p.colnms)])
+    tab <- as.matrix(tab[, colnames(tab) %in% c(stat.colnms, p.colnms)])
+    if (!is.numeric(tab)) stop("Some stat or p-value columns of tab are not numeric.")
   } # end df
   alt.sign <- ifelse(alternative %in% c("Up", "greater"), 1, -1)
   
-  sign.mat <- sign(data.matrix(tab[, stat.colnms, drop=FALSE]))
+  sign.mat <- sign(tab[, stat.colnms, drop=FALSE])
   
   # sign=0 associated p-values are not transformed to 1-new_pv 
   if (!is.null(nperm)){

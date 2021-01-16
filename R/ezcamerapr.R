@@ -26,9 +26,9 @@
 ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
                       min.nfeats=3, max.nfeats=1000, inter.gene.cor=0.01, pwy.nchar=199){
   alternative <- match.arg(alternative)
-  if (is.data.frame(stats.tab)){ stats.tab <- data.matrix(stats.tab) }
+  if (is.data.frame(stats.tab)){ stats.tab <- as.matrix(stats.tab) }
   stopifnot(!is.null(rownames(stats.tab)), !is.null(colnames(stats.tab)), rownames(stats.tab) %in% rownames(feat.tab),
-            is.finite(stats.tab))
+            is.finite(stats.tab), is.numeric(stats.tab))
   
   # stats.tab must be matrix
   index <- g_index(G=G, object=stats.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
@@ -39,7 +39,8 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
       # stats.tab must be vector
       tmp <- limma::cameraPR(statistic=stats.tab.v, index=xx, inter.gene.cor=inter.gene.cor)
       tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
-      data.matrix(tmp)
+      # data.matrix(tmp)
+      as.matrix(tmp)
     }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
     tab.tmp <- as.data.frame(tab.tmp)
     if (alternative!="two.sided"){

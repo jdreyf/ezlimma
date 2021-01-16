@@ -27,7 +27,8 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
   stopifnot(ncol(tab) >= 1, nrow(tab) >= 1, !is.null(colnames(tab)))
   alternative <- match.arg(alternative)
   p.colnms <- grep_cols(tab, p.cols=p.cols)
-  tab.p <- data.matrix(tab[, p.colnms])
+  tab.p <- as.matrix(tab[, p.colnms])
+  if (!is.numeric(tab.p)) stop("Some p-value columns of tab are not numeric.")
   if (any(tab.p == 0, na.rm = TRUE)){
     small.p <- max(10**(-15), min(tab.p[tab.p > 0])/2)
     warning("p-values should not be zero; these have been converted to ", small.p, ".", call. = FALSE)

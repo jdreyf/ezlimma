@@ -98,7 +98,7 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
     if (nrow(object) > 1){
       grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
     } else {
-      grp.means <- data.matrix(t(tapply(object[1,], INDEX=grp, FUN=mean, na.rm=TRUE)))
+      grp.means <- as.matrix(t(tapply(object[1,], INDEX=grp, FUN=mean, na.rm=TRUE)))
       rownames(grp.means) <- rownames(mtt)
     }
     colnames(grp.means) <- paste(colnames(grp.means), "avg", sep=".")

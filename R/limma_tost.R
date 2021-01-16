@@ -65,7 +65,7 @@ limma_tost <- function(object, grp=NULL, contrast.v, tost.lfc, design=NULL, weig
     if (nrow(object) > 1){
       grp.means <- t(apply(object, MARGIN=1, FUN=function(v) tapply(v, INDEX=grp, FUN=mean, na.rm=TRUE)))
     } else {
-      grp.means <- data.matrix(t(tapply(object[1,], INDEX=grp, FUN=mean, na.rm=TRUE)))
+      grp.means <- as.matrix(t(tapply(object[1,], INDEX=grp, FUN=mean, na.rm=TRUE)))
       # rownames gets lost when only one row, so grab it from input object
       rownames(grp.means) <- rownames(object)
     }
