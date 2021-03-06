@@ -13,6 +13,9 @@ test_that("non-sim multi fisher", {
   ss2 <- list(bottom=rownames(eztt.o)[51:100])
   fe2 <- fisher_enrichment(sig.set = ss2, G=g2, feat.tab = eztt)
   
+  ss2v <- setNames(ss2[[1]], nm=paste0("nm", seq_along(ss2[[1]])))
+  mfe.err <- expect_error(multi_fisher_enrichment(sig.sets = ss2v, G=g2, feat.tab = eztt[, 1:3]))
+  
   mfe <- multi_fisher_enrichment(sig.sets = c(sig.set.tmp, ss2), G=g2, feat.tab = eztt[, 1:3])
   
   expect_equal(nrow(mfe[[1]]), 4)

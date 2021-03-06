@@ -18,7 +18,8 @@
 # name is for multi _fe output
 multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.method="BH", min.nfeats=3, max.nfeats=1000, 
                                     pwy.nchar=199){
-  stopifnot(!duplicated(names(sig.sets)), length(sig.sets) > 1)
+  # is.list catches if sig.sets is a named vector
+  stopifnot(!duplicated(names(sig.sets)), length(sig.sets) > 1, is.list(sig.sets))
   
   # get G index
   index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
@@ -41,7 +42,7 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
     } else {
       pwy.mat <- cbind(pwy.mat, fe.tmp[rownames(pwy.mat), -1, drop=FALSE])
     }
-    
+    # sig.set is a list of length one w/ sig.set for index ind
     fe.tab[, nm.ss] <- rownames(fe.tab) %in% sig.set[[1]]
   }
   fe.df <- data.frame(fe.tab[rownames(feat.tab),, drop=FALSE], feat.tab)
