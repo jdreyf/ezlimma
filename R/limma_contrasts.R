@@ -63,16 +63,22 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
     colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
   }
   
+  # lmFit tests if is.null(block), rather than missing(block), & correlation only used if !is.null(block) 
+  args.lst <- list(object=object, design=design, block = block, correlation = correlation)
+  
   # can't set weights=NULL in lmFit when using voom, since lmFit only assigns
   # weights "if (missing(weights) && !is.null(y$weights))"
   # can't make this into separate function, since then !missing(weights)
   # length(NULL)=0; other weights should have length > 1
   if (length(weights)!=1 || !is.na(weights)){
     if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
-    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation, weights=weights)
-  } else {
-    fit <- limma::lmFit(object, design=design, block = block, correlation = correlation)
+    # handles weights=NULL or weights as vector or matrix
+    args.lst <- c(args.lst, list(weights=weights))
   }
+  # fit <- limma::lmFit(object, design=design, block = block, correlation = correlation)
+  
+  # use do.call st can specify args as list()
+  fit <- do.call(limma::lmFit, args = args.lst)
   
   contr.mat <- limma::makeContrasts(contrasts=contrast.v, levels=design)
   fit2 <- limma::contrasts.fit(fit, contr.mat)
