@@ -20,7 +20,7 @@ multi_cor(
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
-features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
+features (e.g. genes) and columns to samples. Must have row names that are non-duplicated and non-empty.}
 
 \item{pheno.tab}{Matrix-like data object with columns as sample phenotypes, with \code{nrow(pheno.tab)==ncol(object)}.}
 
@@ -32,9 +32,11 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 
 \item{prefix}{Character string to add to beginning of column names. \code{NULL} does not add a prefix.}
 
-\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}. 
+Must be \code{NULL} if \code{ndups > 1}.}
 
-\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation. Must be given if 
+\code{ndups>1} or \code{!is.null(block)}.}
 
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete

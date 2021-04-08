@@ -10,7 +10,7 @@ g_index(G, object, min.nfeats, max.nfeats)
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
 
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
-features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
+features (e.g. genes) and columns to samples. Must have row names that are non-duplicated and non-empty.}
 
 \item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 

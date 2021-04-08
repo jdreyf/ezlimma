@@ -99,7 +99,7 @@ test_that("only one feature", {
   expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
   expect_silent(res <- limma_contrasts(object=M[1,,drop=FALSE], grp = grp, contrast.v = contr.v))
   expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
-  expect_silent(res <- limma_contrasts(object=data.matrix(t(M[1,])), grp = grp, contrast.v = contr.v))
+  expect_error(res <- limma_contrasts(object=data.matrix(t(M[1,])), grp = grp, contrast.v = contr.v))
   expect_equal(res[1, "Last3vsFirst3.logFC"], eztt["gene1", "Last3vsFirst3.logFC"])
 })
 
@@ -114,4 +114,20 @@ test_that("!moderated", {
   expect_equal(eztt2["gene1", "Last3vsFirst3.p"], g1.t$p.value)
   expect_equal(eztt2["gene1", "Last3vsFirst3.logFC"], 
                unname(g1.t$estimate["mean of x"]-g1.t$estimate["mean of y"]))
+})
+
+test_that("ndups & spacing", {
+  expect_error(limma_contrasts(M, grp = grp, contrast.v = contr.v, block=rep(1:3, times=2), ndups=2))
+  # need cor if ndups=2 or !is.null(block) 
+  expect_error(limma_contrasts(M, grp = grp, contrast.v = contr.v, ndups=2))
+  
+  eztt.nodups <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v, ndups = 1, spacing=1)
+  expect_true(all.equal(eztt, eztt.nodups))
+  
+  eztt.dups <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v, ndups = 2, correlation = 0.3)
+  expect_equal(nrow(eztt.dups), 50)
+  expect_true("gene1" %in% rownames(eztt.dups)[1:10])
+  expect_lt(eztt.dups["gene1", "Last3vsFirst3.logFC"], 0)
+  expect_gt(eztt.dups["gene1", "First3.avg"], 0.5)
+  expect_lt(abs(mean(eztt.dups[, "Last3.avg"])), 0.1)
 })

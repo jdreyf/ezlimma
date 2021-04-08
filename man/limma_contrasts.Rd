@@ -11,6 +11,8 @@ limma_contrasts(
   design = NULL,
   weights = NA,
   trend = FALSE,
+  ndups = NULL,
+  spacing = NULL,
   block = NULL,
   correlation = NULL,
   adjust.method = "BH",
@@ -23,7 +25,7 @@ limma_contrasts(
 }
 \arguments{
 \item{object}{Matrix-like data object containing log-ratios or log-expression values, with rows corresponding to 
-features (e.g. genes) and columns to samples. Must have rownames that are non-duplicated and non-empty.}
+features (e.g. genes) and columns to samples. Must have row names that are non-duplicated and non-empty.}
 
 \item{grp}{Vector of sample groups. These must be valid variable names in R and the same length as 
 \code{ncol(object)}.}
@@ -35,15 +37,22 @@ estimated.}
 
 \item{weights}{Non-negative observation weights. Can be a numeric matrix of individual weights of same size as the 
 \code{object}, or a numeric vector of sample weights with length \code{ncol(object)}, or a numeric vector of gene 
-weights with length equal to\code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
+weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \code{object$weights}. 
 \code{weights=NA} (with length one) doesn't pass weights to \code{limma}.}
 
 \item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
 
-\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}.}
+\item{ndups}{Positive integer giving the number of times each distinct probe is measured in each sample. See Details.}
 
-\item{correlation}{Inter-duplicate or inter-technical replicate correlation.}
+\item{spacing}{Positive integer giving the spacing between duplicate occurrences of the same probe, with 
+\code{spacing=1} for consecutive rows.  See Details.}
+
+\item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}. 
+Must be \code{NULL} if \code{ndups > 1}.}
+
+\item{correlation}{Inter-duplicate or inter-technical replicate correlation. Must be given if 
+\code{ndups>1} or \code{!is.null(block)}.}
 
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
@@ -76,6 +85,13 @@ a table. See examples in vignette.
 If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
 \code{model.matrix(~0+grp)}. However, \code{grp} isn't needed if \code{design} is provided & \code{add.means} 
 is \code{FALSE}.
+
+The defaults of arguments \code{ndups} and \code{spacing} are set to \code{NULL}, 
+which allows these arguments to be overridden by the elements \code{object$printer$ndups} and
+\code{object$printer$spacing}, respectively, if these exist; whereas if these elements do not exist,
+the arguments are both treated as being their defaults in \code{\link[limma]{lmFit}}, which is one for both.
+If either of these arguments are specified, they would override the respective element of \code{object$printer},
+if the element existed.  
 
 When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.
 }
