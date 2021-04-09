@@ -16,10 +16,10 @@
 #' @export
 
 roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = NULL, 
-                    fun=c("fry", "mroast"), set.statistic = "mean",
-                    weights = NA, gene.weights=NULL, trend = FALSE, block = NULL, 
-                    correlation = NULL, prefix=NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, 
-                    alternative=c("two.sided", "less", "greater"), nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
+                    fun=c("fry", "mroast"), set.statistic = "mean", weights = NA, gene.weights=NULL, 
+                    trend = FALSE, block = NULL, correlation = NULL, prefix=NULL, adjust.method = "BH", 
+                    min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"), 
+                    nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
