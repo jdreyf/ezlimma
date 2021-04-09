@@ -125,7 +125,14 @@ test_that("ndups & spacing", {
   expect_true(all.equal(eztt, eztt.nodups))
   
   eztt.dups <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v, ndups = 2, correlation = 0.3)
+  eztt.dups2 <- limma_contrasts(object=M, grp = grp, contrast.v = contr.v, ndups = 2, correlation = 0.6)
   expect_equal(nrow(eztt.dups), 50)
+  expect_equal(dim(eztt.dups), dim(eztt.dups2))
+  expect_true(!all(eztt.dups == eztt.dups2))
+  # gene numbers in eztt.dups are all odds from 1:99:2
+  expect_equal(sort(as.numeric(sub("gene", "", rownames(eztt.dups)))), seq(1, 99, by=2))
+  expect_equal(eztt.dups["gene1", "First3.avg"], mean(M[1:2, 1:3]))
+  expect_equal(eztt.dups["gene1", "Last3.avg"], mean(M[1:2, 4:6]))
   expect_true("gene1" %in% rownames(eztt.dups)[1:10])
   expect_lt(eztt.dups["gene1", "Last3vsFirst3.logFC"], 0)
   expect_gt(eztt.dups["gene1", "First3.avg"], 0.5)

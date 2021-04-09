@@ -44,10 +44,11 @@
 #' 
 #' The defaults of arguments \code{ndups} and \code{spacing} are set to \code{NULL}, 
 #' which allows these arguments to be overridden by the elements \code{object$printer$ndups} and
-#' \code{object$printer$spacing}, respectively, if these exist; whereas if these elements do not exist,
-#' the arguments are both treated as being their defaults in \code{\link[limma]{lmFit}}, which is one for both.
-#' If either of these arguments are specified, they would override the respective element of \code{object$printer},
-#' if the element existed.  
+#' \code{object$printer$spacing}, respectively, if these exist. Whereas, if an element does not exist,
+#' the corresponding argument is treated as being its default in \code{\link[limma]{lmFit}}, 
+#' i.e. \code{ndups=1} or \code{spacing=1}. 
+#' If either of these arguments are specified, they would override the 
+#' respective element of \code{object$printer}, if the element existed.
 #' 
 #' When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.
 #'   

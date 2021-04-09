@@ -11,6 +11,8 @@ limma_cor(
   prefix = NULL,
   weights = NA,
   trend = FALSE,
+  ndups = NULL,
+  spacing = NULL,
   block = NULL,
   correlation = NULL,
   adjust.method = "BH",
@@ -41,6 +43,11 @@ weights with length equal to \code{nrow(object)}. Set to \code{NULL} to ignore \
 
 \item{trend}{Logical; should an intensity-trend be allowed for the prior variance? Default is that the prior variance 
 is constant.}
+
+\item{ndups}{Positive integer giving the number of times each distinct probe is measured in each sample. See Details.}
+
+\item{spacing}{Positive integer giving the spacing between duplicate occurrences of the same probe, with 
+\code{spacing=1} for consecutive rows.  See Details.}
 
 \item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}. 
 Must be \code{NULL} if \code{ndups > 1}.}
@@ -80,6 +87,14 @@ Test correlation of each row of object to phenotype. By default, it uses the mod
 Exactly one of \code{design} or \code{phenotype} must be non-null. If \code{design} is \code{NULL} and 
 \code{phenotype} is given, design will be calculated as \code{model.matrix(~0+phenotype)}. See further details 
 in \code{\link[limma]{lmFit}}.
+
+The defaults of arguments \code{ndups} and \code{spacing} are set to \code{NULL}, 
+which allows these arguments to be overridden by the elements \code{object$printer$ndups} and
+\code{object$printer$spacing}, respectively, if these exist. Whereas, if an element does not exist,
+the corresponding argument is treated as being its default in \code{\link[limma]{lmFit}}, 
+i.e. \code{ndups=1} or \code{spacing=1}. 
+If either of these arguments are specified, they would override the 
+respective element of \code{object$printer}, if the element existed.
 
 When \code{moderated} is FALSE, an error is generated if \code{trend} is TRUE.
 }

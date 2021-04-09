@@ -92,8 +92,8 @@ test_that("!moderated", {
   
   # with covariates
   des.lc <- model.matrix(~1+pheno.v+covar)
-  lc <- limma_cor(M[1,], design = des.lc)
-  lc2 <- limma_cor(object=M[1,], design = des.lc, moderated = FALSE)
+  lc <- limma_cor(M[1,, drop=FALSE], design = des.lc)
+  lc2 <- limma_cor(object=M[1,, drop=FALSE], design = des.lc, moderated = FALSE)
   lc3 <- limma_cor(object=M, design = des.lc, moderated = FALSE)
   expect_equal(lc$p, lc2$p)
   expect_equal(lc$p, lc3["gene1", "p"])
@@ -101,7 +101,8 @@ test_that("!moderated", {
   # independent of which of M or Y is on LHS
   # so can use limma_cor without concern for which var to put on LHS!
   des.lc2 <- model.matrix(~1+M[1,]+covar)
-  lc4 <- limma_cor(object=pheno.v, design = des.lc2, moderated = FALSE)
+  pheno.mat <- matrix(pheno.v, ncol=length(pheno.v), dimnames=list("pheno", names(pheno.v)))
+  lc4 <- limma_cor(object=pheno.mat, design = des.lc2, moderated = FALSE)
   expect_equal(lc2$p, lc4$p)
   
   # matches ppcor
@@ -127,4 +128,32 @@ test_that("size", {
   lc4 <- limma_cor(M[-1,], phenotype = ph4)
   
   expect_lte(mean(rbind(lc1, lc2, lc3, lc4)[,"p"] < 0.05), 0.05)
+})
+
+test_that("ndups & spacing", {
+  expect_error(limma_cor(M, phenotype = pheno.v, block=rep(1:3, times=2), ndups=2))
+  # need cor if ndups=2 or !is.null(block) 
+  expect_error(limma_cor(M, phenotype = pheno.v, ndups=2))
+  
+  lc.nodups <- limma_cor(object=M, phenotype = pheno.v, ndups = 1, spacing=1)
+  expect_true(all.equal(lc, lc.nodups))
+  
+  ph2 <- phenotype
+  ph2[1:3] <- ph2[1:3]-4
+  
+  lc.dups <- limma_cor(object=M, phenotype = ph2, ndups = 2, correlation = 0.3)
+  lc.dups2 <- limma_cor(object=M, phenotype = ph2, ndups = 2, correlation = 0.6)
+  expect_equal(nrow(lc.dups), 50)
+  expect_equal(dim(lc.dups), dim(lc.dups2))
+  expect_true(!all(lc.dups == lc.dups2))
+  expect_equal(nrow(lc.dups), 50)
+  
+  # gene numbers in lc.dups are all odds from 1:99:2
+  expect_equal(sort(as.numeric(sub("gene", "", rownames(lc.dups)))), seq(1, 99, by=2))
+  expect_equal(lc.dups["gene1", "AveExpr"], mean(M[1:2, 1:6]))
+  expect_gt(lc.dups["gene1", "AveExpr"], 0)
+  expect_lt(abs(mean(lc.dups[, "AveExpr"])), 0.1)
+  
+  expect_lt(lc.dups["gene1", "slope"], 0)
+  expect_lt(lc.dups2["gene1", "slope"], 0)
 })
