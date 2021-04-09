@@ -26,6 +26,15 @@ test_that("weights", {
   expect_warning(rcn.mw <- roast_contrasts(el, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", 
                                            weights=el$weights))
   expect_equal(mean(rcn.mw$First3.p==rcn.me$First3.p), 1)
+  
+  # errors
+  expect_error(roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=4))
+  expect_error(roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry", weights="d"))
+  expect_error(roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", weights=letters[1:2]))
+  expect_error(roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", 
+                               weights=letters[1:ncol(M)]))
+  expect_error(roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast", 
+                               weights=c(1:(ncol(M)-1), NA)))
 })
 
 test_that("one sided testing", {
@@ -97,4 +106,3 @@ test_that("clean names & write", {
   
   unlink("bad_names_fry", recursive = TRUE)
 })
-  

@@ -34,7 +34,7 @@ G <- list(list(name="pwy1", description=NA, genes=paste0("gene", 1:10)),
 
 rcn.f <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="fry")
 set.seed(0)
-rcn.m <- roast_contrasts(M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast")
+rcn.m <- roast_contrasts(object=M, G=G, feat.tab=eztt, grp=grp, contrast.v = contr.v, fun="mroast")
 rcr.f <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry")
 set.seed(0)
 rcr.m <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast")

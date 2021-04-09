@@ -30,6 +30,15 @@ test_that("weights", {
   #pheno has NA
   expect_warning(rcr.mw2 <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno2, fun="mroast", weights=1:6))
   expect_equal(mean(rcr.mw$p==rcr.mw2$p), 0)
+  
+  # errors
+  expect_error(roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", weights=4))
+  expect_error(roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", weights="d"))
+  expect_error(roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", weights=letters[1:2]))
+  expect_error(roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", 
+                         weights=letters[1:ncol(M)]))
+  expect_error(roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", 
+                         weights=c(1:(ncol(M)-1), NA)))
 })
 
 test_that("one sided testing", {

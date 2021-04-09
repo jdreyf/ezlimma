@@ -68,6 +68,13 @@ test_that("weights", {
   #object$weights are being ignored
   expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrast.v = contr.v, weights = NULL))
   expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
+  
+  # errors
+  expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = 4))
+  expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = "d"))
+  expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = letters[1:2]))
+  expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = letters[1:ncol(M)]))
+  expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = c(1:(ncol(M)-1), NA)))
 })
 
 test_that("with treat matches topTable(treat(contrasts.fit(lmfit(M))))", {

@@ -64,9 +64,12 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
                             moderated=TRUE, check.names=TRUE, cols=c("P.Value", "adj.P.Val", "logFC")){
   
   # spacing could be given if ndups=1, since lmFit might use ndups=object$printer$ndups
-  stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), 
-            all(is.na(weights)) || is.null(weights) || dim(weights)==dim(object) || length(weights)==nrow(object) || 
-              length(weights)==ncol(object), is.null(ndups) || (is.numeric(ndups) && ndups >= 1), 
+  stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object)>1,
+            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
+              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
+            length(weights)<=1 || dim(weights)==dim(object) || 
+              length(weights)==nrow(object) || length(weights)==ncol(object), 
+            is.null(ndups) || (is.numeric(ndups) && ndups >= 1), 
             is.null(spacing) || (is.numeric(spacing) && spacing>=1), 
             is.null(correlation) || (is.numeric(correlation) && abs(correlation)<=1),
             is.null(ndups) || ndups < 2 || is.null(block),

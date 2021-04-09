@@ -11,8 +11,7 @@
 #' @inheritParams limma_cor
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
-#' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns 
-#' are rounded to 3 significant figures.
+#' @inherit roast_contrasts details
 #' @seealso \code{\link[ezlimma]{roast_contrasts}}.
 #' @export
 
@@ -22,8 +21,17 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
                     correlation = NULL, prefix=NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, 
                     alternative=c("two.sided", "less", "greater"), nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
-  stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
-            is.null(gene.weights)|length(gene.weights)==nrow(object), ncol(object) > 1)
+  stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
+            rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
+            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
+              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
+            length(weights)<=1 || dim(weights)==dim(object) || 
+              length(weights)==nrow(object) || length(weights)==ncol(object),
+            is.null(gene.weights) || length(gene.weights)==nrow(object))
+  
+  if (!is.null(block) && is.null(correlation))
+    stop("!is.null(block), so correlation must not be NULL.")
+  
   # only mroast takes some arguments
   if (fun=="fry" && (set.statistic!="mean" || !is.null(gene.weights) || adjust.method!="BH")){
     warning("fry method does not take arguments: set.statistic, gene.weights, or adjust.method. These arguments will be ignored.")
@@ -86,7 +94,8 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   # mroast vs fry x is.na(weights) vs not, so 4 conditions
   if (fun=="fry"){
     if (length(weights) == 1 && is.na(weights)){
-      res <- limma::fry(y = object, index = index, design = design, contrast = 2, trend = trend, block = block, correlation = correlation)
+      res <- limma::fry(y = object, index = index, design = design, contrast = 2, trend = trend, block = block, 
+                        correlation = correlation)
     } else {
       res <- limma::fry(y = object, index = index, design = design, contrast = 2,
                         weights = weights, trend = trend, block = block, correlation = correlation)

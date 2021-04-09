@@ -102,8 +102,11 @@ Excel file. The Excel file links to CSV files, which contain statistics per
 gene set. See example in vignette of \code{\link[ezlimma]{roast_contrasts}}.
 }
 \details{
-Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns 
-are rounded to 3 significant figures.
+Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
+rounded to 3 significant figures.
+
+This function does not accept \code{ndups} nor \code{spacing}, because we found that these arguments do not impact
+\code{limma::mroast} nor \code{limma::fry}.
 }
 \seealso{
 \code{\link[ezlimma]{roast_contrasts}}.

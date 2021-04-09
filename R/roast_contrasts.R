@@ -28,15 +28,28 @@
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 3 significant figures.
+#' 
+#' This function does not accept \code{ndups} nor \code{spacing}, because we found that these arguments do not impact
+#' \code{limma::mroast} nor \code{limma::fry}.
 #' @export
 
 # limma 3.34.6 fixed array weights bug, but I don't require this version of limma, since don't have it on server
 roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NULL, fun=c("fry", "mroast"), 
-                            set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, block = NULL,
-                            correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
+                            set.statistic = "mean", name=NA, weights = NA, gene.weights = NULL, trend = FALSE, 
+                            block = NULL, correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
                             alternative=c("two.sided", "less", "greater"), check.names=TRUE, pwy.nchar=199, seed=0){
-  stopifnot(rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
-            is.null(gene.weights) || length(gene.weights)==nrow(object), ncol(object) > 1)
+  
+  stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
+    rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
+            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
+              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
+            length(weights)<=1 || dim(weights)==dim(object) || 
+              length(weights)==nrow(object) || length(weights)==ncol(object),
+            is.null(gene.weights) || length(gene.weights)==nrow(object))
+  
+  if (!is.null(block) && is.null(correlation))
+    stop("!is.null(block), so correlation must not be NULL.")
+  
   # only mroast takes some arguments
   if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
     warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
@@ -45,54 +58,43 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   alternative <- match.arg(alternative)
   
   if (fun=="mroast") set.seed(seed=seed)
-
+  
   # get G index
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
-
+  
   if (is.null(design)){
-      stopifnot(ncol(object) == length(grp))
-      design <- stats::model.matrix(~0+grp)
-      colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
-      if (check.names){ stopifnot(colnames(object) == names(grp)) }
+    stopifnot(ncol(object) == length(grp))
+    design <- stats::model.matrix(~0+grp)
+    colnames(design) <- sub("grp", "", colnames(design), fixed=TRUE)
+    if (check.names){ stopifnot(colnames(object) == names(grp)) }
   }
-
+  
   contr.mat <- limma::makeContrasts(contrasts = contrast.v, levels = design)
+  args.lst <- list(y=object, index=index, design=design, block = block, correlation = correlation, trend=trend)
   
   # deal with weights
   if (!is.matrix(object)){
-      if (!is.null(object$weights)){
-          if (length(weights) != 1){
-              warning("object$weights are being ignored")
-          } else {
-              if (is.null(dimnames(object$weights))) dimnames(object$weights) <- dimnames(object)
-              weights <- object$weights
-          }
+    if (!is.null(object$weights)){
+      if (length(weights) != 1){
+        warning("object$weights are being ignored")
+        args.lst <- c(args.lst, list(weights=weights))
+      } else {
+        if (is.null(dimnames(object$weights))) dimnames(object$weights) <- dimnames(object)
+        args.lst <- c(args.lst, list(weights=object$weights))
       }
-  }# end if(!is.matrix(object))
-
+    }
+  } else if (length(weights) != 1) args.lst <- c(args.lst, list(weights=weights))
+  
   # run fry or mroast for each contrast
   # block & correlation from lmFit, trend from eBayes
   for (i in seq_along(contrast.v)){
+    args.tmp <- c(args.lst, list(contrast = contr.mat[, i]))
     if (fun=="fry"){
-      if (length(weights) == 1 && is.na(weights)){
-        res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], 
-                              block=block, correlation=correlation, trend=trend)
-      } else {
-        res.tmp <- limma::fry(y = object, index = index, design = design, contrast = contr.mat[, i], weights = weights, 
-                              block=block, correlation=correlation, trend=trend)
-      }
+      res.tmp <- do.call(limma::fry, args = args.tmp)
     } else {
-      if (length(weights) == 1 && is.na(weights)){
-        res.tmp <- limma::mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
-                       gene.weights = gene.weights, trend = trend, block = block, correlation = correlation, 
-                       adjust.method = adjust.method, set.statistic = set.statistic, nrot=nrot)
-      } else {
-        res.tmp <- limma::mroast(y = object, index = index, design = design, contrast = contr.mat[, i],
-                                 weights = weights, gene.weights = gene.weights, trend = trend,
-                                 block = block, correlation = correlation, adjust.method = adjust.method,
-                                 set.statistic = set.statistic, nrot=nrot)
-      }
-      
+      args.tmp <- c(args.tmp, list(gene.weights = gene.weights, set.statistic = set.statistic, nrot=nrot))
+      res.tmp <- do.call(limma::mroast, args = args.tmp)
+
       # PropUp & PropDown don't use feat.tab & threshold at z=sqrt(2) -> p=0.1
       res.tmp <- res.tmp[, setdiff(colnames(res.tmp), c("PropDown", "PropUp"))]
     }# end roast
@@ -111,7 +113,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     # if want one-sided test, change p-values, calc new FDRs, then remove Mixed columns
     if (alternative!="two.sided"){
       res.tmp <- roast_two2one_tailed(roast.res=res.tmp, fun=fun, alternative=alternative, 
-                                  nrot=nrot, adjust.method=adjust.method)
+                                      nrot=nrot, adjust.method=adjust.method)
     }# end if one.tailed
     colnames(res.tmp) <- gsub("PValue", "p", 
                               gsub("FDR.Mixed", "Mixed.FDR", 
@@ -119,15 +121,15 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     # add contrast names to each column except 1st, which is NGenes
     colnames(res.tmp)[-1] <- paste(names(contrast.v[i]), colnames(res.tmp)[-1], sep = ".")
     if (i == 1){
-        res <- res.tmp
+      res <- res.tmp
     } else {
-        res <- cbind(res, res.tmp[rownames(res), -1])
+      res <- cbind(res, res.tmp[rownames(res), -1])
     }
   }# end for i
   
   # let combine_pvalues find pvalue columns
   if (nrow(res) > 1) res <- res[order(combine_pvalues(res)), ]
-
+  
   # change FDR to appropriate adjustment name if user doesn"t use FDR
   if (!(adjust.method %in% c("BH", "fdr"))){
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))

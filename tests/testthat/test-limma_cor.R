@@ -28,6 +28,13 @@ test_that("weights", {
   #object$weights are being ignored
   expect_warning(lc.elw <- limma_cor(el, phenotype = pheno.v, weights = NULL))
   expect_equal(mean(lc.elw$p==lc$p), 1)
+  
+  # errors
+  expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = 4))
+  expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = "d"))
+  expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = letters[1:2]))
+  expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = letters[1:ncol(M)]))
+  expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = c(1:(ncol(M)-1), NA)))
 })
 
 test_that("throw error for NAs in pheno", {
