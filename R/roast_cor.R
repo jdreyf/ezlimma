@@ -25,7 +25,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
             rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
               (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
-            length(weights)<=1 || dim(weights)==dim(object) || 
+            length(weights)<=1 || all(dim(weights)==dim(object)) || 
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(gene.weights) || length(gene.weights)==nrow(object))
   

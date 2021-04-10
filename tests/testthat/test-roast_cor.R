@@ -22,7 +22,7 @@ test_that("weights", {
   expect_equal(mean(rcr.f$p==rcr.me$p), 0)
   
   #suppress object$weights
-  expect_warning(rcr.fw <- roast_cor(el, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry", weights=el$weights))
+  expect_warning(rcr.fw <- roast_cor(object=el, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry", weights=el$weights))
   expect_equal(mean(rcr.fe$p==rcr.fw$p), 1)
   expect_warning(rcr.mw <- roast_cor(el, G=G, feat.tab=eztt, pheno=pheno.v, fun="mroast", weights=el$weights))
   expect_equal(mean(rcr.me$p==rcr.mw$p), 1)

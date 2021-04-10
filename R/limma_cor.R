@@ -37,7 +37,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object)>1,
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
               (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
-            length(weights)<=1 || dim(weights)==dim(object) || 
+            length(weights)<=1 || all(dim(weights)==dim(object)) || 
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(ndups) || (is.numeric(ndups) && ndups >= 1), 
             is.null(spacing) || (is.numeric(spacing) && spacing>=1), 
