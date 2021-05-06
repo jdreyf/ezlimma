@@ -21,7 +21,8 @@ Gene set list *G* with the symbols replaced by the mapped IDs.
 \description{
 Map pathway list with old gene IDs (e.g. entrez IDs) to another ID type (e.g. gene symbols) using a table with both
 annotation types. The original IDs can be separated within a column of annot with a string, e.g. " /// ".
-The other IDs should be the rownames of annot.
+The other IDs should be the rownames of annot. The idea for this is based on the Gene Set Enrichment
+Analysis (GSEA) utility [chip2chip](https://www.gsea-msigdb.org/gsea/doc/GSEAUserGuideFrame.html?Chip2Chip_Page).
 }
 \details{
 Gene annotations are transformed to upper-case to avoid missing matches of different cases.
