@@ -95,16 +95,13 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
   # lmFit requires !missing(correlation) if !(ndups < 2 && is.null(block))
   args.lst <- list(object=object, design=design, block = block, correlation = correlation)
   
-  # can't set weights=NULL in lmFit when using voom, since lmFit only assigns
-  # weights "if (missing(weights) && !is.null(y$weights))"
-  # can't make this into separate function, since then !missing(weights)
-  # length(NULL)=0; other weights should have length > 1
-  if (length(weights)!=1 || !is.na(weights)){
-    if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
-    # handles weights=NULL or weights as vector or matrix
-    args.lst <- c(args.lst, list(weights=weights))
-  }
+  # 22 Nov 2020: limma 3.47.1
+  #- Explicitly setting `weights=NULL` in a call to lmFit() no longer over-rides the `weights` value found in `object`.
+  # - Default settings in lmFit() changed from `ndups=` and `spacing=1` to `ndups=NULL` and `spacing=NULL`. 
+  # No change to function behavior from a user point of view.
   
+  # handles weights=NULL or weights as vector or matrix
+  if (length(weights)!=1 || !is.na(weights)) args.lst <- c(args.lst, list(weights=weights))
   if (!is.null(ndups)) args.lst <- c(args.lst, ndups=ndups)
   if (!is.null(spacing)) args.lst <- c(args.lst, spacing=spacing)
   

@@ -65,9 +65,9 @@ test_that("weights", {
   eztt.el <- limma_contrasts(el, grp = grp, contrast.v = contr.v)
   expect_equal(mean(eztt.el$First3.p==eztt$First3.p), 0)
   
-  #object$weights are being ignored
-  expect_warning(eztt.elw <- limma_contrasts(el, grp = grp, contrast.v = contr.v, weights = NULL))
-  expect_equal(mean(eztt.elw$First3.p==eztt$First3.p), 1)
+  # limma now ignores weights=NULL
+  eztt.elw <- limma_contrasts(object=el, grp = grp, contrast.v = contr.v, weights = NULL)
+  expect_equal(mean(eztt.elw$First3.p==eztt.el$First3.p), 1)
   
   # errors
   expect_error(eztt.err <- limma_contrasts(M, grp = grp, contrast.v = contr.v, weights = 4))

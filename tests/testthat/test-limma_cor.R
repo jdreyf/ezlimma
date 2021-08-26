@@ -25,9 +25,9 @@ test_that("weights", {
   lc.el <- limma_cor(el, phenotype = pheno.v)
   expect_equal(mean(lc.el$p==lc$p), 0)
   
-  #object$weights are being ignored
-  expect_warning(lc.elw <- limma_cor(el, phenotype = pheno.v, weights = NULL))
-  expect_equal(mean(lc.elw$p==lc$p), 1)
+  # weights = NULL now ignored
+  lc.elw <- limma_cor(el, phenotype = pheno.v, weights = NULL)
+  expect_equal(mean(lc.elw$p==lc.el$p), 1)
   
   # errors
   expect_error(lc.err <- limma_cor(M, phenotype=pheno.v, weights = 4))

@@ -63,11 +63,7 @@ limma_cor <- function(object, phenotype=NULL, design=NULL, prefix=NULL, weights=
   
   args.lst <- list(object=object, design=design, block = block, correlation = correlation)
   
-  if (length(weights)!=1 || !is.na(weights)){
-    if (!is.matrix(object) && !is.null(object$weights)){ warning("object$weights are being ignored") }
-    args.lst <- c(args.lst, list(weights=weights))
-  }
-  
+  if (length(weights)!=1 || !is.na(weights)) args.lst <- c(args.lst, list(weights=weights))
   if (!is.null(ndups)) args.lst <- c(args.lst, ndups=ndups)
   if (!is.null(spacing)) args.lst <- c(args.lst, spacing=spacing)
   

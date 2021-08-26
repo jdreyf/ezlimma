@@ -1,6 +1,5 @@
 #' A wrapper function for \code{cameraPR} with output to Excel
 #' 
-#' 
 #' Test whether a set of genes is highly ranked relative to other genes in terms of differential expression, 
 #' accounting for inter-gene correlation with \code{\link[limma:camera]{cameraPR}}.
 #' To find pathways whose genes have large magnitude changes, independent of direction of their change, 
