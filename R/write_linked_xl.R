@@ -11,9 +11,6 @@
 write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name, pwy.nchar=199){
   stopifnot(!is.null(name), nrow(pwy.tab) > 0, !is.null(feat.lst), !is.null(names(feat.lst)), nrow(feat.tab) > 0,
             rownames(pwy.tab) %in% names(feat.lst))
-  if (!requireNamespace("writexl", quietly = TRUE)){
-    stop("Install 'writexl' package.", call. = FALSE)
-  }
   
   feat.lst <- feat.lst[rownames(pwy.tab)]
   tx <- xl_pwys(pwy.tab=pwy.tab, pwy.nchar=pwy.nchar)

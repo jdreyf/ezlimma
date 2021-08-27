@@ -37,7 +37,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
     tab.tmp <- t(vapply(index, FUN=function(xx){
       # stats.tab must be vector
       tmp <- limma::cameraPR(statistic=stats.tab.v, index=xx, inter.gene.cor=inter.gene.cor)
-      tmp$Direction <- ifelse(tmp$Direction == "Up", 1, -1)
+      tmp$Direction <- ifelse(tmp$Direction == "Up", yes = 1, no = -1)
       # data.matrix(tmp)
       as.matrix(tmp)
     }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
@@ -62,7 +62,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "cameraPR", sep="_")
-    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
+    ezlimma:::write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   return(tab)
 }
