@@ -11,9 +11,9 @@ add_zcols(toptab, stat.suffix = "t", p.suffix = "p")
 is \code{"t"} or ends with \code{".t"} & a column of p-values is \code{"p"} or ends with \code{".p"}.
 Columns with t-statistics and those with p-values must have same prefixes.}
 
-\item{stat.suffix}{SUffix of numeric signed statistics column(s).}
+\item{stat.suffix}{Suffix of numeric signed statistics column(s).}
 
-\item{p.suffix}{SUffix of numeric p-value column(s).}
+\item{p.suffix}{Suffix of numeric p-value column(s).}
 }
 \description{
 Add column to toptab with z-stats.

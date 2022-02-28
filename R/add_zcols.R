@@ -5,8 +5,8 @@
 #' @param toptab Table with genes as rows and statistics as columns. Must include a column with t-statistics that
 #' is \code{"t"} or ends with \code{".t"} & a column of p-values is \code{"p"} or ends with \code{".p"}.
 #' Columns with t-statistics and those with p-values must have same prefixes.
-#' @param stat.suffix SUffix of numeric signed statistics column(s).
-#' @param p.suffix SUffix of numeric p-value column(s).
+#' @param stat.suffix Suffix of numeric signed statistics column(s).
+#' @param p.suffix Suffix of numeric p-value column(s).
 #' @importFrom rlang :=
 
 add_zcols <- function(toptab, stat.suffix="t", p.suffix="p"){
