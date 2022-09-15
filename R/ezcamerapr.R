@@ -62,7 +62,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "cameraPR", sep="_")
-    ezlimma:::write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
+    write_linked_xl(pwy.tab=res.xl, feat.lst=index, feat.tab=feat.tab, name=nm, pwy.nchar=pwy.nchar)
   }
   return(tab)
 }

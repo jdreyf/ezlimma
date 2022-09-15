@@ -45,7 +45,8 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
     # sig.set is a list of length one w/ sig.set for index ind
     fe.tab[, nm.ss] <- rownames(fe.tab) %in% sig.set[[1]]
   }
-  fe.df <- data.frame(fe.tab[rownames(feat.tab),, drop=FALSE], feat.tab)
+  # only want to show analytes in fe.tab
+  fe.df <- data.frame(fe.tab, feat.tab[rownames(fe.tab),, drop=FALSE])
 
   # writexl
   res.xl <- signif(pwy.mat, digits = 3)
