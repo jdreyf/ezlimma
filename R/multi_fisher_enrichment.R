@@ -26,7 +26,7 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
    
   # want gene membership matrix, which will be subset by pathway for CSVs
   # fe = fisher enrichment
-  feats.all <- unique(unlist(sig.sets))
+  feats.all <- union(unlist(sig.sets), unlist(index))
   stopifnot(feats.all %in% rownames(feat.tab))
   fe.tab <- matrix(0, nrow=length(feats.all), ncol=length(sig.sets), dimnames=list(feats.all, names(sig.sets)))
   

@@ -21,7 +21,7 @@ write_linked_xl <- function(pwy.tab, feat.lst, feat.tab, name, pwy.nchar=199){
   dir.create(name)
   dir.create(paste0(name, '/pathways'))
   
-  for(pwy in rownames(tx)){
+  for (pwy in rownames(tx)){
     stat <- feat.tab[feat.lst[[pwy]],, drop=FALSE]
     if (any(grepl(pattern="(\\.|^)(p|PValue)$", x=colnames(stat)))) stat <- stat[order(combine_pvalues(stat)),, drop=FALSE]
     utils::write.csv(stat, paste0(name, '/pathways/', pwy, '.csv'))
