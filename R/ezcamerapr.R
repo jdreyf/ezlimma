@@ -58,7 +58,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   # order rows by p-values
   tab <- tab[order(combine_pvalues(tab)), ]
   
-  res.xl <- df_signif(as.data.frame(tab), digits=3)
+  res.xl <- df_signif(as.data.frame(tab), digits=6)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "cameraPR", sep="_")

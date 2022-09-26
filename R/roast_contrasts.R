@@ -135,7 +135,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
-  res.xl <- df_signif(res, digits = 3)
+  res.xl <- df_signif(res, digits = 6)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")

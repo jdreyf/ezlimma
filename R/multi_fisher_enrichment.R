@@ -49,7 +49,7 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
   fe.df <- data.frame(fe.tab, feat.tab[rownames(fe.tab),, drop=FALSE])
 
   # writexl
-  res.xl <- signif(pwy.mat, digits = 3)
+  res.xl <- signif(pwy.mat, digits = 6)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "fisher_test", sep="_")
