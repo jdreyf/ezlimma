@@ -8,7 +8,7 @@
 
 # to improve can look at
 # https://stackoverflow.com/questions/9063889/how-to-round-a-data-frame-in-r-that-contains-some-character-variables
-df_signif <- function(tab, digits=6){
+df_signif <- function(tab, digits=8){
   stopifnot(is.data.frame(tab))
   cols.num <- sapply(tab, is.numeric)
   tab.num <- tab[,cols.num, drop=FALSE]

@@ -27,7 +27,7 @@
 #' @inheritParams limma_contrasts
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-#' rounded to 3 significant figures.
+#' rounded to 8 significant figures.
 #' 
 #' This function does not accept \code{ndups} nor \code{spacing}, because we found that these arguments do not impact
 #' \code{limma::mroast} nor \code{limma::fry}.
@@ -135,7 +135,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
-  res.xl <- df_signif(res, digits = 6)
+  res.xl <- df_signif(res, digits = 8)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")

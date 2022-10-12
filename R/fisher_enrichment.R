@@ -9,7 +9,7 @@
 #' @inheritParams roast_contrasts
 #' @return Table of pathway statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-#' rounded to 3 significant figures.
+#' rounded to 8 significant figures.
 #' @examples
 #'  G = list(s1=list(name = "s1", description=NULL, genes=letters[3:10]), 
 #'    s2=list(name = "s2", description=NULL, genes=letters[2:99]))
@@ -48,7 +48,7 @@ fisher_enrichment <- function(sig.set, G, feat.tab, name=NA, adjust.method="BH",
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
-  res.xl <- df_signif(res, digits = 6)
+  res.xl <- df_signif(res, digits = 8)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "fisher_test", sep="_")

@@ -56,5 +56,5 @@ The Excel file links to CSV files, which contain statistics per gene set.
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-rounded to 3 significant figures.
+rounded to 8 significant figures.
 }

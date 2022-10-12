@@ -4,7 +4,7 @@
 \alias{df_signif}
 \title{Apply \code{signif} function to numeric columns of data frames}
 \usage{
-df_signif(tab, digits = 6)
+df_signif(tab, digits = 8)
 }
 \arguments{
 \item{tab}{A data frame}

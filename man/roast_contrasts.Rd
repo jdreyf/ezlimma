@@ -99,7 +99,7 @@ examples in vignette.
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-rounded to 3 significant figures.
+rounded to 8 significant figures.
 
 This function does not accept \code{ndups} nor \code{spacing}, because we found that these arguments do not impact
 \code{limma::mroast} nor \code{limma::fry}.

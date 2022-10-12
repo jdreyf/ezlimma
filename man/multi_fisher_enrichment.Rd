@@ -45,7 +45,7 @@ have one vector of significant genes, use \code{\link[ezlimma]{fisher_enrichment
 }
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-rounded to 3 significant figures.
+rounded to 8 significant figures.
 }
 \seealso{
 \code{\link[ezlimma]{fisher_enrichment}}

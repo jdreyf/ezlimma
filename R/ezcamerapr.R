@@ -19,7 +19,7 @@
 #' @inheritParams roast_contrasts
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-#' rounded to 3 significant figures.
+#' rounded to 8 significant figures.
 #' @export
 
 ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
@@ -58,7 +58,7 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   # order rows by p-values
   tab <- tab[order(combine_pvalues(tab)), ]
   
-  res.xl <- df_signif(as.data.frame(tab), digits=6)
+  res.xl <- df_signif(as.data.frame(tab), digits=8)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "cameraPR", sep="_")

@@ -11,7 +11,7 @@
 #' @return List with two elements: \code{pwy.stats}, a table of pathway statistics; and \code{feat.tab}, a table that 
 #' appends a binary matrix of which genes are in which \code{sig.set} and the input \code{feat.tab}.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
-#' rounded to 3 significant figures.
+#' rounded to 8 significant figures.
 #' @seealso \code{\link[ezlimma]{fisher_enrichment}}
 #' @export
 
@@ -49,7 +49,7 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
   fe.df <- data.frame(fe.tab, feat.tab[rownames(fe.tab),, drop=FALSE])
 
   # writexl
-  res.xl <- signif(pwy.mat, digits = 6)
+  res.xl <- signif(pwy.mat, digits = 8)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, "fisher_test", sep="_")

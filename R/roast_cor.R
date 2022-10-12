@@ -133,7 +133,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
     colnames(res) <- gsub("FDR$", adjust.method, colnames(res))
   }
   
-  res.xl <- df_signif(res, digits = 6)
+  res.xl <- df_signif(res, digits = 8)
   # write xlsx file with links
   if (!is.na(name)){
     nm <- paste(name, fun, sep="_")
