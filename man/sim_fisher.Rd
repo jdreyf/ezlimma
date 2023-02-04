@@ -32,7 +32,7 @@ sim_fisher(
 
 \item{test.ft}{Compare to \code{\link[stats]{fisher.test}}.}
 
-\item{seed}{Random seed for reprodubility.}
+\item{seed}{Random seed for reproducibility.}
 
 \item{verbose}{Logical; should the number of simulations be printed every 100 simulations?}
 }

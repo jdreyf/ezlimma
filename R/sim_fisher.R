@@ -6,7 +6,7 @@
 #' @param alpha Alpha level.
 #' @param nsim Number of simulations.
 #' @param test.ft Compare to \code{\link[stats]{fisher.test}}.
-#' @param seed Random seed for reprodubility.
+#' @param seed Random seed for reproducibility.
 #' @param verbose Logical; should the number of simulations be printed every 100 simulations?
 #' @inheritParams roast_contrasts
 
