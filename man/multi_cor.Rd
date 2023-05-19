@@ -59,5 +59,6 @@ regression in \code{\link{limma_cor}}. See examples in vignette.
 }
 \details{
 Each column of \code{pheno.tab} is tested independently. Arguments \code{covariates}, \code{block}, and
-\code{correlation} only apply if \code{method="limma"}.
+\code{correlation} only apply if \code{method="limma"}. When each individual \code{pheno.tab} column is tested, 
+if some samples have \code{NA}s for that column, those samples are omitted for that column only.
 }

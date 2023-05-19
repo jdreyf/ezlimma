@@ -16,7 +16,8 @@
 #' @inheritParams limma_cor
 #' @return Data frame with several statistical columns corresponding to each phenotype and one row per feature.
 #' @details Each column of \code{pheno.tab} is tested independently. Arguments \code{covariates}, \code{block}, and
-#' \code{correlation} only apply if \code{method="limma"}.
+#' \code{correlation} only apply if \code{method="limma"}. When each individual \code{pheno.tab} column is tested, 
+#' if some samples have \code{NA}s for that column, those samples are omitted for that column only. 
 #' @export
 
 multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendall", "limma"), reorder.rows=TRUE, 
@@ -24,7 +25,7 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
                      limma.cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
   method <- match.arg(method)
   if (is.null(dim(pheno.tab))) stop("pheno.tab needs to have rows and columns.")
-  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || is.numeric(covariates))
+  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || is.numeric(covariates), colMeans(is.na(pheno.tab)) < 1)
   if (check.names){
     stopifnot(rownames(pheno.tab)==colnames(object))
   }
@@ -33,12 +34,22 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
   for (ind in 1:ncol(pheno.tab)){
     prefix.tmp <- ifelse(!is.null(prefix), paste(prefix, colnames(pheno.tab)[ind], sep="."), colnames(pheno.tab)[ind])
     if (method=="limma"){
+      # na.omit() missing phenotypes in pheno.tab
+      ph.idx <- 1:nrow(pheno.tab)
+      if (any(is.na(pheno.tab[,ind]))){
+        ph.idx <- which(!is.na(pheno.tab[,ind]))
+        if (!is.null(block)) block <- block[ph.idx]
+      }
+      
+      # block is on samples, so should be modified in case of NAs, but NULL[ph.idx] is NULL
       if (is.null(covariates)){
-        cor.tmp <- data.matrix(limma_cor(object, pheno.tab[,ind], reorder.rows=FALSE, prefix=prefix.tmp, block = block,
+        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], pheno.tab[ph.idx, ind], reorder.rows=FALSE, prefix=prefix.tmp, block = block,
                                          correlation = correlation, cols=limma.cols))
       } else {
-        des.tmp <- stats::model.matrix(~1+pheno.tab[,ind]+covariates)
-        cor.tmp <- data.matrix(limma_cor(object, design=des.tmp, reorder.rows=FALSE, prefix=prefix.tmp, block = block,
+        # model.matrix.lm, but not model.matrix, respects na.action
+        # https://stackoverflow.com/questions/5616210/model-matrix-with-na-action-null
+        des.tmp <- stats::model.matrix.lm(~1+pheno.tab[, ind]+covariates, na.action = stats::na.omit)
+        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], design=des.tmp, reorder.rows=FALSE, prefix=prefix.tmp, block = block,
                                          correlation = correlation, cols=limma.cols))
       }
     } else {

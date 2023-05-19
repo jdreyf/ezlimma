@@ -14,6 +14,14 @@ test_that("matches limma", {
   res.lc <- res.lc[rownames(res.mc2),]
   res.lc.pval <- setNames(res.lc$p,rownames(res.lc))
   expect_equal(as.numeric(res.lc.pval), as.numeric(res.mc2[,"b.p"]))
+  
+  # with NAs
+  pheno2.nona <- na.omit(pheno2)
+  expect_error(res.mc.na <- multi_cor(M, cbind(a=pheno2, b=pheno.v, c=rep(NA, length(pheno.v))), method="limma", reorder.rows = FALSE))
+  res.lc2 <- limma_cor(M[, !is.na(pheno2)], pheno2.nona, reorder.rows = FALSE, prefix = colnames(pheno.v), cols = c('AveExpr', 'P.Value', 'adj.P.Val', 'logFC'))
+  res.mc3 <- multi_cor(M, cbind(a=pheno2, b=pheno.v), method="limma", reorder.rows = FALSE)
+  expect_equal(res.mc3[rownames(res.mc2), "b.p"], res.mc2$b.p)
+  expect_equal(res.mc3[rownames(res.lc2), "a.p"], res.lc2$p)
 })
 
 test_that("rows get reordered", {
@@ -38,4 +46,10 @@ test_that("covars", {
   expect_error(multi_cor(object=M, pheno.tab = design[,"Last3Arrays", drop=FALSE], method = "limma", covariates = covar.df))
   
   expect_warning(multi_cor(object=M, pheno.tab = design[,"Last3Arrays", drop=FALSE], covariates = covar))
+  
+  # w/ NAs
+  des.lc2 <- model.matrix(~1+pheno2+covar)
+  lc2 <- limma_cor(M[, -1], design = des.lc2, prefix = "pheno2")
+  mc2 <- multi_cor(object=M, pheno.tab = data.frame(pheno2), method = "limma", covariates = covar, check.names = FALSE)
+  expect_equal(mc2, lc2)
 })
