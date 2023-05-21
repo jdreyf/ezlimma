@@ -39,6 +39,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
                             block = NULL, correlation = NULL, adjust.method = "BH", min.nfeats=3, max.nfeats=1000, nrot=999,
                             alternative=c("two.sided", "less", "greater"), check.names=TRUE, pwy.nchar=199, seed=0){
   
+  fun <- match.arg(fun)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
     rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 

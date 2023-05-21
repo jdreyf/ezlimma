@@ -21,6 +21,7 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
                     min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"), 
                     nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
+  fun <- match.arg(fun)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
