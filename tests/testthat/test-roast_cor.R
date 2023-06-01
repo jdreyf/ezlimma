@@ -83,3 +83,11 @@ test_that("prefixes added",{
   res.rc <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno.v, fun="fry", weights=1:6, prefix = "abc")
   expect_true(all(grepl(pattern = "abc", x = colnames(res.rc)[-1])))
 })
+
+test_that("design covars have effect", {
+  des1 <- cbind(Int=1, design[, 1, drop=FALSE])
+  des2 <- cbind(Int=1, design[, 1, drop=FALSE], covar=1:6)
+  rc.des1 <- roast_cor(M, G=G, feat.tab=eztt, fun="fry", design = des1)
+  rc.des2 <- roast_cor(M, G=G, feat.tab=eztt, fun="fry", design = des2)
+  expect_true(all(rc.des1$p != rc.des2$p))
+})
