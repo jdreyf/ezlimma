@@ -1,7 +1,7 @@
 Package: ezlimma
 Type: Package
 Title: Streamlines and extends limma package
-Version: 0.2.5.9005
+Version: 0.2.5.9006
 Authors@R: c(person("Jonathan", "Dreyfuss", role = c("aut", "cre"), email = "jdreyf@bu.edu"),
              person("Hui", "Pan", role = "aut"),
 			 person("Grace", "Daher", role = "ctb"))
@@ -15,6 +15,7 @@ Imports:
 	stats,
 	tibble,
 	tidyxl,
+	utils,
 	writexl
 Suggests:
 	covr,
@@ -22,7 +23,6 @@ Suggests:
 	knitr,
 	readxl,
 	rmarkdown,
-	sessioninfo,
 	statmod,
     testthat
 License: MIT + file LICENSE
