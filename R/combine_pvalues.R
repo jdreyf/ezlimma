@@ -11,9 +11,10 @@
 #' @param only.p Logical; should only combined p-values be returned? If not, returns matrix with z-scores and FDRs also.
 #' @param alternative Direction of change: \code{"two.sided"}; \code{"greater"} or \code{"less"}, or their synonyms  
 #' \code{"Up"} or \code{"Down"}.
-#' @details Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
-#' \code{method="z.transform"} in \code{survcomp::combine.test}.
-#' 
+#' @details Z-transform method is used to combine p-values across rows, similarly to using unweighted 
+#' \code{method="z.transform"} in \code{survcomp::combine.test}, except this function slightly adjusts
+#' p-values of zero or one to avoid generating z-scores of infinite magnitude.
+#'
 #' \code{stat.cols} are ignored if \code{alternative} is \code{"two.sided"}. Otherwise, they should match \code{p.cols}.
 #' @return Vector of p-values.
 #' @examples
@@ -47,6 +48,17 @@ combine_pvalues <- function(tab, p.cols="p|PValue", stat.cols="logFC|slope|cor|r
       stop("All rows of p-values, after accounting for stats, must not be all NA.")
     }
   }
+
+  # account for p-values = 1 after account for alternative
+  # largest x st 1-10**-x prints as less than one is x=6
+  large.p <- 1 - 10**-15
+  if (any(tab.p > large.p, na.rm = TRUE)){
+    # p-values can be one in discrete settings
+    # message("p-values of one have been converted to ", large.p, ".", call. = FALSE)
+    wh <- which(tab.p > large.p)
+    tab.p[wh] <- large.p
+  }
+  
   tab.z <- apply(as.matrix(tab.p), MARGIN=2, stats::qnorm, lower.tail = FALSE)
   # account for NAs
   combz.v <- apply(as.matrix(tab.z), MARGIN=1, FUN=function(zv){

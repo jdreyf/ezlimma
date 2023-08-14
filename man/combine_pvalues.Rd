@@ -34,8 +34,9 @@ uses the direction of \code{stat.cols} to transform \code{p.cols} into one-sided
 these p-values were originally calculated from two-sided tests, as is done in \pkg{limma}.
 }
 \details{
-Z-transform method is used to combine p-values across rows, equivalently to using unweighted 
-\code{method="z.transform"} in \code{survcomp::combine.test}.
+Z-transform method is used to combine p-values across rows, similarly to using unweighted 
+\code{method="z.transform"} in \code{survcomp::combine.test}, except this function slightly adjusts
+p-values of zero or one to avoid generating z-scores of infinite magnitude.
 
 \code{stat.cols} are ignored if \code{alternative} is \code{"two.sided"}. Otherwise, they should match \code{p.cols}.
 }

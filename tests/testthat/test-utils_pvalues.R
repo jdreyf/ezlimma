@@ -19,7 +19,9 @@ test_that("combine_pvals", {
   cp <- as.numeric(c("1", "0.626422003782904", "0.593346207732144", "0.581518654612405", "0.578313236039981", 
                      "0.581518654612405", "0.593346207732144", "0.626422003782904", "1"))
   expect_equal(names(combine_pvalues(tab)), rownames(tab))
-  expect_equal(combine_pvalues(tab2), cp)
+  rows2.has.one <- rowSums(tab2 == 1) > 0
+  expect_equal(combine_pvalues(tab2)[!rows2.has.one], cp[!rows2.has.one])
+  expect_true(all(combine_pvalues(tab2)[rows2.has.one] <= cp[rows2.has.one]))
   # NULL = 0 rows
   expect_error(combine_pvalues(NULL))
   expect_error(combine_pvalues(tab3))
