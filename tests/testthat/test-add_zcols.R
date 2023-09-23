@@ -7,6 +7,10 @@ test_that("one comparison w/ prefix", {
   expect_true("abc.z" %in% colnames(eztt1.z))
   expect_lte(which(colnames(eztt1.z) == "abc.z"), which(colnames(eztt1.z) == "abc.t"))
   expect_true(all(abs(eztt1.z$abc.z) <= abs(eztt1.z$abc.t)))
+  
+  eztt1.z2 <- add_zcols(eztt1, stat.suffix = "logFC")
+  # allowed vector inputs
+  expect_equal(eztt1.z$abc.z, eztt1.z2$abc.z)
 })
 
 test_that("one comparison w/o prefix", {

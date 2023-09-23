@@ -2,9 +2,9 @@
 #' 
 #' Add column to toptab with z-stats.
 #' 
-#' @param toptab Table with genes as rows and statistics as columns. Must include a column with t-statistics that
-#' is \code{"t"} or ends with \code{".t"} & a column of p-values is \code{"p"} or ends with \code{".p"}.
-#' Columns with t-statistics and those with p-values must have same prefixes.
+#' @param toptab Table with genes as rows and statistics as columns. Must include a column with signed statistics
+#' e.g. named \code{"t"} or ends with \code{".t"} & a column of p-values e.g. named \code{"p"} or ends with \code{".p"}.
+#' Columns with signed statistics and those with p-values must have same prefixes.
 #' @param stat.suffix Suffix of numeric signed statistics column(s).
 #' @param p.suffix Suffix of numeric p-value column(s).
 #' @importFrom rlang :=
