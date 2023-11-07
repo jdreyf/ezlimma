@@ -7,7 +7,8 @@
 #' @param sig.set Named list of length one whose sole element is a vector of significant gene IDs matching 
 #' \code{rownames(feat.tab)}.
 #' @inheritParams roast_contrasts
-#' @return Table of pathway statistics.
+#' @return Table of pathway statistics with the number of genes from \code{feat.tab} in the pathway, the number of these genes that are 
+#' in \code{sig.set}, the p-value, and the adjusted p-value from the one-sided Fisher exact test.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 8 significant figures.
 #' @examples
@@ -33,7 +34,7 @@ fisher_enrichment <- function(sig.set, G, feat.tab, name=NA, adjust.method="BH",
   gset.b <- factor(-as.numeric(rownames(feat.tab) %in% sig.set[[ind]]), levels=c(-1,0))
   res.va <- vapply(index.b, FUN=function(x.b){
     tb <- table(x.b, gset.b)
-    c(num=tb[1,1], p=stats::fisher.test(tb, alternative="greater")$p.value)
+    c(N.DE=tb[1,1], p=stats::fisher.test(tb, alternative="greater")$p.value)
   }, FUN.VALUE = numeric(2))
   res.tmp <- as.data.frame(t(res.va))
   res.tmp$FDR <- stats::p.adjust(res.tmp$p, method=adjust.method)

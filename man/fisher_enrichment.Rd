@@ -34,7 +34,8 @@ fisher_enrichment(
 \item{pwy.nchar}{Numeric maximum number of characters allowed in pathway name.}
 }
 \value{
-Table of pathway statistics.
+Table of pathway statistics with the number of genes from \code{feat.tab} in the pathway, the number of these genes that are 
+in \code{sig.set}, the p-value, and the adjusted p-value from the one-sided Fisher exact test.
 }
 \description{
 Test enrichment of one or more vectors of significant genes against the universe of genes in \code{feat.tab} per 
