@@ -25,7 +25,7 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
                      limma.cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
   method <- match.arg(method)
   if (is.null(dim(pheno.tab))) stop("pheno.tab needs to have rows and columns.")
-  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || is.numeric(covariates), colMeans(is.na(pheno.tab)) < 1)
+  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || limma::isNumeric(covariates), colMeans(is.na(pheno.tab)) < 1)
   if (check.names){
     stopifnot(rownames(pheno.tab)==colnames(object))
   }
