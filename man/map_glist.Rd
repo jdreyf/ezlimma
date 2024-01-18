@@ -4,7 +4,13 @@
 \alias{map_glist}
 \title{Map pathway list gene IDs to another ID type}
 \usage{
-map_glist(G, annot, sep.str = " /// ", symbol.col = "Gene.Symbol")
+map_glist(
+  G,
+  annot,
+  sep.str = " /// ",
+  symbol.col = "Gene.Symbol",
+  fixed = FALSE
+)
 }
 \arguments{
 \item{G}{Gene set list as returned from \code{\link{read_gmt}}.}
@@ -14,6 +20,8 @@ map_glist(G, annot, sep.str = " /// ", symbol.col = "Gene.Symbol")
 \item{sep.str}{strings that separates symbols if there are multiple symbols for a feature.}
 
 \item{symbol.col}{column name or index for the symbol column in *annot*.}
+
+\item{fixed}{logical passed to \code{strsplit}; if \code{TRUE}, match \code{sep.str} exactly, otherwise use regular expression.}
 }
 \value{
 Gene set list *G* with the symbols replaced by the mapped IDs.

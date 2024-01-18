@@ -22,7 +22,6 @@ test_that("new G", {
   annot.tmp$sym[1] <- "g1 __ g11"
   
   ecc <- map_glist(G=G.tmp, annot=annot.tmp, symbol.col = "sym", sep.str = " __ ")
-  
   expect_equal(length(ecc), 3)
   expect_equal(length(ecc[[1]][[3]]), 10)
   expect_equal(length(ecc[[2]][[3]]), 11)
@@ -30,4 +29,10 @@ test_that("new G", {
   expect_true("gene1" %in% ecc[[1]][[3]])
   expect_true("gene1" %in% ecc[[2]][[3]])
   expect_false("gene1" %in% ecc[[3]][[3]])
+  
+  annot.tmp$sym[1] <- "g1|g11"
+  ecb <- map_glist(G=G.tmp, annot=annot.tmp, symbol.col = "sym", sep.str = "|", fixed = TRUE)
+  expect_true("gene1" %in% ecb[[1]][[3]])
+  expect_true("gene1" %in% ecb[[2]][[3]])
+  expect_false("gene1" %in% ecb[[3]][[3]])
 })
