@@ -15,7 +15,7 @@
 #' @seealso \code{\link[ezlimma]{roast_contrasts}}.
 #' @export
 
-roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = NULL, 
+roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, design = NULL, 
                     fun=c("fry", "mroast"), set.statistic = "mean", weights = NA, gene.weights=NULL, 
                     trend = FALSE, block = NULL, correlation = NULL, prefix=NULL, adjust.method = "BH", 
                     min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"), 
@@ -23,12 +23,13 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
   
   fun <- match.arg(fun)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
-            rownames(object) %in% rownames(feat.tab), !is.null(design)|!is.null(phenotype),
+            !is.null(design)|!is.null(phenotype),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
               (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
             length(weights)<=1 || all(dim(weights)==dim(object)) || 
               length(weights)==nrow(object) || length(weights)==ncol(object),
-            is.null(gene.weights) || length(gene.weights)==nrow(object))
+            is.null(gene.weights) || length(gene.weights)==nrow(object),
+            is.na(name) || rownames(object) %in% rownames(feat.tab))
   
   if (!is.null(block) && is.null(correlation))
     stop("!is.null(block), so correlation must not be NULL.")
@@ -56,14 +57,14 @@ roast_cor <- function(object, G, feat.tab, name=NA, phenotype = NULL, design = N
       # model.matrix clips NAs in phenotype, so need to also remove from object, weights
       n.na <- sum(is.na(phenotype))
       if (n.na > 0){
-          warning(n.na, " NAs in phenotype removed")
+          message(n.na, " NAs in phenotype removed")
           pheno.nona <- phenotype[!is.na(phenotype)]
           # len > 1 excludes NA and NULL
           if(length(weights) > 1){
             if (length(weights)==ncol(object)){ 
               weights <- weights[!is.na(phenotype)]
             } else {
-              weights <- weights[,!is.na(phenotype)]
+              weights <- weights[,!is.na(phenotype), drop=FALSE]
             }
           } # end if !is.null weights
           object <- object[,!is.na(phenotype), drop=FALSE]

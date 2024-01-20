@@ -28,7 +28,7 @@ test_that("weights", {
   expect_equal(mean(rcr.me$p==rcr.mw$p), 1)
   
   #pheno has NA
-  expect_warning(rcr.mw2 <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno2, fun="mroast", weights=1:6))
+  expect_message(rcr.mw2 <- roast_cor(M, G=G, feat.tab=eztt, pheno=pheno2, fun="mroast", weights=1:6))
   expect_equal(mean(rcr.mw$p==rcr.mw2$p), 0)
   
   # errors
