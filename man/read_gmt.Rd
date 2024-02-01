@@ -4,10 +4,12 @@
 \alias{read_gmt}
 \title{Read gene set file with GMT extension to a list}
 \usage{
-read_gmt(file.path)
+read_gmt(file.path, strip.nm = "REACTOME_")
 }
 \arguments{
 \item{file.path}{Path to the GMT file.}
+
+\item{strip.nm}{Regular expression which is removed from gene set names. Case is ignored.}
 }
 \value{
 List of gene sets. Each element has a gene set \code{name}, \code{description}, and \code{genes}.
