@@ -13,7 +13,7 @@ prop_changed(feat.tab, feat.lst, stat.col = 1, p.col = 2)
 
 \item{stat.col}{Column name or column index with signed statistics.}
 
-\item{p.col}{Column name or column indix with p-values.}
+\item{p.col}{Column name or column index with p-values.}
 }
 \description{
 Calculate proportion of features up & down at p=0.05 per pathway.
