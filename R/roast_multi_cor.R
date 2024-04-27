@@ -23,6 +23,7 @@ roast_multi_cor <- function(object, G, pheno.tab, feat.tab, name=NA, covariates=
                     min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"), 
                     nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
+  fun <- match.arg(fun)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             !is.null(colnames(pheno.tab)), nrow(pheno.tab) == ncol(object), limma::isNumeric(pheno.tab), colSums(!is.na(pheno.tab)) > 2,
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
@@ -30,7 +31,7 @@ roast_multi_cor <- function(object, G, pheno.tab, feat.tab, name=NA, covariates=
             length(weights)<=1 || all(dim(weights)==dim(object)) || 
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(gene.weights) || length(gene.weights)==nrow(object),
-            is.na(name) || rownames(object) %in% rownames(feat.tab))
+            is.na(name) || all(rownames(object) %in% rownames(feat.tab)))
   if (!is.null(covariates)) stopifnot(limma::isNumeric(covariates), !is.na(covariates))
   if (check.names) stopifnot(rownames(pheno.tab)==colnames(object))
   

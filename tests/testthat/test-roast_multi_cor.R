@@ -1,7 +1,7 @@
 des1 <- cbind(Int=1, design[, 1, drop=FALSE])
 des2 <- cbind(Int=1, design[, 1, drop=FALSE], covar=1:6)
 
-test_that("one phenotypes", {
+test_that("one phenotype", {
   # covar
   pheno.tab <- design[, 1, drop=FALSE]
   rc.des1 <- roast_cor(M, G=G, feat.tab=eztt, fun="fry", design = des1, prefix = "First3Arrays")
@@ -31,7 +31,8 @@ test_that("one phenotypes", {
 test_that("multiple pheno", {
   # NA
   mph <- data.frame(design, pheno2=pheno2)
-  expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph))
+  # expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph, name = "mph")) # to test writing to file
+  expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph, name = "mph"))
   rc.des1 <- roast_cor(M, G=G, feat.tab=eztt, fun="fry", design = des1, prefix = "First3Arrays")
   expect_equal(rmc.multi[, 1:6], rc.des1)
   expect_message(rc.pheno2 <- roast_cor(object=M, G=G, feat.tab=eztt, pheno=pheno2, prefix = "pheno2"))
