@@ -15,17 +15,20 @@
 # assume that if "logFC" in cols, then want "FC"
 # limma_contrasts tests one coef at a time
 eztoptab <- function(fit, cols=c("P.Value", "adj.P.Val", "logFC"), adjust.method="BH", prefix=NULL, coef=NULL){
-  stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr", "z", "t", "F", "P.Value", "adj.P.Val", "B", "logFC"))
+  stopifnot(length(cols)>=1, cols %in% c("CI.L", "CI.R", "AveExpr", "z", "t", "F", "P.Value", "adj.P.Val", "B", "logFC", "SE"))
   confint.bool <- ifelse(any(c("CI.L", "CI.R") %in% cols), yes = TRUE, no = FALSE)
   
   if (!is.null(coef) && length(coef)>=2){
-    # topTable tests all coefficients if at least 2 of them
+    # topTable tests all coefficients using F-test if at least 2 of them
     tt <- limma::topTable(fit, number=Inf, adjust.method=adjust.method, coef=coef, confint = confint.bool)
     cols <- setdiff(cols, c("logFC", "t"))
   } else {
     tt <- limma::topTable(fit, number=Inf, sort.by="P", adjust.method=adjust.method, coef=coef, confint = confint.bool)
     if ("z" %in% cols){
       tt <- add_zcols(tt, p.suffix = "P.Value")
+    }
+    if ("SE" %in% cols){
+      tt <- add_se_cols(tt, lfc.suffix="logFC", t.suffix="t")
     }
   }
   

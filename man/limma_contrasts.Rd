@@ -71,7 +71,7 @@ which is \code{treat.lfc=log2(1.1)}.}
 and \code{add.means} is \code{FALSE}.}
 
 \item{cols}{Columns of \code{topTable} output to include. Possibilities include 
-\code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "CI.L", "CI.R", "B"}. Some of these column names are then changed here. 
+\code{"logFC", "SE", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "CI.L", "CI.R", "B"}. Some of these column names are then changed here. 
 If \code{logFC} is specified, \code{FC} will automatically also be given.}
 }
 \value{
@@ -96,7 +96,7 @@ respective element of \code{object$printer}, if the element existed.
 
 When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.
 
-\code{CI.L} and \code{CI.R} give the 95% confidence interval of the \code{logFC}.
+Cols \code{CI.L} and \code{CI.R} give the 95% confidence interval of the \code{logFC}. \code{SE} gives the empirical Bayes standard error.
 }
 \references{
 McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 

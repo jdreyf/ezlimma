@@ -31,8 +31,10 @@ test_that("one phenotype", {
 test_that("multiple pheno", {
   # NA
   mph <- data.frame(design, pheno2=pheno2)
+  # message is "1 NAs in pheno2 removed"
   # expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph, name = "mph")) # to test writing to file
-  expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph, name = "mph"))
+  expect_message(rmc.multi <- roast_multi_cor(object=M, G=G, feat.tab=eztt, pheno.tab=mph))
+  
   rc.des1 <- roast_cor(M, G=G, feat.tab=eztt, fun="fry", design = des1, prefix = "First3Arrays")
   expect_equal(rmc.multi[, 1:6], rc.des1)
   expect_message(rc.pheno2 <- roast_cor(object=M, G=G, feat.tab=eztt, pheno=pheno2, prefix = "pheno2"))
