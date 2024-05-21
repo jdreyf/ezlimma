@@ -35,7 +35,7 @@
 #' @param check.names Logical; should \code{names(grp)==rownames(object)} be checked? Ignored if \code{is.null(design)}
 #' and \code{add.means} is \code{FALSE}.
 #' @param cols Columns of \code{topTable} output to include. Possibilities include 
-#' \code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "B"}. Some of these column names are then changed here. 
+#' \code{"logFC", "AveExpr", "z", "t", "P.Value", "adj.P.Val", "CI.L", "CI.R", "B"}. Some of these column names are then changed here. 
 #' If \code{logFC} is specified, \code{FC} will automatically also be given.
 #' @return Data frame.
 #' @details If \code{design} is \code{NULL} and \code{grp} is given, design will be calculated as 
@@ -51,6 +51,8 @@
 #' respective element of \code{object$printer}, if the element existed.
 #' 
 #' When \code{moderated} is FALSE, an error is generated if \code{!is.null(treat.lfc)} or \code{trend} is TRUE.
+#' 
+#' \code{CI.L} and \code{CI.R} give the 95% confidence interval of the \code{logFC}.
 #'   
 #' @references McCarthy DJ & Smyth GK (2009). Testing significance relative to a fold-change threshold is a TREAT. 
 #' Bioinformatics 25, 765-771.

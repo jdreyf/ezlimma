@@ -145,3 +145,8 @@ test_that("ndups & spacing", {
   expect_gt(eztt.dups["gene1", "First3.avg"], 0.5)
   expect_lt(abs(mean(eztt.dups[, "Last3.avg"])), 0.1)
 })
+
+test_that("CI", {
+  eztt.ci <- limma_contrasts(M, grp = grp, contrast.v = contr.v[1], cols = c("logFC", "P.Value", "adj.P.Val", "CI.L", "CI.R"))
+  expect_true(all(eztt.ci$First3.CI.L < eztt.ci$First3.logFC & eztt.ci$First3.CI.R > eztt.ci$First3.logFC))
+})
