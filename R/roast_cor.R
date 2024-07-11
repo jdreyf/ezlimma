@@ -29,7 +29,7 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
             length(weights)<=1 || all(dim(weights)==dim(object)) || 
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(gene.weights) || length(gene.weights)==nrow(object),
-            is.na(name) || rownames(object) %in% rownames(feat.tab))
+            is.na(name) || all(rownames(object) %in% rownames(feat.tab)))
   
   if (!is.null(block) && is.null(correlation))
     stop("!is.null(block), so correlation must not be NULL.")
