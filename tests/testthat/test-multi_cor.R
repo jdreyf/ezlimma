@@ -22,6 +22,17 @@ test_that("matches limma", {
   res.mc3 <- multi_cor(M, cbind(a=pheno2, b=pheno.v), method="limma", reorder.rows = FALSE)
   expect_equal(res.mc3[rownames(res.mc2), "b.p"], res.mc2$b.p)
   expect_equal(res.mc3[rownames(res.lc2), "a.p"], res.lc2$p)
+  
+  # with block
+  block.tmp <- c("a", letters[1:5])
+  res.lc3 <- limma_cor(M, phenotype = pheno.v, block = block.tmp, correlation = -0.5, reorder.rows = FALSE)
+  res.mc4 <- multi_cor(M, cbind(a=pheno2, b=pheno2, c=pheno.v, d=pheno.v), method="limma", block = block.tmp, 
+                       correlation = c(0, 0.9, -0.5, 0.5), reorder.rows = FALSE)
+  expect_equal(res.lc3$p, res.mc4$c.p)
+  expect_equal(res.lc3$slope, res.mc4$c.slope)
+  # block should matter for pheno.v but not for pheno2, since it only one sample per block
+  expect_equal(res.mc4$a.p, res.mc4$b.p)
+  expect_true(res.mc4$c.p[1] != res.mc4$d.p[1])
 })
 
 test_that("rows get reordered", {

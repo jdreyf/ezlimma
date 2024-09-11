@@ -8,10 +8,12 @@
 #' @param method Character string indicating which association is to be used 
 #'   for the test. One of \code{"pearson"}, \code{"spearman"}, \code{"kendall"}, 
 #'   from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}.
-#' @param check.names Logical; should \code{rownames(pheno.tab)=colnames(object)} be checked?
-#' @param limma.cols If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.
+#' @param correlation Numeric vector of inter-duplicate or inter-technical replicate correlations. Must be given if 
+#' \code{!is.null(block)}. Its length should be the same as the number of columns of \code{pheno.tab}.
 #' @param covariates If \code{method="limma"}, numeric vector or matrix of covariates to include in 
 #' \code{\link{limma_cor}} \code{design} matrix.
+#' @param check.names Logical; should \code{rownames(pheno.tab)=colnames(object)} be checked?
+#' @param limma.cols If \code{method="limma"}, \code{cols} from \code{\link{limma_cor}} to include.
 #' @inheritParams limma_contrasts
 #' @inheritParams limma_cor
 #' @return Data frame with several statistical columns corresponding to each phenotype and one row per feature.
@@ -25,7 +27,8 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
                      limma.cols=c("AveExpr", "P.Value", "adj.P.Val", "logFC")){
   method <- match.arg(method)
   if (is.null(dim(pheno.tab))) stop("pheno.tab needs to have rows and columns.")
-  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || limma::isNumeric(covariates), colMeans(is.na(pheno.tab)) < 1)
+  stopifnot(ncol(object)==nrow(pheno.tab), is.null(covariates) || limma::isNumeric(covariates), colMeans(is.na(pheno.tab)) < 1,
+            is.null(block) || length(correlation) == ncol(pheno.tab))
   if (check.names){
     stopifnot(rownames(pheno.tab)==colnames(object))
   }
@@ -35,22 +38,18 @@ multi_cor <- function(object, pheno.tab, method=c("pearson", "spearman", "kendal
     prefix.tmp <- ifelse(!is.null(prefix), paste(prefix, colnames(pheno.tab)[ind], sep="."), colnames(pheno.tab)[ind])
     if (method=="limma"){
       # na.omit() missing phenotypes in pheno.tab
-      ph.idx <- 1:nrow(pheno.tab)
-      if (any(is.na(pheno.tab[,ind]))){
-        ph.idx <- which(!is.na(pheno.tab[,ind]))
-        if (!is.null(block)) block <- block[ph.idx]
-      }
+      ph.idx <- which(!is.na(pheno.tab[,ind]))
       
-      # block is on samples, so should be modified in case of NAs, but NULL[ph.idx] is NULL
+      # block is on samples, so should be modified in case of NAs, & NULL[ph.idx] is still NULL
       if (is.null(covariates)){
-        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], pheno.tab[ph.idx, ind], reorder.rows=FALSE, prefix=prefix.tmp, block = block,
-                                         correlation = correlation, cols=limma.cols))
+        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], pheno.tab[ph.idx, ind], reorder.rows=FALSE, prefix=prefix.tmp, block = block[ph.idx],
+                                         correlation = correlation[ind], cols=limma.cols))
       } else {
         # model.matrix.lm, but not model.matrix, respects na.action
         # https://stackoverflow.com/questions/5616210/model-matrix-with-na-action-null
         des.tmp <- stats::model.matrix.lm(~1+pheno.tab[, ind]+covariates, na.action = stats::na.omit)
-        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], design=des.tmp, reorder.rows=FALSE, prefix=prefix.tmp, block = block,
-                                         correlation = correlation, cols=limma.cols))
+        cor.tmp <- data.matrix(limma_cor(object[, ph.idx], design=des.tmp, reorder.rows=FALSE, prefix=prefix.tmp, block = block[ph.idx],
+                                         correlation = correlation[ind], cols=limma.cols))
       }
     } else {
       if (!is.null(covariates) || !is.null(block) || !is.null(correlation)){

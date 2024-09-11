@@ -35,8 +35,8 @@ from \code{\link[stats]{cor.test}} or \code{"limma"} for \code{\link{limma_cor}}
 \item{block}{Vector specifying a blocking variable on the samples. Has length = \code{ncol(object)}. 
 Must be \code{NULL} if \code{ndups > 1}.}
 
-\item{correlation}{Inter-duplicate or inter-technical replicate correlation. Must be given if 
-\code{ndups>1} or \code{!is.null(block)}.}
+\item{correlation}{Numeric vector of inter-duplicate or inter-technical replicate correlations. Must be given if 
+\code{!is.null(block)}. Its length should be the same as the number of columns of \code{pheno.tab}.}
 
 \item{adjust.method}{Method used to adjust the p-values for multiple testing. Options, in increasing conservatism, 
 include \code{"none"}, \code{"BH"}, \code{"BY"}, and \code{"holm"}. See \code{\link[stats]{p.adjust}} for the complete
