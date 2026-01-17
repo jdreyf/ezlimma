@@ -129,8 +129,8 @@ limma_contrasts <- function(object, grp=NULL, contrast.v, design=NULL, weights=N
     fit2 <- limma::treat(fit2, lfc=treat.lfc, trend=trend)
   }
   
-  # limma ignores names of contrast.v when it's given as vector
-  if (!is.null(names(contrast.v))){
+  # limma until 3.66.0 ignores names of contrast.v when it's given as vector
+  if (!is.null(names(contrast.v)) && any(colnames(fit2$contrasts) != names(contrast.v))){
     stopifnot(colnames(fit2$contrasts)==contrast.v)
     colnames(fit2$contrasts) <- names(contrast.v)
   }

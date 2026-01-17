@@ -41,7 +41,7 @@ limma_tost <- function(object, grp=NULL, contrast.v, tost.lfc, design=NULL, weig
   fit2 <- ezebayes(fit2, moderated = TRUE, trend=trend)
 
   # limma ignores names of contrast.v when it's given as vector
-  if (!is.null(names(contrast.v))){
+  if (!is.null(names(contrast.v)) && any(colnames(fit2$contrasts) != names(contrast.v))){
     stopifnot(colnames(fit2$contrasts)==contrast.v)
     colnames(fit2$contrasts) <- names(contrast.v)
   }
