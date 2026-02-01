@@ -14,7 +14,8 @@
 #' @param gene.weights Numeric vector of directional (positive or negative) genewise weights. These represent each 
 #' gene's contribution to pathways. They are not for precision weights, from \code{weights}. This vector must have 
 #' length equal to \code{nrow(object)}. Only for \code{mroast}.
-#' @param adjust.method Method used to adjust the p-values for multiple testing. Only for \code{mroast}.
+#' @param adjust.method Method used to adjust the p-values for multiple testing. Used for \code{mroast} and only for \code{fry} when 
+#' \code{alternative} is not \code{"two.sided"}.
 #' @param min.nfeats Minimum number of features (e.g. genes) needed in a gene set for testing.
 #' @param max.nfeats Maximum number of features (e.g. genes) needed in a gene set for testing.
 #' @param nrot Number of rotations used to estimate the p-values for \code{mroast}.
@@ -40,6 +41,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
                             alternative=c("two.sided", "less", "greater"), check.names=TRUE, pwy.nchar=199, seed=0){
   
   fun <- match.arg(fun)
+  alternative <- match.arg(alternative)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
     rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
@@ -52,11 +54,12 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
     stop("!is.null(block), so correlation must not be NULL.")
   
   # only mroast takes some arguments
-  if (fun=="fry" && (!is.null(gene.weights)||adjust.method!="BH")){
-    warning("fry method does not take arguments: gene.weights or adjust.method. These arguments will be ignored.")
+  if (fun=="fry" && (!is.null(gene.weights) || set.statistic!="mean")){
+    warning("fry method does not take the argument gene.weights or set.statistic, so these will be ignored.")
   }
-  fun <- match.arg(fun)
-  alternative <- match.arg(alternative)
+  if (fun=="fry" && alternative == "two.sided" && adjust.method!="BH"){
+    warning("When alternative is 'two.sided', fry method does not take the argument adjust.method, so it will be ignored.")
+  }
   
   if (fun=="mroast") set.seed(seed=seed)
   

@@ -70,7 +70,8 @@ Must be \code{NULL} if \code{ndups > 1}.}
 \item{correlation}{Inter-duplicate or inter-technical replicate correlation. Must be given if 
 \code{ndups>1} or \code{!is.null(block)}.}
 
-\item{adjust.method}{Method used to adjust the p-values for multiple testing. Only for \code{mroast}.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Used for \code{mroast} and only for \code{fry} when 
+\code{alternative} is not \code{"two.sided"}.}
 
 \item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 

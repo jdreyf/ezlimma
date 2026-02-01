@@ -29,7 +29,8 @@ All values must be \code{\link[base:is.finite]{finite}}.}
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{adjust.method}{Method used to adjust the p-values for multiple testing. Only for \code{mroast}.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Used for \code{mroast} and only for \code{fry} when 
+\code{alternative} is not \code{"two.sided"}.}
 
 \item{alternative}{Alternative hypothesis; must be one of\code{"two.sided"}; \code{"greater"} or \code{"less"},
 or their synonyms  \code{"Up"} or \code{"Down"}.}

@@ -7,7 +7,8 @@
 #' \code{\link[limma]{eBayes}}).
 #' @inheritParams limma_contrasts
 #' @return Object of \pkg{limma} \code{MArrayLM-class}.
-#' @details \code{trend} is only applicable if \code{moderated} is \code{TRUE}.
+#' @details \code{trend} is only applicable if \code{moderated} is \code{TRUE}; when \code{moderated} is FALSE, 
+#' an error is generated if \code{trend} is TRUE.
 
 ezebayes <- function(fit, moderated=TRUE, trend=FALSE){
   stopifnot(is.logical(moderated), is.logical(trend))

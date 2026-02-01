@@ -25,7 +25,8 @@ multi_fisher_enrichment(
 
 \item{name}{Name for the folder and Excel file that get written. Set to \code{NA} to avoid writing output.}
 
-\item{adjust.method}{Method used to adjust the p-values for multiple testing. Only for \code{mroast}.}
+\item{adjust.method}{Method used to adjust the p-values for multiple testing. Used for \code{mroast} and only for \code{fry} when 
+\code{alternative} is not \code{"two.sided"}.}
 
 \item{min.nfeats}{Minimum number of features (e.g. genes) needed in a gene set for testing.}
 

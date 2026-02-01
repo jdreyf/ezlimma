@@ -22,6 +22,7 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
                     nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
   fun <- match.arg(fun)
+  alternative <- match.arg(alternative)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             !is.null(design)|!is.null(phenotype),
             length(weights)!=1 || is.na(weights), length(weights)<=1 || 
@@ -35,8 +36,11 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
     stop("!is.null(block), so correlation must not be NULL.")
   
   # only mroast takes some arguments
-  if (fun=="fry" && (set.statistic!="mean" || !is.null(gene.weights) || adjust.method!="BH")){
-    warning("fry method does not take arguments: set.statistic, gene.weights, or adjust.method. These arguments will be ignored.")
+  if (fun=="fry" && (!is.null(gene.weights) || set.statistic!="mean")){
+    warning("fry method does not take the argument gene.weights or set.statistic, so these will be ignored.")
+  }
+  if (fun=="fry" && alternative == "two.sided" && adjust.method!="BH"){
+    warning("When alternative is 'two.sided', fry method does not take the argument adjust.method, so it will be ignored.")
   }
   
   if (!is.null(phenotype)){
@@ -45,8 +49,6 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
       stopifnot(names(phenotype)==colnames(object))
     }
   }
-  fun <- match.arg(fun)
-  alternative <- match.arg(alternative)
   
   if (fun=="mroast") set.seed(seed=seed)
   

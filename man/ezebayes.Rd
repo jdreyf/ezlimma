@@ -24,5 +24,6 @@ Wrapper for \pkg{limma}'s \code{\link[limma]{eBayes}}, which computes empirical 
 using the rest of the \pkg{limma} workflow in \pkg{ezlimma} to compute ordinary least squares statistics.
 }
 \details{
-\code{trend} is only applicable if \code{moderated} is \code{TRUE}.
+\code{trend} is only applicable if \code{moderated} is \code{TRUE}; when \code{moderated} is FALSE, 
+an error is generated if \code{trend} is TRUE.
 }
