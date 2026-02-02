@@ -32,7 +32,9 @@ add_se_cols <- function(toptab, lfc.suffix="logFC", t.suffix="t"){
   for (se.col in 1:ncol(se.mat)){
     se.colnm <- colnames(se.mat)[se.col]
     lfc.colnm <- lfc.colnms[se.col]
-    toptab2 <- tibble::add_column(toptab2, rlang::`!!`(se.colnm) := se.mat[, se.colnm], .after = lfc.colnm)
+    toptab2 <- tibble::add_column(toptab2, rlang::`!!`(se.colnm) := se.mat[, se.colnm], .after = lfc.colnm) |> 
+      as.data.frame()
+    rownames(toptab2) <- rownames(toptab)
   }
   toptab2
 }

@@ -23,3 +23,9 @@ test_that(">1 comparisons w/ prefix  for logFC", {
   expect_true(all(c("First3.SE", "Last3.SE", "Last3vsFirst3.SE") %in% colnames(eztt.SE)))
   expect_true(all(eztt.t$SE == eztt.t$logFC/eztt.t$t))
 })
+
+test_that("preserves rownames", {
+  eztt3 <- ezlimma:::eztoptab(fit, prefix = 'xyz', cols = c("t", "logFC", "P.Value"))
+  eztt3.se <- add_se_cols(eztt3)
+  expect_true(all(rownames(eztt3.se) == rownames(eztt3)))
+})

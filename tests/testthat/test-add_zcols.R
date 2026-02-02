@@ -26,3 +26,8 @@ test_that(">1 comparisons w/ prefix  for logFC", {
   expect_true(all(c("First3.z", "Last3.z", "Last3vsFirst3.z") %in% colnames(eztt.z)))
   expect_true(all(sign(eztt.z$First3.z) <= sign(eztt.z$First3.logFC)))
 })
+
+test_that("preserves rownames", {
+  eztt.z <- add_zcols(eztt, stat.suffix = "logFC")
+  expect_equal(rownames(eztt), rownames(eztt.z))
+})

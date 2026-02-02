@@ -1,4 +1,4 @@
-#' Add column to toptab with z-stats
+  #' Add column to toptab with z-stats
 #' 
 #' Add column to toptab with z-stats.
 #' 
@@ -34,7 +34,9 @@ add_zcols <- function(toptab, stat.suffix="t", p.suffix="p"){
   for (z.col in 1:ncol(z.mat)){
     z.colnm <- colnames(z.mat)[z.col]
     stat.colnm <- stat.colnms[z.col]
-    toptab2 <- tibble::add_column(toptab2, rlang::`!!`(z.colnm) := z.mat[, z.colnm], .before = stat.colnm)
+    toptab2 <- tibble::add_column(toptab2, rlang::`!!`(z.colnm) := z.mat[, z.colnm], .before = stat.colnm) |> 
+      as.data.frame()
+    rownames(toptab2) <- rownames(toptab)
   }
   toptab2
 }
