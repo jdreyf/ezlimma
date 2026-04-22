@@ -44,11 +44,11 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   alternative <- match.arg(alternative)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
     rownames(object) %in% rownames(feat.tab), !is.null(design) || !is.null(grp),
-            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
-              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
-            length(weights)<=1 || all(dim(weights)==dim(object)) || 
-              length(weights)==nrow(object) || length(weights)==ncol(object),
-            is.null(gene.weights) || length(gene.weights)==nrow(object))
+    length(weights)!=1 || is.na(weights), length(weights)<=1 || (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
+    length(weights)<=1 || all(dim(weights)==dim(object)) || length(weights)==nrow(object) || length(weights)==ncol(object),
+    is.null(gene.weights) || length(gene.weights)==nrow(object),
+    !is.null(names(contrast.v)), names(contrast.v) %in% gsub("\\..+", "", colnames(feat.tab))
+  )
   
   if (!is.null(block) && is.null(correlation))
     stop("!is.null(block), so correlation must not be NULL.")

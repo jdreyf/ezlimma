@@ -4,3 +4,5 @@
 ^codecov\.yml$
 ^CODE_OF_CONDUCT\.md$
 ^\.github$
+^\.positai$
+^\.claude$

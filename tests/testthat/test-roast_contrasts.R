@@ -83,6 +83,10 @@ test_that("proportion up & down", {
   
   #same behavior from fry & mroast
   expect_equal(rcn.f[,grep("^Prop", colnames(rcn.f))], rcn.m[,grep("^Prop", colnames(rcn.m))])
+  
+  # error if feat.tab lacks contrasts eg Last3vsFirst3, since then output would lack PropUp & PropDown
+  feat_tab_tmp <- eztt[, 1:10]
+  expect_error(roast_contrasts(object=M, G=G, feat.tab=feat_tab_tmp, grp=grp, contrast.v = contr.v, fun="fry"))
 })
 
 test_that("one pwy", {
