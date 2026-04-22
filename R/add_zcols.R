@@ -1,4 +1,4 @@
-  #' Add column to toptab with z-stats
+#' Add column to toptab with z-stats
 #' 
 #' Add column to toptab with z-stats.
 #' 
@@ -8,8 +8,11 @@
 #' @param stat.suffix Suffix of numeric signed statistics column(s).
 #' @param p.suffix Suffix of numeric p-value column(s).
 #' @importFrom rlang :=
+#' @export
 
 add_zcols <- function(toptab, stat.suffix="t", p.suffix="p"){
+  # need to coerce since i select a column by name and expect a vector
+  toptab <- as.data.frame(toptab)
   stat.colnms <- grep_cols(toptab, stat.cols = stat.suffix)
   p.colnms <- grep_cols(toptab, p.cols = p.suffix)
   stopifnot(length(p.colnms) == length(stat.colnms))
@@ -26,7 +29,7 @@ add_zcols <- function(toptab, stat.suffix="t", p.suffix="p"){
   z.mat <- apply(as.matrix(prefix.v), MARGIN = 1, FUN=function(xx){
     stat.colnm <- paste0(xx, sep, stat.suffix)
     p.colnm <- paste0(xx, sep, p.suffix)
-    stats::qnorm(toptab[, p.colnm]/2, lower.tail = FALSE) * sign(toptab[, stat.colnm])
+    stats::qnorm(toptab[[p.colnm]]/2, lower.tail = FALSE) * sign(toptab[[stat.colnm]])
   })
   colnames(z.mat) <- gsub(pattern = paste0(stat.suffix, "$"), "z", stat.colnms)
   

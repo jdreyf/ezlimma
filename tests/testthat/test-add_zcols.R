@@ -31,3 +31,18 @@ test_that("preserves rownames", {
   eztt.z <- add_zcols(eztt, stat.suffix = "logFC")
   expect_equal(rownames(eztt), rownames(eztt.z))
 })
+
+test_that("errors if stat.suffix and p.suffix don't match", {
+  expect_error(add_zcols(eztt, stat.suffix = "logFC", p.suffix = "P.Value"))
+  expect_error(add_zcols(eztt, stat.suffix = "t", p.suffix = "P.Value"))
+})
+
+test_that("works on tibbles", {
+  eztt.tib <- tibble::as_tibble(eztt, rownames = "gene")
+  eztt.tib.z <- add_zcols(eztt.tib, stat.suffix = "logFC")
+  eztt.z <- add_zcols(eztt, stat.suffix = "logFC")
+  expect_lte(which(colnames(eztt.tib.z) == "First3.z"), which(colnames(eztt.tib.z) == "First3.logFC"))
+  expect_equal(sign(eztt.tib.z$First3.z), sign(eztt.tib.z$First3.logFC))
+  expect_equal(rownames(eztt), eztt.tib.z$gene)
+  expect_equal(eztt.z$First3.z, eztt.tib.z$First3.z)
+})
