@@ -58,4 +58,14 @@ The Excel file links to CSV files, which contain statistics per gene set.
 \details{
 Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 rounded to 8 significant figures.
+
+For performance, gene set membership is resolved to integer indices into \code{rownames(stats.tab)} once
+up front, and \code{\link[limma:camera]{cameraPR}} is called once per column of \code{stats.tab} for all
+gene sets together, rather than once per gene set. \code{cameraPR} re-derives integer indices from character
+IDs (\code{which(ID \%in\% iset)}) and recomputes the mean and variance of the full statistic vector on every
+call it is given, so calling it once per gene set repeats both of those over the full, often very large,
+feature universe for every gene set and every column. Passing pre-resolved integer indices and batching all
+gene sets into a single call per column avoids that redundant work, which otherwise scales with
+\code{nrow(stats.tab) * length(G) * ncol(stats.tab)} and can become prohibitive for large arrays
+(e.g. hundreds of thousands of probes) tested against thousands of gene sets across many comparisons.
 }
