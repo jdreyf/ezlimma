@@ -44,3 +44,13 @@ names(fl) <- lapply(G, FUN=function(x) x$name)
 
 fit <- limma::eBayes(limma::lmFit(M))
 fit2 <- limma::eBayes(limma::lmFit(M, design = design))
+
+# writexl >= 2.0.0 stores hyperlink cells (as built by xl_pwys() via writexl::xl_hyperlink())
+# as `xl_cell_general` objects. as.character() on these returns the cached display `value`,
+# which is NA for formula-only cells -- it does not return the underlying "=HYPERLINK(...)"
+# formula text. There is no public accessor for that text, so tests reach into writexl's
+# internal cell records (as its own print method does) to check what write_xlsx() will
+# actually write to the sheet. If writexl changes this internal structure, update this helper.
+xl_formula_text <- function(x) {
+  vapply(seq_along(x), function(i) writexl:::.cell_records(x)[[i]]$formula, character(1))
+}

@@ -18,7 +18,7 @@ xl_pwys <- function(pwy.tab, pwy.nchar=199){
   pwys.clean <- clean_filenames(pwys, nm.nchar=pwy.nchar)
   
   urls <- paste0("pathways/", pwys.clean, ".csv")
-  xl_links <- writexl::xl_hyperlink(url=urls, name = pwys)
+  xl_links <- writexl::xl_hyperlink(url=urls, value = pwys)
   xl <- data.frame(xl_links, pwy.tab, stringsAsFactors = FALSE)
   rownames(xl) <- pwys.clean
   # 1st col is rownames
