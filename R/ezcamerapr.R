@@ -20,6 +20,16 @@
 #' @return Data frame of gene set statistics.
 #' @details Pathway (i.e. gene set) names are altered to be valid filenames in Windows and Linux. Numeric columns are
 #' rounded to 8 significant figures.
+#'
+#' For performance, gene set membership is resolved to integer indices into \code{rownames(stats.tab)} once
+#' up front, and \code{\link[limma:camera]{cameraPR}} is called once per column of \code{stats.tab} for all
+#' gene sets together, rather than once per gene set. \code{cameraPR} re-derives integer indices from character
+#' IDs (\code{which(ID \%in\% iset)}) and recomputes the mean and variance of the full statistic vector on every
+#' call it is given, so calling it once per gene set repeats both of those over the full, often very large,
+#' feature universe for every gene set and every column. Passing pre-resolved integer indices and batching all
+#' gene sets into a single call per column avoids that redundant work, which otherwise scales with
+#' \code{nrow(stats.tab) * length(G) * ncol(stats.tab)} and can become prohibitive for large arrays
+#' (e.g. hundreds of thousands of probes) tested against thousands of gene sets across many comparisons.
 #' @export
 
 ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alternative=c("two.sided", "greater", "less", "Up", "Down"),
@@ -28,20 +38,21 @@ ezcamerapr <- function(stats.tab, G, feat.tab, name=NA, adjust.method ="BH", alt
   if (is.data.frame(stats.tab)){ stats.tab <- as.matrix(stats.tab) }
   stopifnot(!is.null(rownames(stats.tab)), !is.null(colnames(stats.tab)), rownames(stats.tab) %in% rownames(feat.tab),
             is.finite(stats.tab), is.numeric(stats.tab))
-  
+
   # stats.tab must be matrix
   index <- g_index(G=G, object=stats.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
+  # resolve gene set membership to integer indices into rownames(stats.tab) once, since this mapping is the
+  # same for every column of stats.tab -- see performance note in @details above
+  index.int <- lapply(index, function(nm) match(nm, rownames(stats.tab)))
 
   for (col.ind in 1:ncol(stats.tab)){
-    stats.tab.v <- stats::setNames(stats.tab[, col.ind], nm=rownames(stats.tab))
-    tab.tmp <- t(vapply(index, FUN=function(xx){
-      # stats.tab must be vector
-      tmp <- limma::cameraPR(statistic=stats.tab.v, index=xx, inter.gene.cor=inter.gene.cor)
-      tmp$Direction <- ifelse(tmp$Direction == "Up", yes = 1, no = -1)
-      # data.matrix(tmp)
-      as.matrix(tmp)
-    }, FUN.VALUE = stats::setNames(numeric(3), nm=c("NGenes", "Direction", "p"))))
-    tab.tmp <- as.data.frame(tab.tmp)
+    stats.tab.v <- stats.tab[, col.ind]
+    # test all gene sets in a single cameraPR() call, rather than one call per gene set
+    tmp <- limma::cameraPR(statistic=stats.tab.v, index=index.int, inter.gene.cor=inter.gene.cor, sort=FALSE)
+    tmp$Direction <- ifelse(tmp$Direction == "Up", yes = 1, no = -1)
+    # drop cameraPR's own FDR column (if present); it's recomputed below using adjust.method
+    tab.tmp <- tmp[, c("NGenes", "Direction", "PValue")]
+    colnames(tab.tmp) <- c("NGenes", "Direction", "p")
     if (alternative!="two.sided"){
       tab.tmp$p <- two2one_tailed(tab=tab.tmp, alternative = alternative)[,1]
     }
