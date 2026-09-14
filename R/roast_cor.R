@@ -15,26 +15,54 @@
 #' @seealso \code{\link[ezlimma]{roast_contrasts}}.
 #' @export
 
-roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, design = NULL, 
-                    fun=c("fry", "mroast"), set.statistic = "mean", weights = NA, gene.weights=NULL, 
-                    trend = FALSE, block = NULL, correlation = NULL, prefix=NULL, adjust.method = "BH", 
-                    min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"), 
+roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, design = NULL,
+                    fun=c("fry", "mroast"), set.statistic = "mean", weights = NA, gene.weights=NULL,
+                    trend = FALSE, block = NULL, correlation = NULL, prefix=NULL, adjust.method = "BH",
+                    min.nfeats=3, max.nfeats=1000, alternative=c("two.sided", "less", "greater"),
                     nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
-  
+
   fun <- match.arg(fun)
   alternative <- match.arg(alternative)
+  # get G index
+  index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
+  .roast_cor_index(object=object, index=index, feat.tab=feat.tab, name=name, phenotype=phenotype, design=design,
+                   fun=fun, set.statistic=set.statistic, weights=weights, gene.weights=gene.weights,
+                   trend=trend, block=block, correlation=correlation, prefix=prefix, adjust.method=adjust.method,
+                   alternative=alternative, nrot=nrot, check.names=check.names, pwy.nchar=pwy.nchar, seed=seed)
+}
+
+#' Core of \code{roast_cor}, taking a pre-computed gene set \code{index}
+#'
+#' Not exported. Split out of \code{\link{roast_cor}} so that \code{\link{roast_multi_cor}} can resolve gene set
+#' membership once (via \code{\link{g_index}}) and reuse it, and pre-resolved integer indices (via
+#' \code{index.int}), across all phenotype columns, rather than redoing that \code{nrow(object) * length(G)}-scale
+#' work on every column.
+#'
+#' @param index Gene set list as returned by \code{\link{g_index}}, i.e. character-vector probe/gene IDs per set.
+#' @param index.int As \code{index}, but with sets already resolved to integer positions into
+#' \code{rownames(object)}. If \code{NULL} (the default), this is derived from \code{index}. Passing it in lets a
+#' caller that loops over many calls with the same \code{object} rows (e.g. \code{roast_multi_cor}) do that
+#' resolution once instead of on every call.
+#' @inheritParams roast_cor
+#' @noRd
+
+.roast_cor_index <- function(object, index, index.int=NULL, feat.tab=NULL, name=NA, phenotype = NULL, design = NULL,
+                    fun="fry", set.statistic = "mean", weights = NA, gene.weights=NULL,
+                    trend = FALSE, block = NULL, correlation = NULL, prefix=NULL, adjust.method = "BH",
+                    alternative="two.sided", nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
+
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             !is.null(design)|!is.null(phenotype),
-            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
-              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
-            length(weights)<=1 || all(dim(weights)==dim(object)) || 
+            length(weights)!=1 || is.na(weights), length(weights)<=1 ||
+              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))),
+            length(weights)<=1 || all(dim(weights)==dim(object)) ||
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(gene.weights) || length(gene.weights)==nrow(object),
             is.na(name) || all(rownames(object) %in% rownames(feat.tab)))
-  
+
   if (!is.null(block) && is.null(correlation))
     stop("!is.null(block), so correlation must not be NULL.")
-  
+
   # only mroast takes some arguments
   if (fun=="fry" && (!is.null(gene.weights) || set.statistic!="mean")){
     warning("fry method does not take the argument gene.weights or set.statistic, so these will be ignored.")
@@ -42,19 +70,22 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
   if (fun=="fry" && alternative == "two.sided" && adjust.method!="BH"){
     warning("When alternative is 'two.sided', fry method does not take the argument adjust.method, so it will be ignored.")
   }
-  
+
   if (!is.null(phenotype)){
     stopifnot(length(phenotype)==ncol(object), limma::isNumeric(phenotype))
     if (check.names){
       stopifnot(names(phenotype)==colnames(object))
     }
   }
-  
+
   if (fun=="mroast") set.seed(seed=seed)
-  
-  # get G index
-  index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
-  
+
+  # resolve gene set membership to integer indices into rownames(object), unless already done by the caller.
+  # limma::fry()/mroast() re-derive integer indices from character IDs (which(geneid %in% iset)) on every call,
+  # so reusing pre-resolved integer indices across many calls (e.g. once per phenotype in roast_multi_cor)
+  # avoids repeating that O(nrow(object)) matching, per gene set, every time.
+  if (is.null(index.int)) index.int <- lapply(index, function(x) if (is.character(x)) match(x, rownames(object)) else x)
+
   if (is.null(design)){
       # model.matrix clips NAs in phenotype, so need to also remove from object, weights
       n.na <- sum(is.na(phenotype))
@@ -98,21 +129,21 @@ roast_cor <- function(object, G, feat.tab=NULL, name=NA, phenotype = NULL, desig
   # mroast vs fry x is.na(weights) vs not, so 4 conditions
   if (fun=="fry"){
     if (length(weights) == 1 && is.na(weights)){
-      res <- limma::fry(y = object, index = index, design = design, contrast = 2, trend = trend, block = block, 
+      res <- limma::fry(y = object, index = index.int, design = design, contrast = 2, trend = trend, block = block,
                         correlation = correlation)
     } else {
-      res <- limma::fry(y = object, index = index, design = design, contrast = 2,
+      res <- limma::fry(y = object, index = index.int, design = design, contrast = 2,
                         weights = weights, trend = trend, block = block, correlation = correlation)
     }
   } else {
     if (length(weights) == 1 && is.na(weights)){
-      res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
-                           set.statistic = set.statistic, gene.weights = gene.weights,  
+      res <- limma::mroast(y = object, index = index.int, design = design, contrast = 2,
+                           set.statistic = set.statistic, gene.weights = gene.weights,
                            trend = trend, block = block, correlation = correlation,
                            adjust.method = adjust.method, nrot = nrot)
     } else {
-      res <- limma::mroast(y = object, index = index, design = design, contrast = 2,
-                           set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,  
+      res <- limma::mroast(y = object, index = index.int, design = design, contrast = 2,
+                           set.statistic = set.statistic, weights = weights, gene.weights = gene.weights,
                            trend = trend, block = block, correlation = correlation,
                            adjust.method = adjust.method, nrot = nrot)
     }

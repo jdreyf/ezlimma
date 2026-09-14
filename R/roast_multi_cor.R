@@ -24,20 +24,23 @@ roast_multi_cor <- function(object, G, pheno.tab, feat.tab, name=NA, covariates=
                     nrot=999, check.names=TRUE, pwy.nchar=199, seed=0){
   
   fun <- match.arg(fun)
+  alternative <- match.arg(alternative)
   stopifnot(!is.null(dim(object)), !is.null(rownames(object)), !is.null(colnames(object)), ncol(object) > 1,
             !is.null(colnames(pheno.tab)), nrow(pheno.tab) == ncol(object), limma::isNumeric(pheno.tab), colSums(!is.na(pheno.tab)) > 2,
-            length(weights)!=1 || is.na(weights), length(weights)<=1 || 
-              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))), 
-            length(weights)<=1 || all(dim(weights)==dim(object)) || 
+            length(weights)!=1 || is.na(weights), length(weights)<=1 ||
+              (is.numeric(weights) && all(weights>=0) && !all(is.na(weights))),
+            length(weights)<=1 || all(dim(weights)==dim(object)) ||
               length(weights)==nrow(object) || length(weights)==ncol(object),
             is.null(gene.weights) || length(gene.weights)==nrow(object),
             is.na(name) || all(rownames(object) %in% rownames(feat.tab)))
   if (!is.null(covariates)) stopifnot(limma::isNumeric(covariates), !is.na(covariates))
   if (check.names) stopifnot(rownames(pheno.tab)==colnames(object))
-  
-  # get G index
+
+  # get G index once, and resolve to integer positions into rownames(object) once, since both are the same for
+  # every phenotype column below -- see performance note in .roast_cor_index()
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
-  
+  index.int <- lapply(index, function(nm) match(nm, rownames(object)))
+
   # would be faster to pre-specify size, but I don't think it matters enough here
   rc.mat <- NULL
   weights.tmp <- weights
@@ -70,11 +73,11 @@ roast_multi_cor <- function(object, G, pheno.tab, feat.tab, name=NA, covariates=
       des.tmp <- stats::model.matrix.lm(~1+pheno.tab[, ind]+covariates, na.action = stats::na.omit)
     }
     
-    rc.tmp <- roast_cor(object=object[, ph.idx], G=G, feat.tab=NULL, name=NA, phenotype = NULL, design = des.tmp, prefix=prefix.tmp, weights = weights.tmp,
-                        fun=fun, set.statistic = set.statistic, gene.weights=gene.weights, 
-                        trend = trend, block = block, correlation = correlation, adjust.method = adjust.method, 
-                        min.nfeats=min.nfeats, max.nfeats=max.nfeats, alternative=alternative, 
-                        nrot=nrot, check.names=check.names, pwy.nchar=pwy.nchar, seed=seed)
+    rc.tmp <- .roast_cor_index(object=object[, ph.idx], index=index, index.int=index.int, feat.tab=NULL, name=NA,
+                        phenotype = NULL, design = des.tmp, prefix=prefix.tmp, weights = weights.tmp,
+                        fun=fun, set.statistic = set.statistic, gene.weights=gene.weights,
+                        trend = trend, block = block, correlation = correlation, adjust.method = adjust.method,
+                        alternative=alternative, nrot=nrot, check.names=check.names, pwy.nchar=pwy.nchar, seed=seed)
     
     if (is.null(rc.mat)){ 
       rc.mat <- rc.tmp

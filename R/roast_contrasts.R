@@ -65,7 +65,12 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   
   # get G index
   index <- g_index(G=G, object=object, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
-  
+  # resolve gene set membership to integer indices into rownames(object) once, since this mapping is the
+  # same for every contrast. limma::fry()/mroast() re-derive integer indices from character IDs
+  # (which(geneid %in% iset)) on every call, so passing pre-resolved integer indices avoids repeating that
+  # O(nrow(object)) matching, per gene set, for every contrast in contrast.v.
+  index.int <- lapply(index, function(nm) match(nm, rownames(object)))
+
   if (is.null(design)){
     stopifnot(ncol(object) == length(grp))
     design <- stats::model.matrix(~0+grp)
@@ -74,7 +79,7 @@ roast_contrasts <- function(object, G, feat.tab, grp=NULL, contrast.v, design=NU
   }
   
   contr.mat <- limma::makeContrasts(contrasts = contrast.v, levels = design)
-  args.lst <- list(y=object, index=index, design=design, block = block, correlation = correlation, trend=trend)
+  args.lst <- list(y=object, index=index.int, design=design, block = block, correlation = correlation, trend=trend)
   
   # deal with weights
   if (!is.matrix(object)){

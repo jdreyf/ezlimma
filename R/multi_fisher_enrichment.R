@@ -21,9 +21,10 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
   # is.list catches if sig.sets is a named vector
   stopifnot(!duplicated(names(sig.sets)), length(sig.sets) > 1, is.list(sig.sets))
   
-  # get G index
+  # get G index once, and reuse it for every sig.sets element below (via .fisher_enrichment_index()) instead of
+  # recomputing it per element -- see performance note in .fisher_enrichment_index()
   index <- g_index(G=G, object=feat.tab, min.nfeats=min.nfeats, max.nfeats=max.nfeats)
-   
+
   # want gene membership matrix, which will be subset by pathway for CSVs
   # fe = fisher enrichment
   feats.all <- union(unlist(sig.sets), unlist(index))
@@ -34,8 +35,8 @@ multi_fisher_enrichment <- function(sig.sets, G, feat.tab, name=NA, adjust.metho
     nm.ss <- names(sig.sets)[[ind]]
     sig.set <- list(sig.sets[[ind]])
     names(sig.set) <- nm.ss
-    fe.tmp <- fisher_enrichment(sig.set=sig.set, G=G, feat.tab=feat.tab, name=NA, adjust.method=adjust.method, 
-                      min.nfeats=min.nfeats, max.nfeats=max.nfeats, pwy.nchar=pwy.nchar)
+    fe.tmp <- .fisher_enrichment_index(sig.set=sig.set, index=index, feat.tab=feat.tab, name=NA,
+                      adjust.method=adjust.method, pwy.nchar=pwy.nchar)
     
     if (ind == 1){
       pwy.mat <- fe.tmp
